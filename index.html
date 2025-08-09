@@ -211,20 +211,32 @@
     </section>
 
     <!-- Section 4: Village Activities -->
-    <!-- Di dalam file HTML -->
-<section id="activities" class="activities-section">
-  <div class="container mx-auto px-4 text-center">
-    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full mb-6 shadow-lg">
-      <i data-lucide="calendar" class="text-white text-2xl"></i>
-    </div>
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">KEGIATAN DESA KARANGHARJA</h2>
-    <div class="w-24 h-1 bg-gradient-to-r from-green-500 to-blue-500 mx-auto mb-6"></div>
-    <p class="text-gray-600 max-w-2xl mx-auto mb-12">
-      Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
-    </p>
+    <!-- Ganti isi section 4 dengan ini: -->
+<section id="activities" class="py-16 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+  <!-- Background decorative elements (tetap sama) -->
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+    <div class="absolute top-10 left-5 w-20 h-20 bg-green-200/20 rounded-full blur-3xl animate-pulse"></div>
+    <div class="absolute bottom-10 right-5 w-24 h-24 bg-blue-200/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <div class="absolute top-1/2 left-1/2 w-16 h-16 bg-purple-200/20 rounded-full blur-3xl animate-pulse delay-500"></div>
+  </div>
 
-    <!-- Hanya tampilan kosong -->
-    <div class="text-center py-12">
+  <div class="container mx-auto px-4 relative z-10">
+    <!-- Header (style sama persis) -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full mb-6 shadow-lg mx-auto">
+        <i data-lucide="calendar" class="w-8 h-8 text-white"></i>
+      </div>
+      <h2 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-4">
+        KEGIATAN DESA KARANGHARJA
+      </h2>
+      <div class="w-24 h-1 bg-gradient-to-r from-green-500 to-blue-500 mx-auto mb-6"></div>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
+      </p>
+    </div>
+
+    <!-- Placeholder "Belum Ada Kegiatan" (style sama seperti sebelumnya) -->
+    <div class="max-w-4xl mx-auto text-center py-12">
       <div class="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6 mx-auto">
         <i data-lucide="calendar" class="w-12 h-12 text-gray-300"></i>
       </div>
