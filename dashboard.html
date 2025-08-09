@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - Desa KarangHarja</title>
+  <link href="https://unpkg.com/lucide@latest" rel="stylesheet">
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f9fafb;
+      color: #111827;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Layout */
+    .min-h-screen {
+      min-height: 100vh;
+    }
+
+    .max-w-7xl {
+      max-width: 80rem;
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .py-8 {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .mb-8 {
+      margin-bottom: 2rem;
+    }
+
+    .mb-2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .space-x-4 > * + * {
+      margin-left: 1rem;
+    }
+
+    .space-y-4 > * + * {
+      margin-top: 1rem;
+    }
+
+    .space-y-6 > * + * {
+      margin-top: 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+    }
+
+    .gap-6 {
+      gap: 1.5rem;
+    }
+
+    .bg-white {
+      background-color: #fff;
+    }
+
+    .bg-gray-50 {
+      background-color: #f9fafb;
+    }
+
+    .bg-green-600 {
+      background-color: #16a34a;
+    }
+
+    .bg-blue-600 {
+      background-color: #2563eb;
+    }
+
+    .bg-orange-600 {
+      background-color: #ea580c;
+    }
+
+    .text-gray-900 {
+      color: #111827;
+    }
+
+    .text-gray-600 {
+      color: #4b5563;
+    }
+
+    .text-gray-500 {
+      color: #6b7280;
+    }
+
+    .text-green-600 {
+      color: #16a34a;
+    }
+
+    .text-blue-600 {
+      color: #2563eb;
+    }
+
+    .text-orange-600 {
+      color: #ea580c;
+    }
+
+    .text-muted-foreground {
+      color: #6b7280;
+    }
+
+    .text-sm {
+      font-size: 0.875rem;
+    }
+
+    .text-xs {
+      font-size: 0.75rem;
+    }
+
+    .text-lg {
+      font-size: 1.125rem;
+    }
+
+    .text-xl {
+      font-size: 1.25rem;
+    }
+
+    .text-2xl {
+      font-size: 1.5rem;
+    }
+
+    .font-medium {
+      font-weight: 500;
+    }
+
+    .font-semibold {
+      font-weight: 600;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .rounded-lg {
+      border-radius: 0.5rem;
+    }
+
+    .rounded-full {
+      border-radius: 9999px;
+    }
+
+    .shadow-sm {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .border {
+      border: 1px solid #e5e7eb;
+    }
+
+    .border-b {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    /* Header */
+    header {
+      background-color: #fff;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .header-container {
+      max-width: 80rem;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      aspect-ratio: 5/4;
+    }
+
+    /* Cards */
+    .card {
+      background-color: #fff;
+      border-radius: 0.5rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      padding: 1.5rem 1.5rem 0;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .button-outline {
+      background-color: transparent;
+      border: 1px solid #e5e7eb;
+      color: #111827;
+    }
+
+    .button-outline:hover {
+      background-color: #f3f4f6;
+    }
+
+    .button-primary {
+      background-color: #2563eb;
+      color: #fff;
+      border: none;
+    }
+
+    .button-primary:hover {
+      background-color: #1d4ed8;
+    }
+
+    .button-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-default {
+      background-color: #e5e7eb;
+      color: #111827;
+    }
+
+    .badge-secondary {
+      background-color: #f3f4f6;
+      color: #4b5563;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    /* Quick Actions */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+      .quick-actions-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Progress Bars */
+    .progress-bar {
+      background-color: #e5e7eb;
+      border-radius: 9999px;
+      height: 0.5rem;
+      width: 8rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+    }
+
+    /* Activity List */
+    .activity-item {
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      transition: background-color 0.2s;
+    }
+
+    .activity-item:hover {
+      background-color: #f9fafb;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+      .px-4 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .px-4 {
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center py-4">
+        <div class="flex items-center">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
+               alt="Logo Desa KarangHarja" 
+               class="logo-img">
+          <div class="ml-3">
+            <h1 class="text-xl font-semibold text-gray-900">Dashboard Admin</h1>
+            <p class="text-sm text-gray-500">Desa KarangHarja</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="/" class="button button-outline">
+            <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+            Lihat Website
+          </a>
+          <button id="logoutBtn" class="button button-outline">
+            <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Welcome Section -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-2">Selamat Datang, Admin! 👋</h2>
+      <p class="text-gray-600">Kelola konten dan kegiatan Desa KarangHarja dari dashboard ini.</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid mb-8">
+      <div class="card">
+        <div class="card-header flex items-center justify-between">
+          <h3 class="text-sm font-medium">Total Kegiatan</h3>
+          <i data-lucide="file-text" class="h-4 w-4 text-muted-foreground"></i>
+        </div>
+        <div class="card-content">
+          <div class="text-2xl font-bold" id="totalActivities">0</div>
+          <p class="text-xs text-muted-foreground">Semua kegiatan yang dibuat</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header flex items-center justify-between">
+          <h3 class="text-sm font-medium">Dipublikasi</h3>
+          <i data-lucide="trending-up" class="h-4 w-4 text-muted-foreground"></i>
+        </div>
+        <div class="card-content">
+          <div class="text-2xl font-bold text-green-600" id="publishedCount">0</div>
+          <p class="text-xs text-muted-foreground">Kegiatan yang sudah dipublikasi</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header flex items-center justify-between">
+          <h3 class="text-sm font-medium">Draft</h3>
+          <i data-lucide="calendar" class="h-4 w-4 text-muted-foreground"></i>
+        </div>
+        <div class="card-content">
+          <div class="text-2xl font-bold text-orange-600" id="draftCount">0</div>
+          <p class="text-xs text-muted-foreground">Kegiatan dalam draft</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header flex items-center justify-between">
+          <h3 class="text-sm font-medium">Total Views</h3>
+          <i data-lucide="eye" class="h-4 w-4 text-muted-foreground"></i>
+        </div>
+        <div class="card-content">
+          <div class="text-2xl font-bold text-blue-600" id="totalViews">0</div>
+          <p class="text-xs text-muted-foreground">Total kali dilihat</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions-grid mb-8">
+      <div class="card lg:col-span-1">
+        <div class="card-header">
+          <h3 class="flex items-center font-medium">
+            <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
+            Quick Actions
+          </h3>
+        </div>
+        <div class="card-content space-y-3">
+          <a href="kegiatan.html" class="button button-primary w-full justify-start">
+            <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+            Tambah Kegiatan
+          </a>
+          <a href="/" class="button button-outline w-full justify-start">
+            <i data-lucide="eye" class="w-4 h-4 mr-2"></i>
+            Lihat Website
+          </a>
+        </div>
+      </div>
+
+      <div class="card lg:col-span-2">
+        <div class="card-header">
+          <h3 class="flex items-center font-medium">
+            <i data-lucide="bar-chart-3" class="w-5 h-5 mr-2"></i>
+            Statistik Cepat
+          </h3>
+        </div>
+        <div class="card-content">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium">Kegiatan Terpublikasi</span>
+              <div class="flex items-center">
+                <div class="progress-bar mr-3">
+                  <div class="progress-fill bg-green-600" id="publishedProgress"></div>
+                </div>
+                <span class="text-sm text-gray-600" id="publishedPercent">0%</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-medium">Engagement Rate</span>
+              <div class="flex items-center">
+                <div class="progress-bar mr-3">
+                  <div class="progress-fill bg-blue-600" style="width: 75%"></div>
+                </div>
+                <span class="text-sm text-gray-600">75%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="card">
+      <div class="card-header flex items-center justify-between">
+        <h3 class="flex items-center font-medium">
+          <i data-lucide="file-text" class="w-5 h-5 mr-2"></i>
+          Kegiatan Terbaru
+        </h3>
+        <a href="kegiatan.html" class="button button-primary button-sm">
+          <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+          Tambah Baru
+        </a>
+      </div>
+      <div class="card-content">
+        <div id="activitiesContainer">
+          <!-- Activities will be loaded here -->
+          <div class="empty-state">
+            <i data-lucide="file-text" class="w-12 h-12 text-gray-300 mx-auto mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Belum ada kegiatan</h3>
+            <p class="text-gray-500 mb-4">Mulai dengan membuat kegiatan pertama Anda</p>
+            <a href="kegiatan.html" class="button button-primary">
+              <i data-lucide="plus" class="w-4 h-4 mr-2"></i>
+              Tambah Kegiatan
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Check authentication
+    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('isAdminLoggedIn');
+      window.location.href = 'login.html';
+    });
+
+    // Mock data for demonstration
+    const activities = [
+      {
+        id: 1,
+        title: "Gotong Royong Membersihkan Desa",
+        date: "2023-10-15",
+        views: 124,
+        published: true
+      },
+      {
+        id: 2,
+        title: "Pelatihan Kewirausahaan",
+        date: "2023-11-02",
+        views: 89,
+        published: true
+      },
+      {
+        id: 3,
+        title: "Peringatan HUT RI",
+        date: "2023-08-17",
+        views: 215,
+        published: true
+      }
+    ];
+
+    // Calculate stats
+    const totalActivities = activities.length;
+    const publishedCount = activities.filter(a => a.published).length;
+    const draftCount = activities.filter(a => !a.published).length;
+    const totalViews = activities.reduce((sum, a) => sum + a.views, 0);
+    const publishedPercent = Math.round((publishedCount / totalActivities) * 100);
+
+    // Update stats
+    document.getElementById('totalActivities').textContent = totalActivities;
+    document.getElementById('publishedCount').textContent = publishedCount;
+    document.getElementById('draftCount').textContent = draftCount;
+    document.getElementById('totalViews').textContent = totalViews;
+    document.getElementById('publishedPercent').textContent = `${publishedPercent}%`;
+    document.getElementById('publishedProgress').style.width = `${publishedPercent}%`;
+
+    // Render activities if they exist
+    if (activities.length > 0) {
+      const activitiesContainer = document.getElementById('activitiesContainer');
+      activitiesContainer.innerHTML = `
+        <div class="space-y-4">
+          ${activities.slice(0, 5).map(activity => `
+            <div class="activity-item">
+              <div class="flex items-center justify-between">
+                <div class="flex-1">
+                  <h3 class="font-medium text-gray-900 mb-1">${activity.title}</h3>
+                  <div class="flex items-center space-x-4 text-sm text-gray-500">
+                    <span class="flex items-center">
+                      <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                      ${new Date(activity.date).toLocaleDateString('id-ID')}
+                    </span>
+                    <span class="flex items-center">
+                      <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                      ${activity.views} views
+                    </span>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="badge ${activity.published ? 'badge-default' : 'badge-secondary'}">
+                    ${activity.published ? 'Published' : 'Draft'}
+                  </span>
+                  <button class="button button-outline button-sm">
+                    Edit
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      // Refresh Lucide icons after rendering activities
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
