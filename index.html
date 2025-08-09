@@ -28,7 +28,7 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
     }
 
     .navbar-brand {
@@ -38,7 +38,6 @@
       font-weight: 600;
       color: #111827;
       text-decoration: none;
-      margin-right: auto;
     }
 
     .navbar-logo {
@@ -51,22 +50,25 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.25rem;
+      padding: 0.5rem;
       display: none;
       color: #111827;
+      position: relative;
+      width: 24px;
+      height: 24px;
     }
 
     .navbar-toggle .bar {
       display: block;
-      width: 18px;
+      width: 100%;
       height: 2px;
       background-color: #111827;
-      margin: 3px 0;
+      margin: 5px 0;
       transition: all 0.3s ease;
     }
 
     .navbar-toggle.active .bar:nth-child(1) {
-      transform: translateY(5px) rotate(45deg);
+      transform: translateY(7px) rotate(45deg);
     }
 
     .navbar-toggle.active .bar:nth-child(2) {
@@ -74,7 +76,7 @@
     }
 
     .navbar-toggle.active .bar:nth-child(3) {
-      transform: translateY(-5px) rotate(-45deg);
+      transform: translateY(-7px) rotate(-45deg);
     }
 
     .navbar-menu {
@@ -108,28 +110,28 @@
     @media (max-width: 767px) {
       .navbar-toggle {
         display: block;
-        margin-left: auto;
       }
 
       .navbar-menu {
-        display: none;
         position: absolute;
         top: 100%;
-        right: 1rem;
+        left: 0;
+        right: 0;
         background-color: #fff;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 0.5rem;
-        padding: 0.5rem 0;
-        width: 180px;
+        padding: 1rem 0;
+        width: 100%;
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-20px);
         transition: opacity 0.3s ease, transform 0.3s ease;
+        visibility: hidden;
+        display: block;
       }
 
       .navbar-menu.active {
-        display: block;
         opacity: 1;
         transform: translateY(0);
+        visibility: visible;
       }
 
       .navbar-links {
@@ -143,7 +145,7 @@
 
       .navbar-links a {
         display: block;
-        padding: 0.75rem 1rem;
+        padding: 0.75rem 1.5rem;
         text-align: left;
       }
     }
@@ -431,28 +433,44 @@
   </footer>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="script.js"></script>
   <script>
     lucide.createIcons();
 
     // Navbar Toggle Functionality for Mobile
-    const navbarToggle = document.getElementById('navbar-toggle');
-    const navbarMenu = document.getElementById('navbar-menu');
+    document.addEventListener('DOMContentLoaded', function() {
+      const navbarToggle = document.getElementById('navbar-toggle');
+      const navbarMenu = document.getElementById('navbar-menu');
 
-    if (navbarToggle && navbarMenu) {
-      navbarToggle.addEventListener('click', () => {
-        navbarToggle.classList.toggle('active');
-        navbarMenu.classList.toggle('active');
-      });
+      if (navbarToggle && navbarMenu) {
+        navbarToggle.addEventListener('click', function() {
+          this.classList.toggle('active');
+          navbarMenu.classList.toggle('active');
+          
+          // Toggle aria-expanded attribute
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !isExpanded);
+        });
 
-      // Close menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
-          navbarToggle.classList.remove('active');
-          navbarMenu.classList.remove('active');
-        }
-      });
-    }
+        // Close menu when clicking on a link
+        const navLinks = document.querySelectorAll('.navbar-links a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            navbarToggle.classList.remove('active');
+            navbarMenu.classList.remove('active');
+            navbarToggle.setAttribute('aria-expanded', 'false');
+          });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!navbarToggle.contains(e.target) {
+            navbarToggle.classList.remove('active');
+            navbarMenu.classList.remove('active');
+            navbarToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+    });
   </script>
 </body>
 </html>
