@@ -407,7 +407,16 @@
         </button>
 
         <!-- Desktop Buttons (Hidden on mobile) -->
-      
+        <div class="hidden md:flex items-center space-x-2">
+          <a href="/" class="flex items-center px-3 py-2 text-sm hover:bg-gray-100 rounded-md">
+            <i data-lucide="home" class="w-4 h-4 mr-1"></i>
+            Lihat Website
+          </a>
+          <button id="logoutBtn" class="flex items-center px-3 py-2 text-sm hover:bg-gray-100 rounded-md">
+            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
+            Logout
+          </button>
+        </div>
       </div>
 
       <!-- Mobile Menu (Hidden by default) -->
@@ -599,29 +608,7 @@
     }
 
     // Mock data for demonstration
-    const activities = JSON.parse(localStorage.getItem('activities')) || [
-      {
-        id: 1,
-        title: "Gotong Royong Desa",
-        date: "2023-10-15",
-        views: 124,
-        published: true
-      },
-      {
-        id: 2,
-        title: "Pengajian Rutin",
-        date: "2023-10-20",
-        views: 89,
-        published: true
-      },
-      {
-        id: 3,
-        title: "Rapat RW 05",
-        date: "2023-10-25",
-        views: 56,
-        published: false
-      }
-    ];
+    
 
     // Calculate stats
     const totalActivities = activities.length;
