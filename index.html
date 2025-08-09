@@ -13,13 +13,14 @@
     /* Navbar Styles */
     .navbar {
       background-color: #fff !important; /* Force white background */
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Reduced shadow for less height impact */
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       z-index: 1000;
-      padding: 0.75rem 1rem;
+      padding: 0.25rem 1rem; /* Reduced padding to make it shorter */
+      height: 50px; /* Fixed height to control space */
     }
 
     .navbar-container {
@@ -27,44 +28,45 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start; /* Align to left instead of space-between */
     }
 
     .navbar-brand {
       display: flex;
       align-items: center;
-      font-size: 1.25rem;
+      font-size: 1.125rem; /* Slightly reduced for compactness */
       font-weight: 600;
       color: #111827;
       text-decoration: none;
+      margin-right: auto; /* Push brand to left, menu to right */
     }
 
     .navbar-logo {
-      height: 32px; /* Base size same as dashboard */
+      height: 28px; /* Slightly reduced from 32px for compactness */
       width: auto;
-      margin-right: 0.5rem;
+      margin-right: 0.25rem; /* Reduced margin for tighter spacing */
     }
 
     .navbar-toggle {
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.5rem;
+      padding: 0.25rem; /* Reduced padding */
       display: none; /* Hidden on desktop by default */
       color: #111827;
     }
 
     .navbar-toggle .bar {
       display: block;
-      width: 20px;
+      width: 18px; /* Slightly reduced for compactness */
       height: 2px;
       background-color: #111827;
-      margin: 4px 0;
+      margin: 3px 0; /* Reduced margin for tighter spacing */
       transition: all 0.3s ease;
     }
 
     .navbar-toggle.active .bar:nth-child(1) {
-      transform: translateY(6px) rotate(45deg);
+      transform: translateY(5px) rotate(45deg);
     }
 
     .navbar-toggle.active .bar:nth-child(2) {
@@ -72,7 +74,7 @@
     }
 
     .navbar-toggle.active .bar:nth-child(3) {
-      transform: translateY(-6px) rotate(-45deg);
+      transform: translateY(-5px) rotate(-45deg);
     }
 
     .navbar-menu {
@@ -106,6 +108,7 @@
     @media (max-width: 767px) {
       .navbar-toggle {
         display: block; /* Show hamburger on mobile */
+        margin-left: auto; /* Push to right */
       }
 
       .navbar-menu {
@@ -147,19 +150,19 @@
 
     @media (min-width: 640px) {
       .navbar-logo {
-        height: 36px; /* Responsive size */
+        height: 32px; /* Responsive size */
       }
     }
 
     @media (min-width: 1024px) {
       .navbar-logo {
-        height: 40px; /* Responsive size */
+        height: 36px; /* Responsive size */
       }
     }
 
     /* Ensure other sections adjust for fixed navbar */
     body {
-      padding-top: 60px; /* Adjust based on navbar height */
+      padding-top: 50px; /* Adjusted to match navbar height */
     }
   </style>
 </head>
@@ -453,4 +456,4 @@
     }
   </script>
 </body>
-  </html>
+</html> 
