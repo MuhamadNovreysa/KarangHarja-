@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tambah Kegiatan - Desa KarangHarja</title>
+  <link href="https://unpkg.com/lucide@latest" rel="stylesheet">
+  <style>
+    /* Reuse styles from dashboard.html */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f9fafb;
+      color: #111827;
+    }
+
+    .min-h-screen {
+      min-height: 100vh;
+    }
+
+    .max-w-4xl {
+      max-width: 56rem;
+    }
+
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .px-4 {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .py-8 {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+    }
+
+    .py-4 {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .items-center {
+      align-items: center;
+    }
+
+    .justify-between {
+      justify-content: space-between;
+    }
+
+    .space-y-6 > * + * {
+      margin-top: 1.5rem;
+    }
+
+    .space-x-4 > * + * {
+      margin-left: 1rem;
+    }
+
+    .bg-white {
+      background-color: #fff;
+    }
+
+    .bg-gray-50 {
+      background-color: #f9fafb;
+    }
+
+    .text-gray-900 {
+      color: #111827;
+    }
+
+    .text-gray-600 {
+      color: #4b5563;
+    }
+
+    .rounded-lg {
+      border-radius: 0.5rem;
+    }
+
+    .shadow-sm {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .border {
+      border: 1px solid #e5e7eb;
+    }
+
+    .border-b {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    /* Header */
+    header {
+      background-color: #fff;
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .header-container {
+      max-width: 80rem;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    /* Card */
+    .card {
+      background-color: #fff;
+      border-radius: 0.5rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+      padding: 1.5rem 1.5rem 0;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #111827;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      font-size: 1rem;
+    }
+
+    textarea {
+      min-height: 200px;
+      resize: vertical;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+    }
+
+    /* Buttons */
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .button-primary {
+      background-color: #16a34a;
+      color: #fff;
+      border: none;
+    }
+
+    .button-primary:hover {
+      background-color: #15803d;
+    }
+
+    .button-outline {
+      background-color: transparent;
+      border: 1px solid #e5e7eb;
+      color: #111827;
+    }
+
+    .button-outline:hover {
+      background-color: #f3f4f6;
+    }
+
+    /* Responsive */
+    @media (min-width: 640px) {
+      .px-4 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .px-4 {
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center py-4">
+        <a href="dashboard.html" class="button button-outline">
+          <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+          Kembali ke Dashboard
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="flex items-center font-medium">
+          <i data-lucide="save" class="w-5 h-5 mr-2"></i>
+          Tambah Kegiatan Baru
+        </h2>
+      </div>
+      <div class="card-content">
+        <form id="activityForm" class="space-y-6">
+          <div class="form-group">
+            <label for="title">Judul Kegiatan</label>
+            <input type="text" id="title" placeholder="Masukkan judul kegiatan" required>
+          </div>
+
+          <div class="form-group">
+            <label for="date">Tanggal Kegiatan</label>
+            <input type="date" id="date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="image">Upload Gambar</label>
+            <input type="file" id="image" accept="image/*">
+          </div>
+
+          <div class="form-group">
+            <label for="content">Konten Kegiatan</label>
+            <textarea id="content" placeholder="Tulis konten kegiatan di sini..." required></textarea>
+          </div>
+
+          <div class="flex items-center">
+            <input type="checkbox" id="published">
+            <label for="published">Publikasikan langsung</label>
+          </div>
+
+          <div class="flex items-center space-x-4">
+            <button type="submit" class="button button-primary">
+              <i data-lucide="save" class="w-4 h-4 mr-2"></i>
+              Simpan Kegiatan
+            </button>
+            <a href="dashboard.html" class="button button-outline">Batal</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Check authentication
+    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
+    }
+
+    // Form submission
+    document.getElementById('activityForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('title').value;
+      const date = document.getElementById('date').value;
+      const content = document.getElementById('content').value;
+      const published = document.getElementById('published').checked;
+      const imageFile = document.getElementById('image').files[0];
+      
+      // Create activity object
+      const newActivity = {
+        id: Date.now(),
+        title,
+        date,
+        content,
+        published,
+        views: 0,
+        imageUrl: imageFile ? URL.createObjectURL(imageFile) : null
+      };
+      
+      // Get existing activities or initialize array
+      let activities = JSON.parse(localStorage.getItem('activities') || '[]');
+      
+      // Add new activity
+      activities.unshift(newActivity);
+      
+      // Save to localStorage
+      localStorage.setItem('activities', JSON.stringify(activities));
+      
+      // Redirect to dashboard
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>
