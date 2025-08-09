@@ -195,6 +195,55 @@
     .button-outline:hover {
       background-color: #f3f4f6;
     }
+        .editor-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid #e5e7eb;
+      border-bottom: none;
+      border-radius: 0.375rem 0.375rem 0 0;
+      background-color: #f9fafb;
+    }
+
+    .editor-toolbar button {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      border-radius: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+     .editor-toolbar button:hover {
+      background-color: #e5e7eb;
+    }
+
+    .editor-toolbar select {
+      padding: 0.25rem;
+      border-radius: 0.25rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    .editor-content {
+      min-height: 200px;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0 0 0.375rem 0.375rem;
+    }
+
+    .editor-content:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px #2563eb;
+    }
+
+    /* Font Family and Size Dropdowns */
+    .font-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
 
     /* Responsive */
     @media (min-width: 640px) {
@@ -233,6 +282,7 @@
           Tambah Kegiatan Baru
         </h2>
       </div>
+
       <div class="card-content">
         <form id="activityForm" class="space-y-6">
           <div class="form-group">
@@ -240,7 +290,8 @@
             <input type="text" id="title" placeholder="Masukkan judul kegiatan" required>
           </div>
 
-          <div class="form-group">
+
+             <div class="form-group">
             <label for="date">Tanggal Kegiatan</label>
             <input type="date" id="date" required>
           </div>
@@ -249,11 +300,53 @@
             <label for="image">Upload Gambar</label>
             <input type="file" id="image" accept="image/*">
           </div>
+          
 
-          <div class="form-group">
+        <div class="form-group">
             <label for="content">Konten Kegiatan</label>
-            <textarea id="content" placeholder="Tulis konten kegiatan di sini..." required></textarea>
-          </div>
+            <div class="editor-toolbar" id="toolbar">
+              <button type="button" data-command="bold" title="Bold">
+                <i data-lucide="bold"></i>
+              </button>
+              <button type="button" data-command="italic" title="Italic">
+                <i data-lucide="italic"></i>
+              </button>
+              <button type="button" data-command="underline" title="Underline">
+                <i data-lucide="underline"></i>
+              </button>
+              <div class="font-controls">
+                <select id="fontFamily">
+                  <option value="Arial">Arial</option>
+                  <option value="Times New Roman">Times New Roman</option>
+                  <option value="Courier New">Courier New</option>
+                  <option value="Georgia">Georgia</option>
+                    </select>
+                <select id="fontSize">
+                  <option value="1">Small</option>
+                  <option value="3" selected>Normal</option>
+                  <option value="5">Large</option>
+                  <option value="7">Huge</option>
+                </select>
+              </div>
+              <button type="button" data-command="justifyLeft" title="Align Left">
+                <i data-lucide="align-left"></i>
+              </button>
+              <button type="button" data-command="justifyCenter" title="Center">
+                <i data-lucide="align-center"></i>
+              </button>
+              <button type="button" data-command="justifyRight" title="Align Right">
+                <i data-lucide="align-right"></i>
+              </button>
+              <button type="button" data-command="insertUnorderedList" title="Bullet List">
+                    <i data-lucide="list"></i>
+              </button>
+              <button type="button" data-command="insertOrderedList" title="Numbered List">
+                <i data-lucide="list-ordered"></i>
+              </button>
+            </div>
+            <div id="content" class="editor-content" contenteditable="true"></div>
+        </div>
+          
 
           <div class="flex items-center">
             <input type="checkbox" id="published">
@@ -281,7 +374,26 @@
     if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
       window.location.href = 'login.html';
     }
+// Rich Text Editor Functionality
+    document.querySelectorAll('#toolbar button').forEach(button => {
+      button.addEventListener('click', function() {
+        const command = this.dataset.command;
+        document.execCommand(command, false, null);
+        document.getElementById('content').focus();
+      });
+    });
 
+    // Font Family and Size Controls
+    document.getElementById('fontFamily').addEventListener('change', function() {
+      document.execCommand('fontName', false, this.value);
+      document.getElementById('content').focus();
+    });
+
+    document.getElementById('fontSize').addEventListener('change', function() {
+      document.execCommand('fontSize', false, this.value);
+      document.getElementById('content').focus();
+    });
+    
     // Form submission
     document.getElementById('activityForm').addEventListener('submit', function(e) {
       e.preventDefault();
