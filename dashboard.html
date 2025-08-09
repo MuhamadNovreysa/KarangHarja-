@@ -577,6 +577,21 @@
 
   <script src="https://unpkg.com/lucide@latest"></script>
   <script>
+      // Mobile menu toggle
+  document.getElementById('mobileMenuButton').addEventListener('click', function() {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('hidden');
+    menu.classList.toggle('active');
+    lucide.createIcons(); // Refresh icons
+  });
+
+  // Mobile logout functionality
+  document.getElementById('mobileLogoutBtn').addEventListener('click', function() {
+    localStorage.removeItem('isAdminLoggedIn');
+    localStorage.removeItem('activities');
+    window.location.href = 'login.html';
+  });
+    
     // Initialize Lucide icons
     lucide.createIcons();
 
