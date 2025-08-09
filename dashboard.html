@@ -17,6 +17,7 @@
     body {
       background-color: #f9fafb;
       color: #111827;
+      margin: 0;
     }
 
     a {
@@ -193,132 +194,157 @@
       border-bottom: 1px solid #e5e7eb;
     }
 
-    /* Header */
-    header {
+    /* Navbar */
+    .navbar {
       background-color: #fff;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      border-bottom: 1px solid #e5e7eb;
       position: fixed;
       width: 100%;
       z-index: 50;
-    }
-
-    /* Header Container */
-    .header-container {
-      max-width: 80rem;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 1rem;
-      padding-right: 1rem;
-      padding-top: 1rem;
-      padding-bottom: 1rem;
-    }
-
-    /* Logo and Title */
-    .logo-img {
-      height: 32px;
-      width: auto;
-    }
-
-    .logo-title {
-      font-size: 1.125rem;
-      margin-left: 0.75rem;
-      font-weight: 600;
-    }
-
-    /* Navigation */
-    .nav-desktop {
-      display: none;
-    }
-
-    /* Mobile Menu Button */
-    #mobileMenuButton {
-      display: block;
-      position: relative;
-      z-index: 50;
-      transition: background-color 0.3s ease;
-    }
-
-    #mobileMenuButton .hamburger-line {
-      display: block;
-      width: 6px;
-      height: 0.5px;
-      background-color: #111827;
+      padding: 0.75rem 1rem;
       transition: all 0.3s ease;
     }
 
-    /* Mobile Menu */
-    #mobileMenu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      right: 1rem;
-      background-color: #fff;
-      border-radius: 0.5rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      opacity: 0;
-      transform: scaleY(0);
-      transform-origin: top;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      width: 180px; /* Mengurangi lebar dari 200px ke 180px untuk lebih proporsional */
-      padding: 0.5rem 0; /* Padding internal untuk ruang yang lebih rapi */
-    }
-
-    #mobileMenu.active {
-      display: block;
-      opacity: 1;
-      transform: scaleY(1);
-    }
-
-    #mobileMenu a,
-    #mobileMenu button {
+    .navbar-container {
+      max-width: 80rem;
+      margin-left: auto;
+      margin-right: auto;
       display: flex;
       align-items: center;
-      padding: 0.5rem 1rem; /* Mengurangi padding vertical dari 0.75rem ke 0.5rem */
-      font-size: 0.875rem;
-      font-weight: 500;
+      justify-content: space-between;
+    }
+
+    .navbar-brand {
+      font-size: 1.25rem;
+      font-weight: 600;
       color: #111827;
-      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
     }
 
-    #mobileMenu a:hover,
-    #mobileMenu button:hover {
-      background-color: #f3f4f6;
-    }
-
-    #mobileMenu i {
+    .navbar-brand .logo-img {
+      height: 32px;
+      width: auto;
       margin-right: 0.5rem;
     }
 
-    /* Desktop Navigation */
-    @media (min-width: 768px) {
-      #mobileMenuButton {
+    .navbar-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: #111827;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar-toggle.active .bar:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .navbar-toggle.active .bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    .navbar-toggle.active .bar:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
+    .navbar-toggle .bar {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: #111827;
+      margin: 4px 0;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar-links li {
+      margin-left: 1.5rem;
+    }
+
+    .navbar-links a,
+    .navbar-links button {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4b5563;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-links a:hover,
+    .navbar-links button:hover {
+      color: #2563eb;
+      background-color: #f3f4f6;
+    }
+
+    .navbar-links button:hover {
+      color: #dc2626;
+    }
+
+    /* Mobile Menu */
+    @media (max-width: 767px) {
+      .navbar-toggle {
+        display: block;
+      }
+
+      .navbar-menu {
         display: none;
+        position: absolute;
+        top: 100%;
+        right: 1rem;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        padding: 0.5rem 0;
+        width: 180px;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
       }
-      .nav-desktop {
+
+      .navbar-menu.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .navbar-links {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .navbar-links li {
+        margin: 0;
+        width: 100%;
+      }
+
+      .navbar-links a,
+      .navbar-links button {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        text-align: left;
       }
-      .nav-desktop a,
-      .nav-desktop button {
-        display: flex;
-        align-items: center;
-        padding: 0.5rem 1rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: #4b5563;
-        transition: color 0.2s ease;
-      }
-      .nav-desktop a:hover,
-      .nav-desktop button:hover {
-        color: #2563eb;
-      }
-      .nav-desktop button:hover {
-        color: #dc2626;
-      }
-      #mobileMenu {
-        display: none !important;
+
+      .navbar-links a i,
+      .navbar-links button i {
+        margin-right: 0.5rem;
       }
     }
 
@@ -467,8 +493,8 @@
       .logo-img {
         height: 36px;
       }
-      .logo-title {
-        font-size: 1.25rem;
+      .navbar-brand {
+        font-size: 1.375rem;
       }
     }
 
@@ -483,62 +509,36 @@
       .logo-img {
         height: 40px;
       }
-      .logo-title {
-        font-size: 1.375rem;
+      .navbar-brand {
+        font-size: 1.5rem;
       }
     }
   </style>
 </head>
 <body class="min-h-screen bg-gray-50">
-  <!-- Header Section -->
-  <header class="bg-white shadow-sm border-b fixed w-full z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center">
-      <!-- Logo and Title -->
-      <div class="flex items-center">
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
-             alt="Logo Desa KarangHarja" 
-             class="logo-img">
-        <span class="logo-title font-semibold text-gray-900">Dashboard Admin</span>
-      </div>
-
-      <!-- Desktop Navigation -->
-      <nav class="nav-desktop ml-auto">
-        <a href="/" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
-          <i data-lucide="home" class="w-4 h-4 mr-2"></i>
-          Lihat Website
-        </a>
-        <button id="desktopLogoutBtn" class="flex items-center text-sm font-medium text-gray-700 hover:text-red-600 transition-colors duration-200">
-          <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
-          Logout
-        </button>
-      </nav>
-
-      <!-- Mobile Menu Button -->
-      <button id="mobileMenuButton" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all duration-300 focus:outline-none">
-        <div class="flex flex-col justify-center items-center space-y-1.5">
-          <span id="line1" class="block w-6 h-0.5 bg-gray-700 transition-all duration-300 transform origin-center"></span>
-          <span id="line2" class="block w-6 h-0.5 bg-gray-700 transition-all duration-300 transform origin-center"></span>
-          <span id="line3" class="block w-6 h-0.5 bg-gray-700 transition-all duration-300 transform origin-center"></span>
-        </div>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="#" class="navbar-brand">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" alt="Logo Dashboard Admin" class="logo-img">
+        Dashboard Admin
+      </a>
+      <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
       </button>
-    </div>
-
-    <!-- Mobile Menu -->
-    <nav id="mobileMenu" class="md:hidden hidden bg-white rounded-lg shadow-lg mt-2 mx-4 absolute w-[180px] transition-all duration-300 transform origin-top">
-      <div class="flex flex-col">
-        <a href="/" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-t-lg transition-colors duration-200">
-          <i data-lucide="home" class="w-4 h-4 mr-2 text-blue-600"></i>
-          Lihat Website
-        </a>
-        <button id="mobileLogoutBtn" class="flex items-center w-full text-left px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-b-lg transition-colors duration-200">
-          <i data-lucide="log-out" class="w-4 h-4 mr-2 text-red-600"></i>
-          Logout
-        </button>
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="navbar-links">
+          <li><a href="/" class="flex items-center"><i data-lucide="globe" class="w-4 h-4 mr-2"></i>Lihat Website</a></li>
+          <li><a href="kegiatan.html" class="flex items-center"><i data-lucide="plus" class="w-4 h-4 mr-2"></i>Posting Kegiatan</a></li>
+          <li><button id="logoutBtn" class="flex items-center"><i data-lucide="log-out" class="w-4 h-4 mr-2"></i>Logout</button></li>
+        </ul>
       </div>
-    </nav>
-  </header>
+    </div>
+  </nav>
 
-  <!-- Main Content with padding to account for fixed header -->
+  <!-- Main Content with padding to account for fixed navbar -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24">
     <!-- Welcome Section -->
     <div class="mb-8">
@@ -680,56 +680,37 @@
     // Initialize Lucide icons
     lucide.createIcons();
 
-    // Mobile Menu Toggle Functionality
-    const mobileMenuButton = document.getElementById('mobileMenuButton');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const line1 = document.getElementById('line1');
-    const line2 = document.getElementById('line2');
-    const line3 = document.getElementById('line3');
+    // Navbar Toggle Functionality
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarMenu = document.getElementById('navbar-menu');
 
-    if (mobileMenuButton && mobileMenu) {
-      mobileMenuButton.addEventListener('click', function (e) {
-        e.stopPropagation(); // Prevent click from bubbling to document
-        mobileMenu.classList.toggle('hidden');
-        mobileMenu.classList.toggle('active');
+    if (navbarToggle && navbarMenu) {
+      navbarToggle.addEventListener('click', () => {
+        navbarToggle.classList.toggle('active');
+        navbarMenu.classList.toggle('active');
+      });
 
-        // Animate hamburger to X
-        if (mobileMenu.classList.contains('active')) {
-          line1.style.transform = 'rotate(45deg) translate(5px, 5px)';
-          line2.style.opacity = '0';
-          line3.style.transform = 'rotate(-45deg) translate(5px, -5px)';
-        } else {
-          line1.style.transform = 'rotate(0deg)';
-          line2.style.opacity = '1';
-          line3.style.transform = 'rotate(0deg)';
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
+          navbarToggle.classList.remove('active');
+          navbarMenu.classList.remove('active');
         }
       });
     }
 
-    // Close menu when clicking outside
-    document.addEventListener('click', function (e) {
-      if (mobileMenu.classList.contains('active') && !mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
-        mobileMenu.classList.add('hidden');
-        mobileMenu.classList.remove('active');
-        line1.style.transform = 'rotate(0deg)';
-        line2.style.opacity = '1';
-        line3.style.transform = 'rotate(0deg)';
-      }
-    });
-
     // Logout functionality
-    const logout = () => {
-      localStorage.removeItem('isAdminLoggedIn');
-      localStorage.removeItem('activities');
-      window.location.href = 'login.html';
-    };
-
-    // Attach logout events
-    document.getElementById('mobileLogoutBtn')?.addEventListener('click', logout);
-    document.getElementById('desktopLogoutBtn')?.addEventListener('click', logout);
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('isAdminLoggedIn');
+        localStorage.removeItem('activities');
+        window.location.href = 'login.html';
+      });
+    }
 
     // Check authentication
-    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
+    if (localStorage.getElementById('isAdminLoggedIn') !== 'true') {
       window.location.href = 'login.html';
     }
 
