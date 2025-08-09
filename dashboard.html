@@ -290,16 +290,44 @@
       gap: 1.5rem;
     }
 
-    /* Mobile Menu Animation */
-    #mobileMenu {
-      transition: all 0.3s ease;
-      max-height: 0;
-      overflow: hidden;
-    }
-    
-    #mobileMenu.active {
-      max-height: 120px;
-    }
+    /* Enhanced Mobile Menu Styles */
+#mobileMenuButton {
+  position: relative;
+  z-index: 50;
+}
+
+#mobileMenu {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+}
+
+#mobileMenu.active {
+  opacity: 1;
+  transform: scaleY(1);
+  max-height: 150px;
+}
+
+/* Animation for menu items */
+#mobileMenu a, #mobileMenu button {
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+#mobileMenu.active a, #mobileMenu.active button {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+#mobileMenu a {
+  transition-delay: 0.1s;
+}
+
+#mobileMenu button {
+  transition-delay: 0.2s;
+}
 
     /* Header Logo */
     .logo-img {
@@ -401,26 +429,28 @@
         <span class="logo-title font-semibold text-gray-900">Dashboard Admin</span>
       </div>
 
-      <!-- Mobile Menu Button -->
-      <button id="mobileMenuButton" class="md:hidden p-1 rounded-md text-gray-700 focus:outline-none">
-        <i data-lucide="menu" class="w-6 h-6"></i>
+      <!-- Enhanced Mobile Menu Button -->
+      <button id="mobileMenuButton" class="md:hidden group flex flex-col justify-center items-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-300 focus:outline-none">
+        <span class="block w-6 h-0.5 bg-gray-700 mb-1.5 transition-all duration-300 group-[.active]:rotate-45 group-[.active]:translate-y-2"></span>
+        <span class="block w-6 h-0.5 bg-gray-700 mb-1.5 transition-all duration-300 group-[.active]:opacity-0"></span>
+        <span class="block w-6 h-0.5 bg-gray-700 transition-all duration-300 group-[.active]:-rotate-45 group-[.active]:-translate-y-2"></span>
       </button>
 
-      <!-- Desktop Buttons (Hanya muncul di desktop) -->
+      <!-- Desktop Buttons (Hidden on mobile) -->
       <div class="hidden md:flex items-center space-x-2">
-        <!-- Tombol desktop disembunyikan di mobile -->
+        <!-- Empty for mobile -->
       </div>
     </div>
 
-    <!-- Mobile Menu (Hidden by default) -->
-    <div id="mobileMenu" class="md:hidden hidden pb-2">
-      <a href="/" class="block px-4 py-2 text-sm hover:bg-gray-100 flex items-center">
-        <i data-lucide="home" class="w-4 h-4 mr-2"></i>
-        Lihat Website
+    <!-- Enhanced Mobile Menu -->
+    <div id="mobileMenu" class="md:hidden hidden pb-2 bg-white rounded-lg shadow-lg mt-1 mx-2 transition-all duration-300 transform origin-top">
+      <a href="/" class="block px-4 py-3 text-sm hover:bg-gray-100 flex items-center rounded-t-lg transition-colors duration-200">
+        <i data-lucide="home" class="w-4 h-4 mr-2 text-blue-600"></i>
+        <span class="font-medium">Lihat Website</span>
       </a>
-      <button id="mobileLogoutBtn" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center">
-        <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
-        Logout
+      <button id="mobileLogoutBtn" class="block w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center rounded-b-lg transition-colors duration-200">
+        <i data-lucide="log-out" class="w-4 h-4 mr-2 text-red-600"></i>
+        <span class="font-medium">Logout</span>
       </button>
     </div>
   </div>
@@ -565,98 +595,88 @@
   </div>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    // Mobile menu toggle
-    document.getElementById('mobileMenuButton').addEventListener('click', function() {
-      const menu = document.getElementById('mobileMenu');
-      const icon = this.querySelector('i');
-      
-      // Toggle menu visibility
-      menu.classList.toggle('hidden');
-      menu.classList.toggle('active');
-      
-      // Change icon from menu to x and vice versa
-      if (menu.classList.contains('active')) {
-        icon.setAttribute('data-lucide', 'x');
-      } else {
-        icon.setAttribute('data-lucide', 'menu');
-      }
-      lucide.createIcons();
-    });
+<script>
+  // Initialize Lucide icons
+  lucide.createIcons();
 
-    // Logout functionality
-    const logout = () => {
-      localStorage.removeItem('isAdminLoggedIn');
-      localStorage.removeItem('activities');
-      window.location.href = 'login.html';
-    };
-    document.getElementById('logoutBtn').addEventListener('click', logout);
-    document.getElementById('mobileLogoutBtn').addEventListener('click', logout);
-    
-    // Initialize Lucide icons
-    lucide.createIcons();
+  // Mobile menu toggle with enhanced animation
+  document.getElementById('mobileMenuButton').addEventListener('click', function() {
+    this.classList.toggle('active');
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('hidden');
+    menu.classList.toggle('active');
+  });
 
-    // Check authentication
-    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
-      window.location.href = 'login.html';
-    }
+  // Logout functionality
+  const logout = () => {
+    localStorage.removeItem('isAdminLoggedIn');
+    localStorage.removeItem('activities');
+    window.location.href = 'login.html';
+  };
 
-    // Mock data for demonstration
-    
+  // Check authentication
+  if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
+    window.location.href = 'login.html';
+  }
 
-    // Calculate stats
-    const totalActivities = activities.length;
-    const publishedCount = activities.filter(a => a.published).length;
-    const draftCount = activities.filter(a => !a.published).length;
-    const totalViews = activities.reduce((sum, a) => sum + a.views, 0);
-    const publishedPercent = Math.round((publishedCount / totalActivities) * 100);
 
-    // Update stats
-    document.getElementById('totalActivities').textContent = totalActivities;
-    document.getElementById('publishedCount').textContent = publishedCount;
-    document.getElementById('draftCount').textContent = draftCount;
-    document.getElementById('totalViews').textContent = totalViews;
-    document.getElementById('publishedPercent').textContent = `${publishedPercent}%`;
-    document.getElementById('publishedProgress').style.width = `${publishedPercent}%`;
 
-    // Render activities if they exist
-    if (activities.length > 0) {
-      const activitiesContainer = document.getElementById('activitiesContainer');
-      activitiesContainer.innerHTML = `
-        <div class="space-y-4">
-          ${activities.slice(0, 5).map(activity => `
-            <div class="activity-item">
-              <div class="flex items-center justify-between">
-                <div class="flex-1">
-                  <h3 class="font-medium text-gray-900 mb-1">${activity.title}</h3>
-                  <div class="flex items-center space-x-4 text-sm text-gray-500">
-                    <span class="flex items-center">
-                      <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
-                      ${new Date(activity.date).toLocaleDateString('id-ID')}
-                    </span>
-                    <span class="flex items-center">
-                      <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
-                      ${activity.views} views
-                    </span>
-                  </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <span class="badge ${activity.published ? 'badge-default' : 'badge-secondary'}">
-                    ${activity.published ? 'Published' : 'Draft'}
+  // Calculate stats
+  const totalActivities = activities.length;
+  const publishedCount = activities.filter(a => a.published).length;
+  const draftCount = activities.filter(a => !a.published).length;
+  const totalViews = activities.reduce((sum, a) => sum + a.views, 0);
+  const publishedPercent = Math.round((publishedCount / totalActivities) * 100);
+
+  // Update stats
+  document.getElementById('totalActivities').textContent = totalActivities;
+  document.getElementById('publishedCount').textContent = publishedCount;
+  document.getElementById('draftCount').textContent = draftCount;
+  document.getElementById('totalViews').textContent = totalViews;
+  document.getElementById('publishedPercent').textContent = `${publishedPercent}%`;
+  document.getElementById('publishedProgress').style.width = `${publishedPercent}%`;
+
+  // Render activities if they exist
+  if (activities.length > 0) {
+    const activitiesContainer = document.getElementById('activitiesContainer');
+    activitiesContainer.innerHTML = `
+      <div class="space-y-4">
+        ${activities.slice(0, 5).map(activity => `
+          <div class="activity-item">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <h3 class="font-medium text-gray-900 mb-1">${activity.title}</h3>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                  <span class="flex items-center">
+                    <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                    ${new Date(activity.date).toLocaleDateString('id-ID')}
                   </span>
-                  <button class="button button-outline button-sm">
-                    Edit
-                  </button>
+                  <span class="flex items-center">
+                    <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                    ${activity.views} views
+                  </span>
                 </div>
               </div>
+              <div class="flex items-center space-x-2">
+                <span class="badge ${activity.published ? 'badge-default' : 'badge-secondary'}">
+                  ${activity.published ? 'Published' : 'Draft'}
+                </span>
+                <button class="button button-outline button-sm">
+                  Edit
+                </button>
+              </div>
             </div>
-          `).join('')}
-        </div>
-      `;
-      
-      // Refresh Lucide icons after rendering activities
-      lucide.createIcons();
-    }
-  </script>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    
+    // Refresh Lucide icons after rendering activities
+    lucide.createIcons();
+  }
+
+  // Event listeners for logout buttons
+  document.getElementById('mobileLogoutBtn')?.addEventListener('click', logout);
+</script>
 </body>
 </html>
