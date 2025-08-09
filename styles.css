@@ -237,24 +237,31 @@ body {
 }
 
 .org-node {
-  position: relative;
-  margin: 0 auto;
+  min-width: 250px; /* Ukuran minimal kotak */
+  width: 100%;
 }
 
+
 .org-card {
-  width: 280px; /* Ukuran tetap */
-  min-height: 120px; /* Tinggi minimum */
-  padding: 1rem;
+  width: 100%; 
+  min-height: 120px; /* Tinggi minimal */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; /* Pusatkan konten vertikal */
   text-align: center;
+  /* Tetap pertahankan style asli: */
+  background: linear-gradient(to bottom right, var(--gradient-from), var(--gradient-to));
+  color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
 }
+
 
 
 .org-card:hover {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   transform: scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
 .org-icon {
