@@ -407,19 +407,20 @@
         </button>
 
         <!-- Desktop Buttons (Hidden on mobile) -->
-        <div class="hidden md:flex items-center space-x-2">
-          <a href="/" class="flex items-center px-3 py-2 text-sm hover:bg-gray-100 rounded-md">
-            <i data-lucide="home" class="w-4 h-4 mr-1"></i>
-            Lihat Website
-          </a>
-          <button id="logoutBtn" class="flex items-center px-3 py-2 text-sm hover:bg-gray-100 rounded-md">
-            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i>
-            Logout
-          </button>
-        </div>
+      
       </div>
 
-      
+      <!-- Mobile Menu (Hidden by default) -->
+      <div id="mobileMenu" class="md:hidden hidden pb-2">
+        <a href="/" class="block px-4 py-2 text-sm hover:bg-gray-100 flex items-center">
+          <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+          Lihat Website
+        </a>
+        <button id="mobileLogoutBtn" class="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 flex items-center">
+          <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
+          Logout
+        </button>
+      </div>
     </div>
   </header>
 
