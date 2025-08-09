@@ -17,70 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-// Login System JS
-document.addEventListener('DOMContentLoaded', function() {
-  const loginBtn = document.getElementById('login-btn');
-  const modal = document.getElementById('login-modal');
-  const closeBtn = document.querySelector('.close');
-  const loginForm = document.getElementById('login-form');
+
+
   
-  // Hardcoded admin credentials (for demo only)
-  const ADMIN_CREDENTIALS = {
-    username: "admin",
-    password: "desa2023"
-  };
-  
-  // Open modal
-  loginBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    modal.style.display = 'block';
-  });
-  
-  // Close modal
-  closeBtn.addEventListener('click', function() {
-    modal.style.display = 'none';
-  });
-  
-  // Login form submission
-  loginForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    
-    if (username === ADMIN_CREDENTIALS.username && 
-        password === ADMIN_CREDENTIALS.password) {
-      // Successful login
-      localStorage.setItem('isAdminLoggedIn', 'true');
-      modal.style.display = 'none';
-      window.location.href = "#dashboard";
-      showAdminUI();
-    } else {
-      alert('Username atau password salah!');
-    }
-  });
-  
-  // Check if already logged in
-  if (localStorage.getItem('isAdminLoggedIn') === 'true') {
-    showAdminUI();
-  }
-  
-  function showAdminUI() {
-    // Change login button to logout
-    const loginBtn = document.getElementById('login-btn');
-    loginBtn.textContent = 'Logout';
-    loginBtn.href = '#';
-    loginBtn.onclick = function() {
-      localStorage.removeItem('isAdminLoggedIn');
-      window.location.reload();
-    };
-    
-    // Show admin dashboard link
-    const dashboardLink = document.createElement('li');
-    dashboardLink.innerHTML = '<a href="#dashboard">Dashboard</a>';
-    document.querySelector('.navbar-links').appendChild(dashboardLink);
-  }
-});
 
 // Dashboard JS
 document.addEventListener('DOMContentLoaded', function() {
