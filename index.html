@@ -9,6 +9,126 @@
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/lucide@latest/icons.css" rel="stylesheet">
+  <style>
+    /* Navbar Styles Override for White Background and Responsive Logo */
+    .navbar {
+      background-color: #fff !important; /* Force white background, overriding any blue in styles.css */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 0.75rem 1rem;
+    }
+
+    .navbar-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #111827;
+      text-decoration: none;
+    }
+
+    .navbar-logo {
+      height: 32px; /* Base size same as dashboard */
+      width: auto;
+      margin-right: 0.5rem;
+    }
+
+    .navbar-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: none; /* Hidden on desktop by default */
+    }
+
+    .navbar-menu {
+      display: flex;
+    }
+
+    .navbar-links {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar-links li {
+      margin-left: 1.5rem;
+    }
+
+    .navbar-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4b5563;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .navbar-links a:hover {
+      color: #2563eb;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 767px) {
+      .navbar-toggle {
+        display: block; /* Show hamburger on mobile */
+      }
+
+      .navbar-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 1rem;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        padding: 0.5rem 0;
+        width: 180px;
+      }
+
+      .navbar-menu.active {
+        display: block;
+      }
+
+      .navbar-links {
+        flex-direction: column;
+      }
+
+      .navbar-links li {
+        margin: 0;
+        width: 100%;
+      }
+
+      .navbar-links a {
+        display: block;
+        padding: 0.75rem 1rem;
+        text-align: left;
+      }
+    }
+
+    @media (min-width: 640px) {
+      .navbar-logo {
+        height: 36px; /* Same as dashboard responsive */
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .navbar-logo {
+        height: 40px; /* Same as dashboard responsive */
+      }
+    }
+  </style>
 </head>
 <body>
   <nav class="navbar">
@@ -20,7 +140,7 @@
         Desa KarangHarja
       </a>
       
-      <!-- Mobile Menu Button (Diperbaiki) -->
+      <!-- Mobile Menu Button -->
       <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle menu">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -29,7 +149,7 @@
         </svg>
       </button>
 
-      <!-- Nav Links (Diperbaiki class-nya) -->
+      <!-- Nav Links -->
       <div class="navbar-menu" id="navbar-menu">
         <ul class="navbar-links">
           <li><a href="#home">Home</a></li>
@@ -71,144 +191,145 @@
 
   <!-- Section 2: Organizational Structure -->
   <section id="about" class="org-section">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-12">
-        <h2 class="text-2xl font-bold text-gray-800 mb-4">STRUKTURAL PEMERINTAH DESA KARANGHARJA</h2>
-        <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
-      </div>
-
-      <!-- Organizational Chart -->
-      <div class="org-chart-container">
-        <!-- Level 0: Kepala Desa -->
-        <div class="org-level">
-          <div class="org-node level-0">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>KEPALA DESA</h3>
-              <p>SUKARMA</p>
-            </div>
-          </div>
-          <div class="connection-line vertical"></div>
-        </div>
-
-        <!-- Level 1: Sekretaris Desa -->
-        <div class="org-level">
-          <div class="org-node level-1">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>SEKERTARIS DESA</h3>
-              <p>SUHANDI</p>
-            </div>
-          </div>
-          <div class="connection-line vertical"></div>
-        </div>
-
-        <!-- Level 2: Kasi Pemerintah -->
-        <div class="org-level">
-          <div class="org-node level-2">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>KASI PEMERINTAH</h3>
-              <p>H. AHMADI</p>
-            </div>
-          </div>
-          <div class="connection-line vertical"></div>
-        </div>
-
-        <!-- Level 3: Staff Level 1 -->
-        <div class="org-staff-grid">
-          <div class="org-node level-3">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>MYATI STAF PELAYANAN</h3>
-              <p>LIMAN OGAN</p>
-            </div>
-          </div>
-          <div class="org-node level-3">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>STAF KESEJANTRAAN</h3>
-              <p>SATIM</p>
-            </div>
-          </div>
-          <div class="org-node level-3">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>STAF UMUM</h3>
-              <p>AMSOR</p>
-            </div>
-          </div>
-        </div>
-        <div class="connection-line vertical"></div>
-
-        <!-- Level 4: Staff Level 2 -->
-        <div class="org-staff-grid">
-          <div class="org-node level-3">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>STAF PERANCANAN</h3>
-              <p>SAMSUDIN</p>
-            </div>
-          </div>
-          <div class="org-node level-3">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>STAF TATAUSAHA</h3>
-              <p>TALA</p>
-            </div>
-          </div>
-          <div class="org-node level-3">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>STAF PEMERINTAH</h3>
-              <p>WARDI GOSERUPAS</p>
-            </div>
-          </div>
-        </div>
-        <div class="connection-line vertical"></div>
-
-        <!-- Level 5: Others -->
-        <div class="org-staff-grid cols-2">
-          <div class="org-node level-3">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>DESA</h3>
-              <p>AJI</p>
-            </div>
-          </div>
-          <div class="org-node level-3">
-            <div class="org-card">
-              <div class="org-icon">
-                <i data-lucide="users"></i>
-              </div>
-              <h3>SEKERTARIS BPD</h3>
-              <p>TOHID</p>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">STRUKTURAL PEMERINTAH DESA KARANGHARJA</h2>
+      <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
     </div>
-  </section>
+
+
+        <!-- Organizational Chart -->
+        <div class="org-chart-container">
+          <!-- Level 0: Kepala Desa -->
+          <div class="org-level">
+            <div class="org-node level-0">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>KEPALA DESA</h3>
+                <p>SUKARMA</p>
+              </div>
+            </div>
+            <div class="connection-line vertical"></div>
+          </div>
+
+          <!-- Level 1: Sekretaris Desa -->
+          <div class="org-level">
+            <div class="org-node level-1">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>SEKERTARIS DESA</h3>
+                <p>SUHANDI</p>
+              </div>
+            </div>
+            <div class="connection-line vertical"></div>
+          </div>
+
+          <!-- Level 2: Kasi Pemerintah -->
+          <div class="org-level">
+            <div class="org-node level-2">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>KASI PEMERINTAH</h3>
+                <p>H. AHMADI</p>
+              </div>
+            </div>
+            <div class="connection-line vertical"></div>
+          </div>
+
+          <!-- Level 3: Staff Level 1 -->
+          <div class="org-staff-grid">
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>MYATI STAF PELAYANAN</h3>
+                <p>LIMAN OGAN</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF KESEJANTRAAN</h3>
+                <p>SATIM</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF UMUM</h3>
+                <p>AMSOR</p>
+              </div>
+            </div>
+          </div>
+          <div class="connection-line vertical"></div>
+
+          <!-- Level 4: Staff Level 2 -->
+          <div class="org-staff-grid">
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF PERANCANAN</h3>
+                <p>SAMSUDIN</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF TATAUSAHA</h3>
+                <p>TALA</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF PEMERINTAH</h3>
+                <p>WARDI GOSERUPAS</p>
+              </div>
+            </div>
+          </div>
+          <div class="connection-line vertical"></div>
+
+          <!-- Level 5: Others -->
+          <div class="org-staff-grid cols-2">
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>DESA</h3>
+                <p>AJI</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>SEKERTARIS BPD</h3>
+                <p>TOHID</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
   <!-- Section 3: Google Maps -->
   <section id="map" class="map-section">
@@ -237,37 +358,38 @@
   </section>
 
   <!-- Section 4: Village Activities -->
-  <section id="activities" class="activities-section">
-    <!-- Background decorative elements -->
-    <div class="decorative-elements">
-      <div class="decorative-circle green"></div>
-      <div class="decorative-circle blue"></div>
-      <div class="decorative-circle purple"></div>
+  <!-- Ganti isi section 4 dengan ini: -->
+<section id="activities" class="activities-section">
+  <!-- Background decorative elements -->
+  <div class="decorative-elements">
+    <div class="decorative-circle green"></div>
+    <div class="decorative-circle blue"></div>
+    <div class="decorative-circle purple"></div>
+  </div>
+
+  <div class="container mx-auto px-4 relative z-10">
+    <!-- Header -->
+    <div class="section-header-activities">
+      <div class="calendar-icon">
+        <i data-lucide="calendar"></i>
+      </div>
+      <h2 class="section-title-activities">KEGIATAN DESA KARANGHARJA</h2>
+      <div class="section-divider"></div>
+      <p class="section-description">
+        Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
+      </p>
     </div>
 
-    <div class="container mx-auto px-4 relative z-10">
-      <!-- Header -->
-      <div class="section-header-activities">
-        <div class="calendar-icon">
-          <i data-lucide="calendar"></i>
-        </div>
-        <h2 class="section-title-activities">KEGIATAN DESA KARANGHARJA</h2>
-        <div class="section-divider"></div>
-        <p class="section-description">
-          Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
-        </p>
+    <!-- Empty State -->
+    <div class="empty-activities">
+      <div class="empty-icon">
+        <i data-lucide="calendar"></i>
       </div>
-
-      <!-- Empty State -->
-      <div class="empty-activities">
-        <div class="empty-icon">
-          <i data-lucide="calendar"></i>
-        </div>
-        <h3 class="empty-title">Belum Ada Kegiatan</h3>
-        <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini</p>
-      </div>
+      <h3 class="empty-title">Belum Ada Kegiatan</h3>
+      <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini</p>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Footer -->
   <footer class="site-footer">
@@ -281,6 +403,23 @@
   <script src="script.js"></script>
   <script>
     lucide.createIcons();
+
+    // Navbar Toggle Functionality for Mobile
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarMenu = document.getElementById('navbar-menu');
+
+    if (navbarToggle && navbarMenu) {
+      navbarToggle.addEventListener('click', () => {
+        navbarMenu.classList.toggle('active');
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
+          navbarMenu.classList.remove('active');
+        }
+      });
+    }
   </script>
 </body>
 </html>
