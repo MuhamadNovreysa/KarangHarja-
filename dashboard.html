@@ -196,10 +196,11 @@
     /* Header */
     header {
       background-color: #fff;
-      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
       border-bottom: 1px solid #e5e7eb;
     }
 
+    /* Header Container */
     .header-container {
       max-width: 80rem;
       margin-left: auto;
@@ -290,54 +291,58 @@
       gap: 1.5rem;
     }
 
-    /* Enhanced Mobile Menu Styles */
-#mobileMenuButton {
-  position: relative;
-  z-index: 50;
-}
-
-#mobileMenu {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  opacity: 0;
-  transform: scaleY(0);
-  transform-origin: top;
-}
-
-#mobileMenu.active {
-  opacity: 1;
-  transform: scaleY(1);
-  max-height: 150px;
-}
-
-/* Animation for menu items */
-#mobileMenu a, #mobileMenu button {
-  transform: translateY(-10px);
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-#mobileMenu.active a, #mobileMenu.active button {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-#mobileMenu a {
-  transition-delay: 0.1s;
-}
-
-#mobileMenu button {
-  transition-delay: 0.2s;
-}
-
-    /* Header Logo */
+    /* Logo and Title */
     .logo-img {
-      height: 30px; /* Reduced from 40px */
+      height: 32px;
       width: auto;
     }
 
     .logo-title {
-      font-size: 1rem; /* Reduced from text-lg */
-      margin-left: 0.5rem; /* Reduced from ml-2 */
+      font-size: 1.125rem;
+      margin-left: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Mobile Menu Button */
+    #mobileMenuButton {
+      position: relative;
+      z-index: 50;
+      transition: background-color 0.3s ease;
+    }
+
+    /* Mobile Menu */
+    #mobileMenu {
+      opacity: 0;
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    #mobileMenu.active {
+      opacity: 1;
+      transform: scaleY(1);
+    }
+
+    /* Animation for menu items */
+    #mobileMenu a,
+    #mobileMenu button {
+      transform: translateY(-10px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    #mobileMenu.active a,
+    #mobileMenu.active button {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    #mobileMenu a {
+      transition-delay: 0.1s;
+    }
+
+    #mobileMenu button {
+      transition-delay: 0.2s;
     }
 
     @media (min-width: 768px) {
@@ -406,6 +411,14 @@
         padding-left: 1.5rem;
         padding-right: 1.5rem;
       }
+
+      .logo-img {
+        height: 36px;
+      }
+
+      .logo-title {
+        font-size: 1.25rem;
+      }
     }
 
     @media (min-width: 768px) {
@@ -414,52 +427,68 @@
         padding-right: 2rem;
       }
     }
+
+    @media (min-width: 1024px) {
+      .logo-img {
+        height: 40px;
+      }
+
+      .logo-title {
+        font-size: 1.375rem;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen bg-gray-50">
-  <!-- Header Section for dashboard.html -->
-<header class="bg-white shadow-sm border-b fixed w-full z-50">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="flex justify-between items-center h-16">
-      <!-- Logo and Title -->
-      <div class="flex items-center">
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
-             alt="Logo Desa KarangHarja" 
-             class="logo-img">
-        <span class="logo-title font-semibold text-gray-900">Dashboard Admin</span>
+  <!-- Header Section -->
+  <header class="bg-white shadow-sm border-b fixed w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo and Title -->
+        <div class="flex items-center">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
+               alt="Logo Desa KarangHarja" 
+               class="logo-img">
+          <span class="logo-title font-semibold text-gray-900">Dashboard Admin</span>
+        </div>
+
+        <!-- Desktop Navigation (Hidden on mobile) -->
+        <nav class="hidden md:flex items-center space-x-4">
+          <a href="/" class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200">
+            <i data-lucide="home" class="w-4 h-4 mr-2"></i>
+            Lihat Website
+          </a>
+          <button id="desktopLogoutBtn" class="flex items-center text-sm font-medium text-gray-700 hover:text-red-600 transition-colors duration-200">
+            <i data-lucide="log-out" class="w-4 h-4 mr-2"></i>
+            Logout
+          </button>
+        </nav>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuButton" class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-gray-100 hover:bg-gray-200 transition-all duration-300 focus:outline-none relative z-50">
+          <div class="flex flex-col justify-center items-center space-y-1.5">
+            <span id="line1" class="block w-6 h-0.5 bg-gray-700 transition-all duration-300"></span>
+            <span id="line2" class="block w-6 h-0.5 bg-gray-700 transition-all duration-300"></span>
+            <span id="line3" class="block w-6 h-0.5 bg-gray-700 transition-all duration-300"></span>
+          </div>
+        </button>
       </div>
 
-      <!-- Enhanced Mobile Menu Button -->
-      <button id="mobileMenuButton" class="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-300 focus:outline-none">
-  <!-- Garis atas -->
-  <span id="line1" class="block w-6 h-0.5 bg-gray-700 mb-1.5 transition-all duration-300"></span>
-  <!-- Garis tengah -->
-  <span id="line2" class="block w-6 h-0.5 bg-gray-700 mb-1.5 transition-all duration-300"></span>
-  <!-- Garis bawah -->
-  <span id="line3" class="block w-6 h-0.5 bg-gray-700 transition-all duration-300"></span>
-      </button>
-      
-
-      <!-- Desktop Buttons (Hidden on mobile) -->
-      <div class="hidden md:flex items-center space-x-2">
-        <!-- Empty for mobile -->
-      </div>
+      <!-- Mobile Menu -->
+      <nav id="mobileMenu" class="md:hidden hidden bg-white rounded-lg shadow-lg mt-2 mx-4 absolute w-[calc(100%-2rem)] transition-all duration-300 transform origin-top">
+        <div class="flex flex-col">
+          <a href="/" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-t-lg transition-colors duration-200">
+            <i data-lucide="home" class="w-4 h-4 mr-2 text-blue-600"></i>
+            Lihat Website
+          </a>
+          <button id="mobileLogoutBtn" class="flex items-center w-full text-left px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-b-lg transition-colors duration-200">
+            <i data-lucide="log-out" class="w-4 h-4 mr-2 text-red-600"></i>
+            Logout
+          </button>
+        </div>
+      </nav>
     </div>
-
-    <!-- Enhanced Mobile Menu -->
-    <div id="mobileMenu" class="md:hidden hidden pb-2 bg-white rounded-lg shadow-lg mt-1 mx-2 transition-all duration-300 transform origin-top">
-      <a href="/" class="block px-4 py-3 text-sm hover:bg-gray-100 flex items-center rounded-t-lg transition-colors duration-200">
-        <i data-lucide="home" class="w-4 h-4 mr-2 text-blue-600"></i>
-        <span class="font-medium">Lihat Website</span>
-      </a>
-      <button id="mobileLogoutBtn" class="block w-full text-left px-4 py-3 text-sm hover:bg-gray-100 flex items-center rounded-b-lg transition-colors duration-200">
-        <i data-lucide="log-out" class="w-4 h-4 mr-2 text-red-600"></i>
-        <span class="font-medium">Logout</span>
-      </button>
-    </div>
-  </div>
-</header>
-
+  </header>
 
   <!-- Main Content with padding to account for fixed header -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-24"> <!-- Added pt-24 to account for header height -->
@@ -599,129 +628,125 @@
   </div>
 
   <script src="https://unpkg.com/lucide@latest"></script>
-<script>
-  // Initialize Lucide icons
-  lucide.createIcons();
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
 
-  // Mobile Menu Toggle Functionality
-  const mobileMenuButton = document.getElementById('mobileMenuButton');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const line1 = document.getElementById('line1');
-  const line2 = document.getElementById('line2');
-  const line3 = document.getElementById('line3');
+    // Mobile Menu Toggle Functionality
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const line1 = document.getElementById('line1');
+    const line2 = document.getElementById('line2');
+    const line3 = document.getElementById('line3');
 
-  if (mobileMenuButton && mobileMenu) {
-    mobileMenuButton.addEventListener('click', function() {
-      // Toggle menu visibility
-      mobileMenu.classList.toggle('hidden');
-      mobileMenu.classList.toggle('scale-y-0');
-      mobileMenu.classList.toggle('opacity-0');
-      
-      // Animate hamburger to X
-      if (mobileMenu.classList.contains('hidden')) {
-        // Return to hamburger icon
-        line1.style.transform = 'rotate(0) translateY(0)';
-        line2.style.opacity = '1';
-        line3.style.transform = 'rotate(0) translateY(0)';
-      } else {
-        // Transform to X icon
-        line1.style.transform = 'rotate(45deg) translateY(6px)';
-        line2.style.opacity = '0';
-        line3.style.transform = 'rotate(-45deg) translateY(-6px)';
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', function () {
+        // Toggle menu visibility
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('active');
+
+        // Animate hamburger to X
+        if (mobileMenu.classList.contains('active')) {
+          line1.style.transform = 'rotate(45deg) translate(5px, 5px)';
+          line2.style.opacity = '0';
+          line3.style.transform = 'rotate(-45deg) translate(7px, -7px)';
+        } else {
+          line1.style.transform = 'rotate(0) translate(0, 0)';
+          line2.style.opacity = '1';
+          line3.style.transform = 'rotate(0) translate(0, 0)';
+        }
+      });
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function (event) {
+      if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
+        if (mobileMenu.classList.contains('active')) {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('active');
+          line1.style.transform = 'rotate(0) translate(0, 0)';
+          line2.style.opacity = '1';
+          line3.style.transform = 'rotate(0) translate(0, 0)';
+        }
       }
     });
-  }
 
-  // Close menu when clicking outside
-  document.addEventListener('click', function(event) {
-    if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
-      if (!mobileMenu.classList.contains('hidden')) {
-        mobileMenu.classList.add('hidden', 'scale-y-0', 'opacity-0');
-        // Reset to hamburger icon
-        line1.style.transform = 'rotate(0) translateY(0)';
-        line2.style.opacity = '1';
-        line3.style.transform = 'rotate(0) translateY(0)';
-      }
+    // Logout functionality
+    const logout = () => {
+      localStorage.removeItem('isAdminLoggedIn');
+      localStorage.removeItem('activities');
+      window.location.href = 'login.html';
+    };
+
+    // Attach logout events
+    document.getElementById('mobileLogoutBtn')?.addEventListener('click', logout);
+    document.getElementById('desktopLogoutBtn')?.addEventListener('click', logout);
+
+    // Check authentication
+    if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
+      window.location.href = 'login.html';
     }
-  });
 
-  // Logout functionality
-  const logout = () => {
-    localStorage.removeItem('isAdminLoggedIn');
-    localStorage.removeItem('activities');
-    window.location.href = 'login.html';
-  };
+    // Update stats
+    const updateStats = () => {
+      const totalActivities = activities.length;
+      const publishedCount = activities.filter(a => a.published).length;
+      const draftCount = activities.filter(a => !a.published).length;
+      const totalViews = activities.reduce((sum, a) => sum + a.views, 0);
+      const publishedPercent = Math.round((publishedCount / totalActivities) * 100);
 
-  // Attach logout event
-  document.getElementById('mobileLogoutBtn')?.addEventListener('click', logout);
+      document.getElementById('totalActivities').textContent = totalActivities;
+      document.getElementById('publishedCount').textContent = publishedCount;
+      document.getElementById('draftCount').textContent = draftCount;
+      document.getElementById('totalViews').textContent = totalViews;
+      document.getElementById('publishedPercent').textContent = `${publishedPercent}%`;
+      document.getElementById('publishedProgress').style.width = `${publishedPercent}%`;
+    };
 
-  // Check authentication
-  if (localStorage.getItem('isAdminLoggedIn') !== 'true') {
-    window.location.href = 'login.html';
-  }
+    // Render activities
+    const renderActivities = () => {
+      const container = document.getElementById('activitiesContainer');
+      if (!container) return;
 
-  
-
-  // Update stats
-  const updateStats = () => {
-    const totalActivities = activities.length;
-    const publishedCount = activities.filter(a => a.published).length;
-    const draftCount = activities.filter(a => !a.published).length;
-    const totalViews = activities.reduce((sum, a) => sum + a.views, 0);
-    const publishedPercent = Math.round((publishedCount / totalActivities) * 100);
-
-    document.getElementById('totalActivities').textContent = totalActivities;
-    document.getElementById('publishedCount').textContent = publishedCount;
-    document.getElementById('draftCount').textContent = draftCount;
-    document.getElementById('totalViews').textContent = totalViews;
-    document.getElementById('publishedPercent').textContent = `${publishedPercent}%`;
-    document.getElementById('publishedProgress').style.width = `${publishedPercent}%`;
-  };
-
-  // Render activities
-  const renderActivities = () => {
-    const container = document.getElementById('activitiesContainer');
-    if (!container) return;
-
-    if (activities.length > 0) {
-      container.innerHTML = `
-        <div class="space-y-4">
-          ${activities.slice(0, 5).map(activity => `
-            <div class="activity-item">
-              <div class="flex items-center justify-between">
-                <div class="flex-1">
-                  <h3 class="font-medium text-gray-900 mb-1">${activity.title}</h3>
-                  <div class="flex items-center space-x-4 text-sm text-gray-500">
-                    <span class="flex items-center">
-                      <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
-                      ${new Date(activity.date).toLocaleDateString('id-ID')}
+      if (activities.length > 0) {
+        container.innerHTML = `
+          <div class="space-y-4">
+            ${activities.slice(0, 5).map(activity => `
+              <div class="activity-item">
+                <div class="flex items-center justify-between">
+                  <div class="flex-1">
+                    <h3 class="font-medium text-gray-900 mb-1">${activity.title}</h3>
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                      <span class="flex items-center">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-1"></i>
+                        ${new Date(activity.date).toLocaleDateString('id-ID')}
+                      </span>
+                      <span class="flex items-center">
+                        <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                        ${activity.views} views
+                      </span>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <span class="badge ${activity.published ? 'badge-default' : 'badge-secondary'}">
+                      ${activity.published ? 'Published' : 'Draft'}
                     </span>
-                    <span class="flex items-center">
-                      <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
-                      ${activity.views} views
-                    </span>
+                    <button class="button button-outline button-sm">
+                      Edit
+                    </button>
                   </div>
                 </div>
-                <div class="flex items-center space-x-2">
-                  <span class="badge ${activity.published ? 'badge-default' : 'badge-secondary'}">
-                    ${activity.published ? 'Published' : 'Draft'}
-                  </span>
-                  <button class="button button-outline button-sm">
-                    Edit
-                  </button>
-                </div>
               </div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-      lucide.createIcons();
-    }
-  };
+            `).join('')}
+          </div>
+        `;
+        lucide.createIcons();
+      }
+    };
 
-  // Initialize dashboard
-  updateStats();
-  renderActivities();
-</script>
+    // Initialize dashboard
+    updateStats();
+    renderActivities();
+  </script>
 </body>
 </html>
