@@ -44,17 +44,18 @@
 
     <!-- Section 2: Organizational Structure -->
     <section id="about" class="org-section">
-      <div class="container">
-        <div class="section-header">
-          <h2>STRUKTURAL PEMERINTAH DESA KARANGHARJA</h2>
-          <div class="header-line"></div>
-        </div>
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">STRUKTURAL PEMERINTAH DESA KARANGHARJA</h2>
+      <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+    </div>
+
 
         <!-- Organizational Chart -->
-        <div class="org-chart">
+        <div class="org-chart-container">
           <!-- Level 0: Kepala Desa -->
           <div class="org-level">
-            <div class="org-node level-0">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -68,7 +69,7 @@
 
           <!-- Level 1: Sekretaris Desa -->
           <div class="org-level">
-            <div class="org-node level-1">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -82,7 +83,7 @@
 
           <!-- Level 2: Kasi Pemerintah -->
           <div class="org-level">
-            <div class="org-node level-2">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -96,7 +97,7 @@
 
           <!-- Level 3: Staff Level 1 -->
           <div class="org-staff-grid">
-            <div class="org-node level-3">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -105,7 +106,7 @@
                 <p>LIMAN OGAN</p>
               </div>
             </div>
-            <div class="org-node level-3">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -114,7 +115,7 @@
                 <p>SATIM</p>
               </div>
             </div>
-            <div class="org-node level-3">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -128,7 +129,7 @@
 
           <!-- Level 4: Staff Level 2 -->
           <div class="org-staff-grid">
-            <div class="org-node level-3">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -137,7 +138,7 @@
                 <p>SAMSUDIN</p>
               </div>
             </div>
-            <div class="org-node level-3">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -146,7 +147,7 @@
                 <p>TALA</p>
               </div>
             </div>
-            <div class="org-node level-3">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -160,7 +161,7 @@
 
           <!-- Level 5: Others -->
           <div class="org-staff-grid cols-2">
-            <div class="org-node level-3">
+            <div class="org-node">
               <div class="org-card">
                 <div class="org-icon">
                   <i data-lucide="users"></i>
@@ -210,37 +211,28 @@
     </section>
 
     <!-- Section 4: Village Activities -->
-    <section id="activities" class="activities-section">
-      <div class="decorative-elements">
-        <div class="decorative-circle green"></div>
-        <div class="decorative-circle blue"></div>
-        <div class="decorative-circle purple"></div>
-      </div>
+    <!-- Di dalam file HTML -->
+<section id="activities" class="activities-section">
+  <div class="container mx-auto px-4 text-center">
+    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 rounded-full mb-6 shadow-lg">
+      <i data-lucide="calendar" class="text-white text-2xl"></i>
+    </div>
+    <h2 class="text-2xl font-bold text-gray-800 mb-4">KEGIATAN DESA KARANGHARJA</h2>
+    <div class="w-24 h-1 bg-gradient-to-r from-green-500 to-blue-500 mx-auto mb-6"></div>
+    <p class="text-gray-600 max-w-2xl mx-auto mb-12">
+      Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
+    </p>
 
-      <div class="container">
-        <div class="section-header">
-          <div class="calendar-icon">
-            <i data-lucide="calendar"></i>
-          </div>
-          <h2>KEGIATAN DESA KARANGHARJA</h2>
-          <div class="header-line gradient"></div>
-          <p class="section-description">
-            Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
-          </p>
-        </div>
-
-        <div class="activities-container" id="activities-container">
-          <!-- Activities will be inserted here by JavaScript -->
-          <div class="empty-activities">
-            <div class="empty-icon">
-              <i data-lucide="calendar" class="empty-calendar"></i>
-            </div>
-            <h3>Belum Ada Kegiatan</h3>
-            <p>Kegiatan desa akan ditampilkan di sini</p>
-          </div>
-        </div>
+    <!-- Hanya tampilan kosong -->
+    <div class="text-center py-12">
+      <div class="inline-flex items-center justify-center w-24 h-24 bg-gray-100 rounded-full mb-6 mx-auto">
+        <i data-lucide="calendar" class="w-12 h-12 text-gray-300"></i>
       </div>
-    </section>
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">Belum Ada Kegiatan</h3>
+      <p class="text-gray-500">Kegiatan desa akan ditampilkan di sini</p>
+    </div>
+  </div>
+</section>
 
     <!-- Footer -->
     <footer class="site-footer">
