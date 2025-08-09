@@ -6,99 +6,79 @@
   <title>Desa KarangHarja - Sistem Informasi Desa</title>
   <meta name="description" content="Sistem Informasi Desa KarangHarja, Kecamatan Pebayuran, Kabupaten Bekasi, Jawa Barat">
   <meta name="keywords" content="desa karangharja, pebayuran, bekasi, jawa barat, sistem informasi desa">
+  <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/lucide@latest/icons.css" rel="stylesheet">
-
+  <link href="https://unpkg.com/lucide@latest/dist/lucide.min.css" rel="stylesheet">
   <style>
-    /* ========== GLOBAL ========== */
-    :root{
-      --bg:#f8fafc;
-      --card:#ffffff;
-      --muted:#6b7280;
-      --primary:#2563eb;
-      --nav-height:50px;
+    /* Reset default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      margin:0;
-      background:var(--bg);
-      color:#0f172a;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      padding-top:var(--nav-height);
-      line-height:1.45;
-    }
-    a{color:inherit}
 
-    /* ========== NAVBAR ========== */
+    body {
+      font-family: 'Inter', sans-serif;
+      padding-top: 60px;
+      background-color: #f9fafb;
+    }
+
+    /* Navbar Styles */
     .navbar {
-      background-color: #fff !important;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       z-index: 1000;
-      padding: 0.25rem 1rem;
-      height: var(--nav-height);
-      display:flex;
-      align-items:center;
-      backdrop-filter: blur(6px);
+      padding: 0.5rem 1rem;
+      height: 60px;
     }
+
     .navbar-container {
       max-width: 1280px;
       margin: 0 auto;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      width:100%;
-      gap:1rem;
+      justify-content: space-between;
     }
 
     .navbar-brand {
       display: flex;
       align-items: center;
-      font-size: 1.125rem;
+      font-size: 1.25rem;
       font-weight: 600;
       color: #111827;
       text-decoration: none;
-      margin-right: auto;
-      gap:.5rem;
     }
 
     .navbar-logo {
-      height: 28px;
+      height: 32px;
       width: auto;
-      margin-right: 0.25rem;
-      display:block;
+      margin-right: 0.5rem;
     }
 
     .navbar-toggle {
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0.25rem;
+      padding: 0.5rem;
       display: none;
       color: #111827;
-      border-radius:.5rem;
     }
-
-    .navbar-toggle:focus { outline: 2px solid rgba(37,99,235,0.15); }
 
     .navbar-toggle .bar {
       display: block;
-      width: 18px;
-      height: 2px;
+      width: 24px;
+      height: 3px;
       background-color: #111827;
-      margin: 3px 0;
-      transition: all 0.28s cubic-bezier(.2,.9,.3,1);
-      border-radius:2px;
+      margin: 5px 0;
+      transition: all 0.3s ease;
     }
 
     .navbar-toggle.active .bar:nth-child(1) {
-      transform: translateY(5px) rotate(45deg);
+      transform: translateY(8px) rotate(45deg);
     }
 
     .navbar-toggle.active .bar:nth-child(2) {
@@ -106,14 +86,12 @@
     }
 
     .navbar-toggle.active .bar:nth-child(3) {
-      transform: translateY(-5px) rotate(-45deg);
+      transform: translateY(-8px) rotate(-45deg);
     }
 
     .navbar-menu {
       display: flex;
-      align-items:center;
-      gap:1rem;
-      margin-left:auto;
+      align-items: center;
     }
 
     .navbar-links {
@@ -121,12 +99,12 @@
       display: flex;
       margin: 0;
       padding: 0;
-      gap:1rem;
-      align-items:center;
     }
 
     .navbar-links li {
-      margin-left: 0;
+      margin-left: 1.5rem;
+      display: flex;
+      align-items: center;
     }
 
     .navbar-links a {
@@ -134,157 +112,316 @@
       font-weight: 500;
       color: #4b5563;
       text-decoration: none;
-      transition: color 0.18s ease, transform 0.18s ease;
-      display:inline-flex;
-      gap:.5rem;
-      align-items:center;
-      padding:.25rem .45rem;
-      border-radius:.5rem;
+      display: flex;
+      align-items: center;
+      transition: color 0.3s ease, transform 0.2s ease;
     }
 
-    .navbar-links a svg { width:16px; height:16px; opacity:.9; }
-
     .navbar-links a:hover {
-      color: var(--primary);
+      color: #2563eb;
       transform: translateY(-2px);
     }
 
-    /* Mobile Menu (animated dropdown card) */
-    .mobile-menu {
-      display:none;
-      position: absolute;
-      top: calc(var(--nav-height) + 8px);
-      right: 1rem;
-      background-color: #fff;
-      box-shadow: 0 8px 30px rgba(2,6,23,0.12);
-      border-radius: 12px;
-      padding: 0.4rem;
-      width: 220px;
-      opacity: 0;
-      transform: translateY(-8px) scale(.98);
-      transition: opacity .26s ease, transform .28s cubic-bezier(.2,.95,.3,1);
-      z-index: 1100;
-      pointer-events:none;
+    .navbar-links i {
+      margin-right: 0.5rem;
+      font-size: 1rem;
     }
 
-    .mobile-menu.active {
-      display:block;
-      opacity:1;
-      transform: translateY(0) scale(1);
-      pointer-events:auto;
-    }
-
-    .mobile-links { list-style:none; margin:0; padding:0.25rem; display:flex; flex-direction:column; gap:.25rem; }
-    .mobile-links a {
-      display:flex;
-      gap:.6rem;
-      align-items:center;
-      padding:.6rem .6rem;
-      text-decoration:none;
-      color:#111827;
-      border-radius:.75rem;
-      font-weight:600;
-      transition: background .18s ease, transform .18s ease, color .18s ease;
-    }
-    .mobile-links a i { width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; }
-    .mobile-links a:hover { background: rgba(37,99,235,0.06); color:var(--primary); transform: translateX(6px); }
-
-    /* stagger animation */
-    .mobile-links a { opacity:0; transform: translateX(6px); transition: opacity .28s ease, transform .28s cubic-bezier(.2,.95,.3,1); }
-    .mobile-menu.active .mobile-links a { opacity:1; transform: translateX(0); }
-    .mobile-links a:nth-child(1){ transition-delay:.03s; }
-    .mobile-links a:nth-child(2){ transition-delay:.07s; }
-    .mobile-links a:nth-child(3){ transition-delay:.11s; }
-    .mobile-links a:nth-child(4){ transition-delay:.15s; }
-    .mobile-links a:nth-child(5){ transition-delay:.19s; }
-
+    /* Mobile Menu */
     @media (max-width: 767px) {
-      .navbar-toggle { display:block; margin-left:auto; }
-      .navbar-links { display:none; }
-      .navbar-menu { gap:.5rem; }
+      .navbar-toggle {
+        display: block;
+      }
+
+      .navbar-menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        right: 1rem;
+        background-color: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        width: 200px;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .navbar-menu.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .navbar-links {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .navbar-links li {
+        margin: 0;
+        width: 100%;
+      }
+
+      .navbar-links a {
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .navbar-links a:hover {
+        background-color: #f1f5f9;
+        transform: translateX(5px);
+      }
     }
 
-    @media (min-width: 768px) {
-      .mobile-menu { display:none !important; }
+    @media (min-width: 640px) {
+      .navbar-logo {
+        height: 36px;
+      }
     }
 
-    /* ========== HERO (SECTION 1) ========== */
+    @media (min-width: 1024px) {
+      .navbar-logo {
+        height: 40px;
+      }
+    }
+
+    /* Hero Section (Placeholder) */
     .hero-section {
-      padding: 3.5rem 1rem 2rem;
-      background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+      text-align: center;
+      padding: 2rem 1rem;
     }
-    .hero-inner {
-      max-width:1200px;
-      margin:0 auto;
-      display:flex;
-      gap:1.5rem;
-      align-items:flex-start;
-      justify-content:space-between;
-      flex-wrap:wrap;
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
     }
-    .logo-container{ flex:0 0 auto; }
-    .logo-img{ width:96px; height:auto; display:block; border-radius:8px; box-shadow:0 6px 18px rgba(2,6,23,0.06); }
 
-    .hero-content{ flex:1 1 560px; min-width:260px; }
-    .hero-title{ font-size:1.25rem; margin:0 0 .4rem; font-weight:700; display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; letter-spacing:.4px; }
-    .cursor { display:inline-block; animation: blink 1s steps(2,end) infinite; color:#111827; }
-    @keyframes blink { 50%{ opacity:0 } }
-    .hero-subtitle{ margin:0; color:var(--muted); font-weight:600; }
-    .hero-description{ margin:.6rem 0 0; color:var(--muted); max-width:72ch; }
-
-    .scroll-indicator { margin-top:1rem; display:flex; align-items:center; gap:.5rem; color:var(--muted); cursor:pointer; }
-    .scroll-icon { width:20px; height:20px; opacity:.85; }
-
-    /* ========== ORG SECTION (SECTION 2) ========== */
-    .org-section { padding:2.25rem 1rem; }
-    .container { max-width:1200px; margin:0 auto; }
-    .text-center { text-align:center; }
-    .org-chart-container { margin-top:1.25rem; display:flex; flex-direction:column; gap:1rem; align-items:center; }
-    .org-level { display:flex; align-items:center; gap: .5rem; }
-    .org-card {
-      background:var(--card);
-      padding:.8rem;
-      border-radius:.75rem;
-      min-width:180px;
-      box-shadow: 0 6px 16px rgba(2,6,23,0.04);
-      text-align:center;
+    .hero-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 1rem;
     }
-    .org-card h3 { margin:.25rem 0 0; font-size:.95rem; }
-    .org-card p { margin: .25rem 0 0; color:var(--muted); font-weight:600; }
 
-    .org-staff-grid { display:flex; gap:.75rem; flex-wrap:wrap; justify-content:center; }
-    .connection-line.vertical { width:2px; height:16px; background:linear-gradient(180deg,#e6eefc,#f8fafc); border-radius:4px; }
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: #4b5563;
+      margin-bottom: 1rem;
+    }
 
-    /* ========== MAP SECTION (SECTION 3) ========== */
-    .map-section { padding:2.25rem 1rem 1rem; }
-    .map-container { max-width:1200px; margin:0 auto; }
-    .map-card { background: #fff; border-radius:12px; overflow:hidden; box-shadow:0 8px 24px rgba(2,6,23,0.05); height:360px; }
+    .hero-description {
+      font-size: 1rem;
+      color: #6b7280;
+      line-height: 1.6;
+    }
 
-    .map-iframe { width:100%; height:100%; border:0; display:block; }
+    .logo-container {
+      margin-bottom: 2rem;
+    }
 
-    /* ========== ACTIVITIES (SECTION 4) ========== */
-    .activities-section { padding:2.25rem 1rem; position:relative; overflow:visible; }
-    .decorative-elements { position:absolute; inset:0; pointer-events:none; }
-    .decorative-circle { position:absolute; border-radius:50%; opacity:.12; }
-    .decorative-circle.green { width:220px; height:220px; left:-60px; top:-40px; background:#10b981; }
-    .decorative-circle.blue { width:160px; height:160px; right:-40px; top:40px; background:#3b82f6; }
-    .decorative-circle.purple { width:120px; height:120px; left:20%; bottom:-40px; background:#8b5cf6; }
+    .logo-img {
+      height: 80px;
+    }
 
-    .section-header-activities { max-width:1200px; margin:0 auto 1rem; display:flex; gap:1rem; align-items:center; }
-    .calendar-icon{ width:48px; height:48px; background:#fff; border-radius:10px; display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(2,6,23,0.06); }
-    .section-title-activities { font-size:1.125rem; margin:0; font-weight:700; }
-    .empty-activities { max-width:1200px; margin:1rem auto; background:#fff; border-radius:12px; padding:1.25rem; box-shadow:0 8px 24px rgba(2,6,23,0.04); text-align:center; }
-    .empty-title { margin:.6rem 0 0; font-weight:700; }
-    .empty-subtitle { margin:.25rem 0 0; color:var(--muted); font-weight:600; }
+    .scroll-indicator {
+      margin-top: 2rem;
+    }
+
+    .scroll-icon {
+      font-size: 2rem;
+      color: #2563eb;
+    }
+
+    /* Organizational Section (Placeholder) */
+    .org-section {
+      padding: 4rem 1rem;
+    }
+
+    .org-chart-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .org-level, .org-staff-grid {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .org-node {
+      background: #fff;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      min-width: 200px;
+    }
+
+    .org-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.5rem;
+    }
+
+    .org-card p {
+      font-size: 0.875rem;
+      color: #4b5563;
+    }
+
+    .connection-line {
+      width: 2px;
+      height: 20px;
+      background: #d1d5db;
+      margin: 1rem auto;
+    }
+
+    /* Map Section (Placeholder) */
+    .map-section {
+      padding: 4rem 1rem;
+      background: #f1f5f9;
+    }
+
+    .map-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .map-card {
+      height: 400px;
+      border-radius: 0.5rem;
+      overflow: hidden;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .header-line {
+      width: 100px;
+      height: 4px;
+      background: #2563eb;
+      margin: 0.5rem auto;
+    }
+
+    /* Activities Section (Placeholder) */
+    .activities-section {
+      padding: 4rem 1rem;
+      position: relative;
+    }
+
+    .decorative-elements {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+
+    .decorative-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.2;
+    }
+
+    .decorative-circle.green {
+      width: 200px;
+      height: 200px;
+      background: #10b981;
+      top: 10%;
+      left: 10%;
+    }
+
+    .decorative-circle.blue {
+      width: 150px;
+      height: 150px;
+      background: #2563eb;
+      top: 60%;
+      right: 10%;
+    }
+
+    .decorative-circle.purple {
+      width: 100px;
+      height: 100px;
+      background: #8b5cf6;
+      bottom: 20%;
+      left: 30%;
+    }
+
+    .section-header-activities {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-title-activities {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .section-divider {
+      width: 100px;
+      height: 4px;
+      background: #2563eb;
+      margin: 0.5rem auto;
+    }
+
+    .section-description {
+      font-size: 1rem;
+      color: #6b7280;
+    }
+
+    .empty-activities {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .empty-icon i {
+      font-size: 3rem;
+      color: #2563eb;
+    }
+
+    .empty-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #111827;
+      margin: 1rem 0;
+    }
+
+    .empty-subtitle {
+      font-size: 1rem;
+      color: #6b7280;
+    }
 
     /* Footer */
-    .site-footer { padding:1rem; text-align:center; color:var(--muted); font-size:.95rem; }
-    /* helpers */
-    .w-24{ width:96px; height:4px; }
+    .site-footer {
+      background: #111827;
+      color: #fff;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    .site-footer p {
+      font-size: 0.875rem;
+    }
+
+    .footer-subtext {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-top: 0.5rem;
+    }
   </style>
 </head>
 <body>
-  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="navbar-container">
       <a href="#" class="navbar-brand">
@@ -293,78 +430,52 @@
              class="navbar-logo">
         Desa KarangHarja
       </a>
-
-      <!-- Mobile Menu Button -->
-      <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+      <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle menu">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
-
-      <!-- Nav Links (desktop) -->
       <div class="navbar-menu" id="navbar-menu">
-        <ul class="navbar-links" role="menubar" aria-label="Main navigation">
-          <li role="none"><a role="menuitem" class="nav-link" href="#home"><i data-lucide="home"></i> Home</a></li>
-          <li role="none"><a role="menuitem" class="nav-link" href="#about"><i data-lucide="layout"></i> Struktur</a></li>
-          <li role="none"><a role="menuitem" class="nav-link" href="#map"><i data-lucide="map-pin"></i> Maps</a></li>
-          <li role="none"><a role="menuitem" class="nav-link" href="#activities"><i data-lucide="calendar"></i> Kegiatan</a></li>
-          <li role="none"><a role="menuitem" class="nav-link" href="login.html" id="login-btn"><i data-lucide="log-in"></i> Login</a></li>
-        </ul>
-      </div>
-
-      <!-- Mobile menu -->
-      <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
-        <ul class="mobile-links" role="menu" aria-label="Mobile menu">
-          <li><a href="#home" role="menuitem"><i data-lucide="home"></i> Home</a></li>
-          <li><a href="#about" role="menuitem"><i data-lucide="layout"></i> Struktur</a></li>
-          <li><a href="#map" role="menuitem"><i data-lucide="map-pin"></i> Maps</a></li>
-          <li><a href="#activities" role="menuitem"><i data-lucide="calendar"></i> Kegiatan</a></li>
-          <li><a href="login.html" role="menuitem"><i data-lucide="log-in"></i> Login</a></li>
+        <ul class="navbar-links">
+          <li><a href="#home"><i data-lucide="home"></i>Home</a></li>
+          <li><a href="#about"><i data-lucide="users"></i>Struktur</a></li>
+          <li><a href="#map"><i data-lucide="map"></i>Maps</a></li>
+          <li><a href="#activities"><i data-lucide="calendar"></i>Kegiatan</a></li>
+          <li><a href="login.html" id="login-btn"><i data-lucide="log-in"></i>Login</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <!-- SECTION 1 : HERO -->
-  <section class="hero-section" id="home">
-    <div class="hero-inner container">
-      <!-- Logo -->
-      <div class="logo-container">
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png"
-             alt="Logo Desa KarangHarja" class="logo-img">
-      </div>
-
-      <!-- Text content -->
-      <div class="hero-content">
-        <h1 class="hero-title">
-          <span id="typewriter-text">SISTEM INFORMASI DESA KARANGHARJA</span>
-          <span class="cursor">|</span>
-        </h1>
-        <p class="hero-subtitle">Kec. Pebayuran Kab. Bekasi</p>
-        <p class="hero-description">
-          Selamat datang di Sistem Informasi Desa KarangHarja. Kami berkomitmen untuk memberikan pelayanan terbaik
-          kepada masyarakat dan membangun desa yang maju, sejahtera, dan berkelanjutan. Mari bersama-sama
-          membangun KarangHarja yang lebih baik untuk generasi mendatang.
-        </p>
-      </div>
-
-      <div class="scroll-indicator" id="scroll-indicator" title="Scroll ke bawah">
-        <i data-lucide="chevron-down" class="scroll-icon"></i>
-      </div>
+  <section class="hero-section">
+    <div class="logo-container">
+      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png"
+           alt="Logo Desa KarangHarja" class="logo-img">
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span id="typewriter-text">SISTEM INFORMASI DESA KARANGHARJA</span>
+        <span class="cursor">|</span>
+      </h1>
+      <p class="hero-subtitle">Kec. Pebayuran Kab. Bekasi</p>
+      <p class="hero-description">
+        Selamat datang di Sistem Informasi Desa KarangHarja. Kami berkomitmen untuk memberikan pelayanan terbaik
+        kepada masyarakat dan membangun desa yang maju, sejahtera, dan berkelanjutan. Mari bersama-sama
+        membangun KarangHarja yang lebih baik untuk generasi mendatang.
+      </p>
+    </div>
+    <div class="scroll-indicator">
+      <i data-lucide="chevron-down" class="scroll-icon"></i>
     </div>
   </section>
 
-  <!-- SECTION 2 : ORGANIZATIONAL STRUCTURE -->
   <section id="about" class="org-section">
-    <div class="container">
+    <div class="container mx-auto px-4">
       <div class="text-center mb-12">
         <h2 class="text-2xl font-bold text-gray-800 mb-4">STRUKTURAL PEMERINTAH DESA KARANGHARJA</h2>
-        <div class="w-24 h-1 bg-blue-600 mx-auto" style="width:96px;height:4px;background:#2563eb;border-radius:4px;margin:0.5rem auto 0;"></div>
+        <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
       </div>
-
-      <!-- Organizational Chart -->
       <div class="org-chart-container">
-        <!-- Level 0: Kepala Desa -->
         <div class="org-level">
           <div class="org-node level-0">
             <div class="org-card">
@@ -377,22 +488,18 @@
           </div>
           <div class="connection-line vertical"></div>
         </div>
-
-        <!-- Level 1: Sekretaris Desa -->
         <div class="org-level">
           <div class="org-node level-1">
             <div class="org-card">
               <div class="org-icon">
                 <i data-lucide="users"></i>
               </div>
-              <h3>SEKERTARIS DESA</h3>
+              <h3>SEKRETARIS DESA</h3>
               <p>SUHANDI</p>
             </div>
           </div>
           <div class="connection-line vertical"></div>
         </div>
-
-        <!-- Level 2: Kasi Pemerintah -->
         <div class="org-level">
           <div class="org-node level-2">
             <div class="org-card">
@@ -405,8 +512,6 @@
           </div>
           <div class="connection-line vertical"></div>
         </div>
-
-        <!-- Level 3: Staff Level 1 -->
         <div class="org-staff-grid">
           <div class="org-node level-3">
             <div class="org-card">
@@ -422,7 +527,7 @@
               <div class="org-icon">
                 <i data-lucide="users"></i>
               </div>
-              <h3>STAF KESEJANTRAAN</h3>
+              <h3>STAF KESEJAHTERAAN</h3>
               <p>SATIM</p>
             </div>
           </div>
@@ -437,15 +542,13 @@
           </div>
         </div>
         <div class="connection-line vertical"></div>
-
-        <!-- Level 4: Staff Level 2 -->
         <div class="org-staff-grid">
           <div class="org-node level-3">
             <div class="org-card">
               <div class="org-icon">
                 <i data-lucide="users"></i>
               </div>
-              <h3>STAF PERANCANAN</h3>
+              <h3>STAF PERENCANAAN</h3>
               <p>SAMSUDIN</p>
             </div>
           </div>
@@ -469,8 +572,6 @@
           </div>
         </div>
         <div class="connection-line vertical"></div>
-
-        <!-- Level 5: Others -->
         <div class="org-staff-grid cols-2">
           <div class="org-node level-3">
             <div class="org-card">
@@ -486,7 +587,7 @@
               <div class="org-icon">
                 <i data-lucide="users"></i>
               </div>
-              <h3>SEKERTARIS BPD</h3>
+              <h3>SEKRETARIS BPD</h3>
               <p>TOHID</p>
             </div>
           </div>
@@ -495,49 +596,48 @@
     </div>
   </section>
 
-  <!-- SECTION 3 : MAP -->
   <section id="map" class="map-section">
     <div class="container">
       <div class="section-header">
         <h2>PETA WILAYAH DESA KARANGHARJA</h2>
-        <div class="header-line white" style="width:80px;height:4px;background:#fff;margin-top:.5rem;border-radius:4px;"></div>
+        <div class="header-line white"></div>
       </div>
-
-      <div class="map-container" style="margin-top:1rem;">
+      <div class="map-container">
         <div class="map-card">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63457.97647!2d107.2182!3d-6.107994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a2a135c633ae1%3A0xbf0e81e411d23543!2sKarangharja%2C%20Pebayuran%2C%20Bekasi%20Regency%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1640000000000!5m2!1sen!2sid"
-            class="map-iframe"
+            width="100%"
+            height="100%"
+            style="border:0;"
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Peta Wilayah Desa KarangHarja dengan Batas Desa"></iframe>
+            title="Peta Wilayah Desa KarangHarja dengan Batas Desa"
+            class="map-iframe"
+          ></iframe>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 4 : ACTIVITIES -->
   <section id="activities" class="activities-section">
     <div class="decorative-elements">
       <div class="decorative-circle green"></div>
       <div class="decorative-circle blue"></div>
       <div class="decorative-circle purple"></div>
     </div>
-
-    <div class="container mx-auto px-4 relative z-10" style="position:relative;z-index:5;">
+    <div class="container mx-auto px-4 relative z-10">
       <div class="section-header-activities">
         <div class="calendar-icon">
           <i data-lucide="calendar"></i>
         </div>
-        <div>
-          <h2 class="section-title-activities">KEGIATAN DESA KARANGHARJA</h2>
-          <div class="section-divider" style="height:4px;width:80px;background:#e6eefc;border-radius:6px;margin:.5rem 0;"></div>
-          <p class="section-description" style="margin:0;color:var(--muted);">Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa</p>
-        </div>
+        <h2 class="section-title-activities">KEGIATAN DESA KARANGHARJA</h2>
+        <div class="section-divider"></div>
+        <p class="section-description">
+          Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
+        </p>
       </div>
-
-      <div class="empty-activities" style="margin-top:1rem;">
+      <div class="empty-activities">
         <div class="empty-icon">
           <i data-lucide="calendar"></i>
         </div>
@@ -547,8 +647,46 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer class="site-footer">
     <div class="container">
       <p>© 2025 Desa KarangHarja. Semua hak dilindungi.</p>
-      <p class="footer-subtext">Kecamatan Pebayuran, Kabupaten Bekasi, Jawa Bara
+      <p class="footer-subtext">Kecamatan Pebayuran, Kabupaten Bekasi, Jawa Barat</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Navbar Toggle Functionality
+    const navbarToggle = document.getElementById('navbar-toggle');
+    const navbarMenu = document.getElementById('navbar-menu');
+
+    if (navbarToggle && navbarMenu) {
+      navbarToggle.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent click from bubbling to document
+        navbarToggle.classList.toggle('active');
+        navbarMenu.classList.toggle('active');
+      });
+
+      // Close menu when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
+          navbarToggle.classList.remove('active');
+          navbarMenu.classList.remove('active');
+        }
+      });
+
+      // Close menu when clicking a menu link
+      const menuLinks = navbarMenu.querySelectorAll('a');
+      menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          navbarToggle.classList.remove('active');
+          navbarMenu.classList.remove('active');
+        });
+      });
+    }
+  </script>
+</body>
+</html>
