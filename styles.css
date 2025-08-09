@@ -242,16 +242,15 @@ body {
 }
 
 .org-card {
-  background: linear-gradient(to bottom right, var(--gradient-from), var(--gradient-to));
-  color: white;
-  border-radius: var(--radius);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  transition: all 0.3s;
-  transform: scale(1);
-  width: 100%;
-  max-width: 20rem;
-  margin: 0 auto;
+  width: 280px; /* Ukuran tetap */
+  min-height: 120px; /* Tinggi minimum */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
+
 
 .org-card:hover {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -268,6 +267,12 @@ body {
   align-items: center;
   justify-content: center;
 }
+.org-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
 
 .org-icon i {
   width: 1rem;
@@ -275,18 +280,27 @@ body {
 }
 
 .org-card h3 {
-  font-size: 0.75rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-  text-align: center;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  white-space: nowrap; /* Agar text tidak wrap */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.org-level {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+
 .org-card p {
-  font-size: 0.75rem;
-  opacity: 0.9;
-  font-weight: 500;
-  text-align: center;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+
 
 /* Connection Lines */
 .connection-line {
@@ -294,10 +308,11 @@ body {
 }
 
 .connection-line.vertical {
+  height: 40px;
   width: 2px;
-  height: 2rem;
-  margin: 0 auto;
+  background-color: #9ca3af;
 }
+
 
 .connection-line.horizontal {
   height: 2px;
