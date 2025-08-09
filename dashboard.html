@@ -260,7 +260,8 @@
       transform: scaleY(0);
       transform-origin: top;
       transition: opacity 0.3s ease, transform 0.3s ease;
-      width: 200px;
+      width: 180px; /* Mengurangi lebar dari 200px ke 180px untuk lebih proporsional */
+      padding: 0.5rem 0; /* Padding internal untuk ruang yang lebih rapi */
     }
 
     #mobileMenu.active {
@@ -273,7 +274,7 @@
     #mobileMenu button {
       display: flex;
       align-items: center;
-      padding: 0.75rem 1rem;
+      padding: 0.5rem 1rem; /* Mengurangi padding vertical dari 0.75rem ke 0.5rem */
       font-size: 0.875rem;
       font-weight: 500;
       color: #111827;
@@ -523,7 +524,7 @@
     </div>
 
     <!-- Mobile Menu -->
-    <nav id="mobileMenu" class="md:hidden hidden bg-white rounded-lg shadow-lg mt-2 mx-4 absolute w-[calc(100%-2rem)] transition-all duration-300 transform origin-top">
+    <nav id="mobileMenu" class="md:hidden hidden bg-white rounded-lg shadow-lg mt-2 mx-4 absolute w-[180px] transition-all duration-300 transform origin-top">
       <div class="flex flex-col">
         <a href="/" class="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-t-lg transition-colors duration-200">
           <i data-lucide="home" class="w-4 h-4 mr-2 text-blue-600"></i>
