@@ -17,6 +17,137 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
+// Login System JS
+document.addEventListener('DOMContentLoaded', function() {
+  const loginBtn = document.getElementById('login-btn');
+  const modal = document.getElementById('login-modal');
+  const closeBtn = document.querySelector('.close');
+  const loginForm = document.getElementById('login-form');
+  
+  // Hardcoded admin credentials (for demo only)
+  const ADMIN_CREDENTIALS = {
+    username: "admin",
+    password: "desa2023"
+  };
+  
+  // Open modal
+  loginBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    modal.style.display = 'block';
+  });
+  
+  // Close modal
+  closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+  });
+  
+  // Login form submission
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    if (username === ADMIN_CREDENTIALS.username && 
+        password === ADMIN_CREDENTIALS.password) {
+      // Successful login
+      localStorage.setItem('isAdminLoggedIn', 'true');
+      modal.style.display = 'none';
+      window.location.href = "#dashboard";
+      showAdminUI();
+    } else {
+      alert('Username atau password salah!');
+    }
+  });
+  
+  // Check if already logged in
+  if (localStorage.getItem('isAdminLoggedIn') === 'true') {
+    showAdminUI();
+  }
+  
+  function showAdminUI() {
+    // Change login button to logout
+    const loginBtn = document.getElementById('login-btn');
+    loginBtn.textContent = 'Logout';
+    loginBtn.href = '#';
+    loginBtn.onclick = function() {
+      localStorage.removeItem('isAdminLoggedIn');
+      window.location.reload();
+    };
+    
+    // Show admin dashboard link
+    const dashboardLink = document.createElement('li');
+    dashboardLink.innerHTML = '<a href="#dashboard">Dashboard</a>';
+    document.querySelector('.navbar-links').appendChild(dashboardLink);
+  }
+});
+
+// Dashboard JS
+document.addEventListener('DOMContentLoaded', function() {
+  if (window.location.hash === '#dashboard' && 
+      localStorage.getItem('isAdminLoggedIn') !== 'true') {
+    window.location.href = '#';
+  }
+  
+  const activityForm = document.getElementById('activity-form');
+  
+  // Rich text editor functionality
+  document.querySelectorAll('.toolbar button').forEach(button => {
+    button.addEventListener('click', function() {
+      const command = this.dataset.command;
+      document.execCommand(command, false, null);
+    });
+  });
+  
+  // Form submission
+  activityForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('activity-title').value;
+    const date = document.getElementById('activity-date').value;
+    const imageFile = document.getElementById('activity-image').files[0];
+    const content = document.getElementById('activity-content').innerHTML;
+    
+    // Create activity object
+    const newActivity = {
+      id: Date.now(),
+      title,
+      date,
+      content,
+      views: 0
+    };
+    
+    // Handle image upload (simplified for demo)
+    if (imageFile) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        newActivity.imageUrl = e.target.result;
+        saveActivity(newActivity);
+      };
+      reader.readAsDataURL(imageFile);
+    } else {
+      saveActivity(newActivity);
+    }
+  });
+  
+  function saveActivity(activity) {
+    // Get existing activities or initialize array
+    let activities = JSON.parse(localStorage.getItem('activities') || '[]');
+    
+    // Add new activity
+    activities.unshift(activity);
+    
+    // Save to localStorage
+    localStorage.setItem('activities', JSON.stringify(activities));
+    
+    // Reset form
+    activityForm.reset();
+    document.getElementById('activity-content').innerHTML = '';
+    
+    alert('Kegiatan berhasil diposting!');
+    window.location.href = "#activities";
+  }
+});
 
 // Typewriter Effect
 function initTypewriter() {
