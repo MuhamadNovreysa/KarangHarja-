@@ -660,30 +660,7 @@
     window.location.href = 'login.html';
   }
 
-  // Dashboard functionality
-  const activities = JSON.parse(localStorage.getItem('activities')) || [
-    {
-      id: 1,
-      title: "Gotong Royong Desa",
-      date: "2023-10-15",
-      views: 124,
-      published: true
-    },
-    {
-      id: 2,
-      title: "Pengajian Rutin",
-      date: "2023-10-20",
-      views: 89,
-      published: true
-    },
-    {
-      id: 3,
-      title: "Rapat RW 05",
-      date: "2023-10-25",
-      views: 56,
-      published: false
-    }
-  ];
+  
 
   // Update stats
   const updateStats = () => {
