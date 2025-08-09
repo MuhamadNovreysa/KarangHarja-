@@ -1,1 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desa KarangHarja - Sistem Informasi Desa</title>
+  <meta name="description" content="Sistem Informasi Desa KarangHarja, Kecamatan Pebayuran, Kabupaten Bekasi, Jawa Barat">
+  <meta name="keywords" content="desa karangharja, pebayuran, bekasi, jawa barat, sistem informasi desa">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/lucide@latest/icons.css" rel="stylesheet">
+</head>
+<body>
+  <div class="min-h-screen">
+    <!-- Navbar (placeholder - you should include your actual navbar HTML) -->
+    <nav class="navbar" id="navbar"></nav>
 
+    <!-- Section 1: Hero -->
+    <section class="hero-section">
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
+             alt="Logo Desa KarangHarja" class="logo-img">
+      </div>
+
+      <!-- Text content -->
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span id="typewriter-text">SISTEM INFORMASI DESA KARANGHARJA</span>
+          <span class="cursor">|</span>
+        </h1>
+        <p class="hero-subtitle">Kec. Pebayuran Kab. Bekasi</p>
+        <p class="hero-description">
+          Selamat datang di Sistem Informasi Desa KarangHarja. Kami berkomitmen untuk memberikan pelayanan terbaik
+          kepada masyarakat dan membangun desa yang maju, sejahtera, dan berkelanjutan. Mari bersama-sama
+          membangun KarangHarja yang lebih baik untuk generasi mendatang.
+        </p>
+      </div>
+
+      <div class="scroll-indicator">
+        <i data-lucide="chevron-down" class="scroll-icon"></i>
+      </div>
+    </section>
+
+    <!-- Section 2: Organizational Structure -->
+    <section id="about" class="org-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>STRUKTURAL PEMERINTAH DESA KARANGHARJA</h2>
+          <div class="header-line"></div>
+        </div>
+
+        <!-- Organizational Chart -->
+        <div class="org-chart">
+          <!-- Level 0: Kepala Desa -->
+          <div class="org-level">
+            <div class="org-node level-0">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>KEPALA DESA</h3>
+                <p>SUKARMA</p>
+              </div>
+            </div>
+            <div class="connection-line vertical"></div>
+          </div>
+
+          <!-- Level 1: Sekretaris Desa -->
+          <div class="org-level">
+            <div class="org-node level-1">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>SEKERTARIS DESA</h3>
+                <p>SUHANDI</p>
+              </div>
+            </div>
+            <div class="connection-line vertical"></div>
+          </div>
+
+          <!-- Level 2: Kasi Pemerintah -->
+          <div class="org-level">
+            <div class="org-node level-2">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>KASI PEMERINTAH</h3>
+                <p>H. AHMADI</p>
+              </div>
+            </div>
+            <div class="connection-line vertical"></div>
+          </div>
+
+          <!-- Level 3: Staff Level 1 -->
+          <div class="org-staff-grid">
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>MYATI STAF PELAYANAN</h3>
+                <p>LIMAN OGAN</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF KESEJANTRAAN</h3>
+                <p>SATIM</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF UMUM</h3>
+                <p>AMSOR</p>
+              </div>
+            </div>
+          </div>
+          <div class="connection-line vertical"></div>
+
+          <!-- Level 4: Staff Level 2 -->
+          <div class="org-staff-grid">
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF PERANCANAN</h3>
+                <p>SAMSUDIN</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF TATAUSAHA</h3>
+                <p>TALA</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>STAF PEMERINTAH</h3>
+                <p>WARDI GOSERUPAS</p>
+              </div>
+            </div>
+          </div>
+          <div class="connection-line vertical"></div>
+
+          <!-- Level 5: Others -->
+          <div class="org-staff-grid cols-2">
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>DESA</h3>
+                <p>AJI</p>
+              </div>
+            </div>
+            <div class="org-node level-3">
+              <div class="org-card">
+                <div class="org-icon">
+                  <i data-lucide="users"></i>
+                </div>
+                <h3>SEKERTARIS BPD</h3>
+                <p>TOHID</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Google Maps -->
+    <section id="map" class="map-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>PETA WILAYAH DESA KARANGHARJA</h2>
+          <div class="header-line white"></div>
+        </div>
+
+        <div class="map-container">
+          <div class="map-card">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63457.97647!2d107.2182!3d-6.107994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a2a135c633ae1%3A0xbf0e81e411d23543!2sKarangharja%2C%20Pebayuran%2C%20Bekasi%20Regency%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1640000000000!5m2!1sen!2sid"
+              width="100%"
+              height="100%"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta Wilayah Desa KarangHarja dengan Batas Desa"
+              class="map-iframe"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Village Activities -->
+    <section id="activities" class="activities-section">
+      <div class="decorative-elements">
+        <div class="decorative-circle green"></div>
+        <div class="decorative-circle blue"></div>
+        <div class="decorative-circle purple"></div>
+      </div>
+
+      <div class="container">
+        <div class="section-header">
+          <div class="calendar-icon">
+            <i data-lucide="calendar"></i>
+          </div>
+          <h2>KEGIATAN DESA KARANGHARJA</h2>
+          <div class="header-line gradient"></div>
+          <p class="section-description">
+            Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
+          </p>
+        </div>
+
+        <div class="activities-container" id="activities-container">
+          <!-- Activities will be inserted here by JavaScript -->
+          <div class="empty-activities">
+            <div class="empty-icon">
+              <i data-lucide="calendar" class="empty-calendar"></i>
+            </div>
+            <h3>Belum Ada Kegiatan</h3>
+            <p>Kegiatan desa akan ditampilkan di sini</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <p>© 2025 Desa KarangHarja. Semua hak dilindungi.</p>
+        <p class="footer-subtext">Kecamatan Pebayuran, Kabupaten Bekasi, Jawa Barat</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="script.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
