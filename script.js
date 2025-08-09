@@ -1,10 +1,20 @@
-// Navbar JS
 document.addEventListener('DOMContentLoaded', function() {
-  const toggle = document.querySelector('.navbar-toggle');
-  const menu = document.querySelector('.navbar-menu');
+  const toggle = document.getElementById('navbar-toggle');
+  const menu = document.getElementById('navbar-menu');
   
   toggle.addEventListener('click', function() {
     menu.classList.toggle('active');
+    
+    // Animasi hamburger icon
+    toggle.classList.toggle('active');
+  });
+  
+  // Tutup menu saat klik di luar
+  document.addEventListener('click', function(e) {
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      menu.classList.remove('active');
+      toggle.classList.remove('active');
+    }
   });
 });
 
