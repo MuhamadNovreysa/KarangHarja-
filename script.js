@@ -38,7 +38,7 @@ function setupLogout() {
   });
 }
 
-// ==================== ACTIVITIES ====================
+// ==================== ACTIVITIES (INDEX) ====================
 function loadActivities(containerId, limit = null, onlyPublished = false) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -67,15 +67,12 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
       ...data
     }));
 
-    // Sort by createdAt (fallback ke 0 kalau gak ada)
     processedActivities.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
-    // Filter hanya published kalau diminta
     if (onlyPublished) {
       processedActivities = processedActivities.filter(act => act.published === true);
     }
 
-    // Build HTML cards
     container.innerHTML = processedActivities.map(activity => {
       const shortDesc = activity.content
         ? activity.content.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 120) + "..."
@@ -101,7 +98,7 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
             <div class="activity-description">${shortDesc}</div>
             <div class="activity-footer">
               <span><i data-lucide="eye"></i> ${activity.views || 0} dilihat</span>
-              <a href="detail-kegiatan.html?id=${activity.id}" class="read-more">Baca Selengkapnya</a>
+              <a href="detail.html?id=${activity.id}" class="read-more">Baca Selengkapnya</a>
             </div>
           </div>
         </div>
@@ -109,18 +106,50 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
     }).join('');
 
     lucide.createIcons();
-    setupActivityClickHandlers();
   });
 }
 
-function setupActivityClickHandlers() {
-  document.querySelectorAll('.activity-card').forEach(card => {
-    card.addEventListener('click', function (e) {
-      if (!e.target.classList.contains('read-more')) {
-        const activityId = this.dataset.id;
-        incrementViews(activityId);
-      }
-    });
+// ==================== DETAIL PAGE ====================
+function loadActivityDetail() {
+  const detailContainer = document.getElementById('activityDetail');
+  if (!detailContainer) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const activityId = params.get('id');
+  if (!activityId) {
+    detailContainer.innerHTML = "<p>Data kegiatan tidak ditemukan.</p>";
+    return;
+  }
+
+  db.ref(`activities/${activityId}`).once('value').then(snapshot => {
+    const activity = snapshot.val();
+    if (!activity) {
+      detailContainer.innerHTML = "<p>Kegiatan tidak ditemukan.</p>";
+      return;
+    }
+
+    // Increment view count
+    incrementViews(activityId);
+
+    detailContainer.innerHTML = `
+      <div class="detail-card">
+        <h1 class="detail-title">${activity.title || 'Tanpa Judul'}</h1>
+        <p class="detail-date"><i data-lucide="calendar"></i> ${activity.date
+          ? new Date(activity.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+          : ''
+        }</p>
+        ${activity.imageBase64 || activity.imageUrl
+          ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" class="detail-image">`
+          : ''
+        }
+        <div class="detail-content">
+          ${activity.content || ''}
+        </div>
+        <p class="detail-views"><i data-lucide="eye"></i> ${activity.views || 0} kali dilihat</p>
+      </div>
+    `;
+
+    lucide.createIcons();
   });
 }
 
@@ -209,11 +238,15 @@ document.addEventListener('DOMContentLoaded', () => {
   setupLogout();
 
   if (document.getElementById('activitiesContainer')) {
-    loadActivities('activitiesContainer', null, true); // index: hanya published
+    loadActivities('activitiesContainer', null, true);
   }
 
   if (document.getElementById('dashboardStats')) {
     setupDashboardStats();
+  }
+
+  if (document.getElementById('activityDetail')) {
+    loadActivityDetail();
   }
 
   lucide.createIcons();
