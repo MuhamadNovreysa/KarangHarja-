@@ -59,12 +59,14 @@
 
     .navbar-logo { height: 30px; margin-right: 10px; }
 
+    /* hamburger button */
     .navbar-toggle {
       display: none;
       background: none;
       border: none;
       cursor: pointer;
       padding: 0.5rem;
+      z-index: 1100; /* above the menu */
     }
 
     .navbar-toggle .bar {
@@ -156,10 +158,11 @@
     .loading-spinner { width: 2rem; height: 2rem; border: 3px solid rgba(59,130,246,0.2); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* MOBILE STYLES */
+    /* MOBILE STYLES (improved) */
     @media (max-width: 768px) {
       .navbar-toggle { display: block; }
 
+      /* base mobile: hide desktop menu */
       .navbar-menu {
         display: none;
         position: absolute;
@@ -168,17 +171,20 @@
         background-color: var(--white);
         box-shadow: 0 6px 18px rgba(0,0,0,0.08);
         border-radius: 0.5rem;
-        padding: 1rem;
+        padding: 0.5rem;
         flex-direction: column;
-        width: 220px;
-        z-index: 2000;
+        width: calc(100% - 2rem);
+        max-width: 320px;
+        z-index: 1200;
         opacity: 0;
-        transform: translateY(-10px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
+        transform: translateY(-8px);
+        transition: opacity 220ms ease, transform 220ms ease;
+        will-change: opacity, transform;
       }
 
+      /* visible state */
       .navbar-menu.active {
-        display: flex;
+        display: flex; /* important so children render */
         opacity: 1;
         transform: translateY(0);
       }
@@ -193,17 +199,21 @@
         padding: 0.75rem;
         justify-content: flex-start;
         border-radius: 0.375rem;
+        color: var(--dark);
       }
       .navbar-links a:hover, .navbar-links button:hover { background: #f3f4f6; }
 
       .stats-grid { grid-template-columns: 1fr; }
       table { display: block; overflow-x: auto; }
     }
+
+    /* small visual helper: ensure menu not covered */
+    .navbar, .navbar-menu { -webkit-font-smoothing:antialiased; }
   </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar">
+  <nav class="navbar" aria-label="Top navigation">
     <div class="navbar-container">
       <a href="#" class="navbar-brand">
         <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png"
@@ -211,12 +221,14 @@
         Dashboard Admin
       </a>
 
-      <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle Menu" aria-expanded="false" type="button">
+      <!-- Mobile hamburger button (visible on <=768px) -->
+      <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle menu" aria-expanded="false" type="button">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
 
+      <!-- Nav Links (desktop + mobile) -->
       <div class="navbar-menu" id="navbarMenu" role="menu" aria-hidden="true">
         <ul class="navbar-links" role="none">
           <li role="none"><a role="menuitem" href="index.html"><i data-lucide="home"></i>Beranda</a></li>
@@ -228,7 +240,7 @@
   </nav>
 
   <!-- Main Content -->
-  <div class="main-content">
+  <div class="main-content" id="mainContent">
     <div class="dashboard-header">
       <h1>Selamat Datang, Admin Desa KarangHarja!</h1>
       <p>Kelola konten dan kegiatan desa melalui dashboard ini</p>
@@ -295,7 +307,7 @@
   <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
 
   <script>
-    // Firebase config & init
+    // Firebase config & init (preserved as original)
     const firebaseConfig = {
       apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
       authDomain: "desakarangharja-31525.firebaseapp.com",
@@ -315,14 +327,14 @@
     // Initialize Lucide icons
     lucide.createIcons();
 
-    // DOM refs
+    // DOM refs (preserved)
     const activitiesTableContainer = document.getElementById('activitiesTable');
     const totalActivitiesEl = document.getElementById('totalActivities');
     const publishedCountEl = document.getElementById('publishedCount');
     const draftCountEl = document.getElementById('draftCount');
     const totalViewsEl = document.getElementById('totalViews');
 
-    // AUTH protection
+    // AUTH protection (preserved)
     auth.onAuthStateChanged(user => {
       console.log('Auth state changed:', user);
       if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
@@ -332,7 +344,7 @@
       }
     });
 
-    // LOGOUT handler
+    // LOGOUT handler (preserved)
     document.getElementById('logoutBtn').addEventListener('click', async (e) => {
       e.preventDefault();
       try {
@@ -344,57 +356,83 @@
       }
     });
 
-    // NAVBAR TOGGLE
-    document.addEventListener('DOMContentLoaded', () => {
+    // NAVBAR TOGGLE (robust version: keeps original behaviour but ensures it always works)
+    (function setupNavbarToggle() {
       const navbarToggle = document.getElementById('navbarToggle');
       const navbarMenu = document.getElementById('navbarMenu');
 
-      if (navbarToggle && navbarMenu) {
-        console.log('Navbar toggle and menu found, setting up event listeners');
-        navbarToggle.addEventListener('click', (ev) => {
+      // fallback: if elements not present yet, try again after short delay
+      if (!navbarToggle || !navbarMenu) {
+        document.addEventListener('DOMContentLoaded', () => {
+          const nT = document.getElementById('navbarToggle');
+          const nM = document.getElementById('navbarMenu');
+          attachToggleHandlers(nT, nM);
+        });
+      } else {
+        attachToggleHandlers(navbarToggle, navbarMenu);
+      }
+
+      function attachToggleHandlers(toggleEl, menuEl) {
+        if (!toggleEl || !menuEl) {
+          console.error('Navbar toggle or menu not found in DOM');
+          return;
+        }
+
+        // Ensure initial aria states
+        toggleEl.setAttribute('aria-expanded', 'false');
+        menuEl.setAttribute('aria-hidden', 'true');
+
+        // Toggle on click
+        toggleEl.addEventListener('click', (ev) => {
           ev.preventDefault();
           ev.stopPropagation();
-          const isActive = navbarMenu.classList.toggle('active');
-          navbarToggle.classList.toggle('active', isActive);
-          navbarToggle.setAttribute('aria-expanded', isActive);
-          navbarMenu.setAttribute('aria-hidden', !isActive);
-          console.log('Hamburger clicked, menu active:', isActive);
+          const isActive = menuEl.classList.toggle('active');
+          toggleEl.classList.toggle('active', isActive);
+          toggleEl.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+          menuEl.setAttribute('aria-hidden', (!isActive).toString());
         });
 
         // Prevent menu from closing when clicking inside
-        navbarMenu.addEventListener('click', (ev) => {
+        menuEl.addEventListener('click', (ev) => {
           ev.stopPropagation();
         });
 
         // Close menu when clicking outside
         document.addEventListener('click', (ev) => {
-          if (navbarMenu.classList.contains('active') &&
-              !navbarMenu.contains(ev.target) &&
-              !navbarToggle.contains(ev.target)) {
-            navbarMenu.classList.remove('active');
-            navbarToggle.classList.remove('active');
-            navbarToggle.setAttribute('aria-expanded', 'false');
-            navbarMenu.setAttribute('aria-hidden', 'true');
-            console.log('Clicked outside, menu closed');
+          if (menuEl.classList.contains('active') &&
+              !menuEl.contains(ev.target) &&
+              !toggleEl.contains(ev.target)) {
+            menuEl.classList.remove('active');
+            toggleEl.classList.remove('active');
+            toggleEl.setAttribute('aria-expanded', 'false');
+            menuEl.setAttribute('aria-hidden', 'true');
           }
         });
 
         // Close menu with Escape key
         document.addEventListener('keydown', (ev) => {
-          if (ev.key === 'Escape' && navbarMenu.classList.contains('active')) {
-            navbarMenu.classList.remove('active');
-            navbarToggle.classList.remove('active');
-            navbarToggle.setAttribute('aria-expanded', 'false');
-            navbarMenu.setAttribute('aria-hidden', 'true');
-            console.log('Escape key pressed, menu closed');
+          if (ev.key === 'Escape' && menuEl.classList.contains('active')) {
+            menuEl.classList.remove('active');
+            toggleEl.classList.remove('active');
+            toggleEl.setAttribute('aria-expanded', 'false');
+            menuEl.setAttribute('aria-hidden', 'true');
+            toggleEl.focus();
           }
         });
-      } else {
-        console.error('Navbar toggle or menu not found in DOM');
-      }
-    });
 
-    // Load activities and update UI
+        // Optional: close menu on resize above breakpoint (so desktop always shows desktop menu)
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 768 && menuEl.classList.contains('active')) {
+            menuEl.classList.remove('active');
+            toggleEl.classList.remove('active');
+            toggleEl.setAttribute('aria-expanded', 'false');
+            menuEl.setAttribute('aria-hidden', 'true');
+          }
+        }, { passive: true });
+      }
+    })();
+
+    // Load activities and update UI (preserved)
     function loadActivities() {
       const ref = db.ref('activities');
       ref.on('value', (snapshot) => {
@@ -490,4 +528,4 @@
     });
   </script>
 </body>
-</html>
+</html> 
