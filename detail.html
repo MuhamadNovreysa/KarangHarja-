@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Detail Kegiatan Desa Karangharja</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9fafb;
+      margin: 0;
+      padding: 0;
+      color: #111;
+    }
+
+    .detail-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .detail-cover {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+    }
+
+    .detail-content {
+      padding: 2rem;
+    }
+
+    .detail-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+    }
+
+    .detail-date {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .detail-description {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #374151;
+      text-align: justify;
+      white-space: pre-line;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.6rem 1.2rem;
+      background: linear-gradient(to right, #2563eb, #059669);
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: 0.3s ease;
+    }
+
+    .back-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 640px) {
+      .detail-title {
+        font-size: 1.5rem;
+      }
+      .detail-content {
+        padding: 1.2rem;
+      }
+      .detail-cover {
+        height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" style="padding: 2rem 1rem;">
+    <div id="detailContainer" class="detail-container">
+      <!-- Konten akan dimuat dari Firebase -->
+    </div>
+  </div>
+
+  <script>
+    // Firebase Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+      authDomain: "desakarangharja-31525.firebaseapp.com",
+      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "desakarangharja-31525",
+      storageBucket: "desakarangharja-31525.firebasestorage.app",
+      messagingSenderId: "428460519406",
+      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Ambil ID dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const activityId = urlParams.get('id');
+
+    if (!activityId) {
+      document.getElementById('detailContainer').innerHTML = `<p style="padding:2rem; text-align:center;">Kegiatan tidak ditemukan.</p>`;
+    } else {
+      db.ref('activities/' + activityId).once('value').then(snapshot => {
+        const data = snapshot.val();
+        if (!data) {
+          document.getElementById('detailContainer').innerHTML = `<p style="padding:2rem; text-align:center;">Kegiatan tidak ditemukan.</p>`;
+          return;
+        }
+
+        document.getElementById('detailContainer').innerHTML = `
+          ${data.imageBase64 || data.imageUrl ? `<img src="${data.imageBase64 || data.imageUrl}" alt="${data.title}" class="detail-cover">` : ''}
+          <div class="detail-content">
+            <h1 class="detail-title">${data.title || 'Tanpa Judul'}</h1>
+            <div class="detail-date">
+              <i data-lucide="calendar"></i>
+              ${data.date ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : ''}
+            </div>
+            <div class="detail-description">${data.content || ''}</div>
+            <a href="index.html#activities" class="back-btn">← Kembali</a>
+          </div>
+        `;
+        lucide.createIcons();
+      });
+    }
+  </script>
+
+</body>
+</html>
