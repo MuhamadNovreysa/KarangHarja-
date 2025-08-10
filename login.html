@@ -220,71 +220,69 @@
     // Initialize Lucide Icons
     lucide.createIcons();
 
-    // Handle form submission
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
+     document.getElementById('loginForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const errorMessage = document.getElementById('errorMessage');
+  const errorText = document.getElementById('errorText');
+  const loginBtn = document.getElementById('loginBtn');
+  const loading = document.getElementById('loading');
+  
+  // Show loading state
+  loginBtn.disabled = true;
+  loginBtn.innerHTML = '<span>Memproses...</span>';
+  loading.style.display = 'block';
+  errorMessage.style.display = 'none';
+  
+  try {
+    // Sign in with Firebase Auth
+    const userCredential = await auth.signInWithEmailAndPassword(email, password);
+    
+    // Check if user is admin
+    if (userCredential.user.email === "karangharja2025@gmail.com") {
+      console.log("Login sukses, redirect ke dashboard...");
       
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorMessage = document.getElementById('errorMessage');
-      const errorText = document.getElementById('errorText');
-      const loginBtn = document.getElementById('loginBtn');
-      const loading = document.getElementById('loading');
+      // Tunggu 1 detik sebelum redirect untuk memberi feedback visual
+      setTimeout(() => {
+        window.location.href = "dashboard.html";
+      }, 1000);
       
-      // Show loading state
-      loginBtn.disabled = true;
-      loginBtn.innerHTML = '<span>Memproses...</span>';
-      loading.style.display = 'block';
-      errorMessage.style.display = 'none';
-      
-      try {
-        // Sign in with Firebase Auth
-        const userCredential = await auth.signInWithEmailAndPassword(email, password);
-        
-        console.log("Login berhasil", userCredential);
-        
-        // Check if user is admin
-        if (userCredential.user.email === "karangharja2025@gmail.com") {
-          // Redirect to dashboard
-          window.location.href = "dashboard.html";
-        } else {
-          await auth.signOut();
-          throw new Error("Anda bukan admin yang berwenang");
-        }
-        
-      } catch (error) {
-        console.error("Login error:", error);
-        
-        let errorMsg = "Terjadi kesalahan saat login";
-        switch(error.code) {
-          case "auth/wrong-password":
-            errorMsg = "Password yang Anda masukkan salah";
-            break;
-          case "auth/invalid-email":
-            errorMsg = "Email tidak valid";
-            break;
-          case "auth/user-not-found":
-            errorMsg = "Akun admin tidak ditemukan";
-            break;
-          case "auth/too-many-requests":
-            errorMsg = "Terlalu banyak percobaan gagal. Coba lagi nanti";
-            break;
-          default:
-            errorMsg = error.message || "Gagal login";
-        }
-        
-        errorText.textContent = errorMsg;
-        errorMessage.style.display = 'flex';
-        
-      } finally {
-        // Reset loading state
-        loginBtn.disabled = false;
-        loginBtn.innerHTML = '<i data-lucide="log-in"></i><span>Masuk</span>';
-        loading.style.display = 'none';
-        lucide.createIcons();
-      }
-    });
-
+    } else {
+      await auth.signOut();
+      throw new Error("Anda bukan admin yang berwenang");
+    }
+    
+  } catch (error) {
+    console.error("Login error:", error);
+    
+    let errorMsg = "Terjadi kesalahan saat login";
+    switch(error.code) {
+      case "auth/wrong-password":
+        errorMsg = "Password yang Anda masukkan salah";
+        break;
+      case "auth/invalid-email":
+        errorMsg = "Email tidak valid";
+        break;
+      case "auth/user-not-found":
+        errorMsg = "Akun admin tidak ditemukan";
+        break;
+      default:
+        errorMsg = error.message || "Gagal login";
+    }
+    
+    errorText.textContent = errorMsg;
+    errorMessage.style.display = 'flex';
+    
+  } finally {
+    // Reset loading state
+    loginBtn.disabled = false;
+    loginBtn.innerHTML = '<i data-lucide="log-in"></i><span>Masuk</span>';
+    loading.style.display = 'none';
+    lucide.createIcons();
+  }
+});
     // Check if already logged in
     auth.onAuthStateChanged(user => {
       if (user && user.email === "karangharja2025@gmail.com") {
