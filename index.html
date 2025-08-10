@@ -1,201 +1,160 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Desa KarangHarja - Sistem Informasi Desa</title>
   <meta name="description" content="Sistem Informasi Desa KarangHarja, Kecamatan Pebayuran, Kabupaten Bekasi, Jawa Barat">
   <meta name="keywords" content="desa karangharja, pebayuran, bekasi, jawa barat, sistem informasi desa">
-  <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/lucide@latest/icons.css" rel="stylesheet">
+
+  <!-- Styles: full custom CSS -->
   <style>
-    /* Navbar Styles */
-    .navbar {
-      background-color: #fff !important;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      padding: 0.25rem 1rem;
-      height: 50px;
+    :root{
+      --bg:#f8fafc; --card:#ffffff; --muted:#6b7280; --accent:#2563eb; --accent-2:#10b981;
+      --radius:12px; --glass: rgba(255,255,255,0.6);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
     }
 
-    .navbar-container {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
+    /* NAVBAR */
+    .navbar{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 20px;
+      background:var(--card);
+      box-shadow:0 4px 18px rgba(2,6,23,0.06);
+      z-index:1200;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+      text-decoration:none; color:#0f172a; font-weight:700;
+    }
+    .brand img{height:34px; width:auto; border-radius:6px;}
+    .nav-links{
+      display:flex; gap:12px; align-items:center;
+      list-style:none; margin:0; padding:0;
+    }
+    .nav-links a{
+      text-decoration:none; color:var(--muted); padding:8px 12px; border-radius:8px; font-weight:600;
+    }
+    .nav-links a:hover{ background:rgba(37,99,235,0.06); color:var(--accent); }
+
+    /* Mobile menu */
+    .nav-toggle{
+      display:none; background:none; border:0; padding:6px; cursor:pointer;
+    }
+    @media (max-width:900px){
+      .nav-links{ display:none; position:fixed; right:12px; top:64px; flex-direction:column; background:var(--card); padding:12px; border-radius:10px; box-shadow:0 8px 30px rgba(2,6,23,0.08); }
+      .nav-links.show{ display:flex; }
+      .nav-toggle{ display:inline-flex; }
     }
 
-    .navbar-brand {
-      display: flex;
-      align-items: center;
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: #111827;
-      text-decoration: none;
-      margin-right: auto;
+    /* SECTIONS */
+    .container{ max-width:1100px; margin:0 auto; padding:0 18px; }
+
+    /* HERO / HOME */
+    .hero{
+      height:420px;
+      margin-top:64px;
+      border-radius:12px;
+      background-image:linear-gradient(180deg, rgba(2,6,23,0.35), rgba(2,6,23,0.15)), url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png');
+      background-size:cover; background-position:center;
+      display:flex; align-items:center; justify-content:center; color:white; text-align:center;
+      box-shadow:0 8px 30px rgba(2,6,23,0.08);
     }
+    .hero h1{ font-size:2rem; margin:0; letter-spacing:0.2px; }
+    .hero p{ color:rgba(255,255,255,0.9); margin-top:10px; font-weight:500; }
 
-    .navbar-logo {
-      height: 28px;
-      width: auto;
-      margin-right: 0.25rem;
+    /* SECTION HEADERS */
+    .section{
+      margin-top:36px;
+      padding:28px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.85));
+      border-radius:var(--radius);
+      box-shadow:0 6px 20px rgba(2,6,23,0.04);
     }
+    .section h2{ margin:0 0 12px 0; font-size:1.25rem; text-align:left; color:#0b1220; }
+    .muted { color:var(--muted); font-size:0.95rem; margin-bottom:14px; }
 
-    .navbar-toggle {
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.25rem;
-      display: none;
-      color: #111827;
+    /* STRUKTUR */
+    .struktur-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap:16px; align-items:start; }
+    .struktur-card{
+      background:var(--card); padding:14px; border-radius:10px; text-align:center; box-shadow: 0 4px 18px rgba(2,6,23,0.04);
     }
+    .struktur-card img{ width:80px; height:80px; object-fit:cover; border-radius:999px; margin-bottom:8px; }
 
-    .navbar-toggle .bar {
-      display: block;
-      width: 18px;
-      height: 2px;
-      background-color: #111827;
-      margin: 3px 0;
-      transition: all 0.3s ease;
+    /* MAPS */
+    .map-wrap{ width:100%; height:420px; border-radius:10px; overflow:hidden; box-shadow:0 6px 18px rgba(2,6,23,0.06); border:1px solid rgba(15,23,42,0.03); }
+
+    /* KEGIATAN CARDS */
+    .activities-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:18px; margin-top:12px; }
+    .activity-card{
+      background:var(--card); border-radius:12px; overflow:hidden; display:flex; flex-direction:column;
+      box-shadow:0 6px 18px rgba(2,6,23,0.05);
+      transition:transform .18s ease, box-shadow .18s ease;
     }
+    .activity-card:hover{ transform:translateY(-6px); box-shadow:0 12px 30px rgba(2,6,23,0.08); }
+    .activity-img{ height:180px; width:100%; object-fit:cover; display:block; background:#eef2ff; }
+    .activity-body{ padding:14px; display:flex; flex-direction:column; gap:8px; flex:1; }
+    .activity-title{ margin:0; font-size:1.05rem; color:#0b1220; font-weight:700; }
+    .activity-excerpt{ color:var(--muted); font-size:0.95rem; flex:1; }
+    .activity-meta{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:0.85rem; color:var(--muted); margin-top:10px; }
 
-    .navbar-toggle.active .bar:nth-child(1) {
-      transform: translateY(5px) rotate(45deg);
-    }
+    /* Loading & empty */
+    .loading-state, .empty-state{ text-align:center; padding:28px; color:var(--muted); }
+    .spinner{ width:36px; height:36px; border-radius:50%; border:4px solid rgba(2,6,23,0.08); border-top-color:var(--accent); margin:12px auto; animation:spin 1s linear infinite; }
+    @keyframes spin{ to{ transform:rotate(360deg); } }
 
-    .navbar-toggle.active .bar:nth-child(2) {
-      opacity: 0;
-    }
+    /* FOOTER */
+    footer{ margin-top:28px; padding:20px; text-align:center; color:#94a3b8; font-size:0.95rem; }
 
-    .navbar-toggle.active .bar:nth-child(3) {
-      transform: translateY(-5px) rotate(-45deg);
-    }
-
-    .navbar-menu {
-      display: flex;
-    }
-
-    .navbar-links {
-      list-style: none;
-      display: flex;
-      margin: 0;
-      padding: 0;
-    }
-
-    .navbar-links li {
-      margin-left: 1.5rem;
-    }
-
-    .navbar-links a {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #4b5563;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .navbar-links a:hover {
-      color: #2563eb;
-    }
-
-    /* Mobile Menu */
-    @media (max-width: 767px) {
-      .navbar-toggle {
-        display: block;
-        margin-left: auto;
-      }
-
-      .navbar-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        right: 1rem;
-        background-color: #fff;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        border-radius: 0.5rem;
-        padding: 0.5rem 0;
-        width: 180px;
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
-      }
-
-      .navbar-menu.active {
-        display: block;
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .navbar-links {
-        flex-direction: column;
-      }
-
-      .navbar-links li {
-        margin: 0;
-        width: 100%;
-      }
-
-      .navbar-links a {
-        display: block;
-        padding: 0.75rem 1rem;
-        text-align: left;
-      }
-    }
-
-    @media (min-width: 640px) {
-      .navbar-logo {
-        height: 32px;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .navbar-logo {
-        height: 36px;
-      }
-    }
-
-    body {
-      padding-top: 50px;
+    /* small screens */
+    @media (max-width:640px){
+      .hero{ height:260px; padding:16px; }
+      .hero h1{ font-size:1.4rem; }
+      section{ padding:20px; }
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="navbar-container">
-      <a href="#" class="navbar-brand">
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
-             alt="Logo Desa KarangHarja" 
-             class="navbar-logo">
-        Desa KarangHarja
+  <!-- NAVBAR -->
+  <header class="navbar" role="banner">
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between;">
+      <a class="brand" href="index.html" aria-label="Desa KarangHarja">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" alt="Logo Desa KarangHarja">
+        <span>Desa KarangHarja</span>
       </a>
-      
-      <!-- Mobile Menu Button -->
-      <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle menu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
 
-      <!-- Nav Links -->
-      <div class="navbar-menu" id="navbar-menu">
-        <ul class="navbar-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">Struktur</a></li>
-          <li><a href="#map">Maps</a></li>
-          <li><a href="#activities">Kegiatan</a></li>
-          <li><a href="login.html" id="login-btn">Login</a></li>
+      <nav style="display:flex; align-items:center; gap:10px;" aria-label="Primary navigation">
+        <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" title="Toggle menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+        </button>
+        <ul id="navLinks" class="nav-links" role="menubar" aria-hidden="true">
+          <li><a href="#home" role="menuitem">Home</a></li>
+          <li><a href="#struktur" role="menuitem">Struktur</a></li>
+          <li><a href="#maps" role="menuitem">Maps</a></li>
+          <li><a href="#kegiatan" role="menuitem">Kegiatan</a></li>
+          <li><a href="login.html" role="menuitem">Login</a></li>
         </ul>
-      </div>
+      </nav>
     </div>
-  </nav>
+  </header>
 
-  <!-- Section 1: Hero -->
+    <!-- Section 1: Hero -->
   <section class="hero-section">
     <!-- Logo -->
     <div class="logo-container">
@@ -282,7 +241,7 @@
                 <i data-lucide="users"></i>
               </div>
               <h3>MYATI STAF PELAYANAN</h3>
-              <p>LIMAN OGAN</p>
+    <p>LIMAN OGAN</p>
             </div>
           </div>
           <div class="org-node level-3">
@@ -389,187 +348,161 @@
     </div>
   </section>
 
-  <!-- Section 4: Village Activities - IMPROVED VERSION -->
-  <section id="activities" class="activities-section">
-    <!-- Background decorative elements -->
-    <div class="decorative-elements">
-      <div class="decorative-circle green"></div>
-      <div class="decorative-circle blue"></div>
-      <div class="decorative-circle purple"></div>
-    </div>
 
-    <div class="container mx-auto px-4 relative z-10">
-      <!-- Header -->
-      <div class="section-header-activities">
-        <div class="calendar-icon">
-          <i data-lucide="calendar"></i>
-        </div>
-        <h2 class="section-title-activities">KEGIATAN DESA KARANGHARJA</h2>
-        <div class="section-divider"></div>
-        <p class="section-description">
-          Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
-        </p>
+    <!-- KEGIATAN -->
+    <section id="kegiatan" class="section container" aria-labelledby="kegiatanTitle">
+      <h2 id="kegiatanTitle">KEGIATAN DESA KARANGHARJA</h2>
+      <p class="muted">Ikuti kegiatan terbaru yang dipublikasikan oleh pihak desa.</p>
+
+      <!-- Loading / Empty state -->
+      <div id="activitiesState" class="loading-state" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <div>Memuat kegiatan...</div>
       </div>
 
-      <!-- Activities Container - Will be populated by Firebase -->
-      <div id="activities-container" class="activities-grid">
-        <!-- Loading state -->
-        <div class="loading-activities">
-          <i data-lucide="loader-2" class="animate-spin"></i>
-          <p>Memuat kegiatan...</p>
-        </div>
-      </div>
-    </div>
-  </section>
+      <!-- Grid -->
+      <div id="activitiesGrid" class="activities-grid" aria-live="polite" style="display:none;"></div>
+    </section>
+  </main>
 
-  <!-- Footer -->
-  <footer class="site-footer">
+  <!-- FOOTER -->
+  <footer>
     <div class="container">
-      <p>© 2025 Desa KarangHarja. Semua hak dilindungi.</p>
-      <p class="footer-subtext">Kecamatan Pebayuran, Kabupaten Bekasi, Jawa Barat</p>
+      <div>&copy; 2025 Desa KarangHarja. Semua hak dilindungi.</div>
+      <div style="margin-top:6px; color:var(--muted);">Kecamatan Pebayuran, Kabupaten Bekasi, Jawa Barat</div>
     </div>
   </footer>
 
+  <!-- Firebase (compat) libs: sama style yang lo pakai di dashboard/kegiatan -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+
+  <!-- Lucide icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="script.js"></script>
+
+  <!-- Main JS: full logic to load activities and render -->
   <script>
-    lucide.createIcons();
-
-    // Navbar Toggle Functionality for Mobile
-    const navbarToggle = document.getElementById('navbar-toggle');
-    const navbarMenu = document.getElementById('navbar-menu');
-
-    if (navbarToggle && navbarMenu) {
-      navbarToggle.addEventListener('click', () => {
-        navbarToggle.classList.toggle('active');
-        navbarMenu.classList.toggle('active');
+    // NAV MOBILE TOGGLE
+    (function(){
+      const btn = document.getElementById('navToggle');
+      const links = document.getElementById('navLinks');
+      btn.addEventListener('click', (e) => {
+        const shown = links.classList.toggle('show');
+        links.setAttribute('aria-hidden', String(!shown));
+        btn.setAttribute('aria-expanded', String(shown));
       });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
-          navbarToggle.classList.remove('active');
-          navbarMenu.classList.remove('active');
+      // close when clicking outside
+      document.addEventListener('click', (ev) => {
+        if (!links.contains(ev.target) && !btn.contains(ev.target) && links.classList.contains('show')) {
+          links.classList.remove('show');
+          links.setAttribute('aria-hidden', 'true');
+          btn.setAttribute('aria-expanded', 'false');
         }
       });
+    })();
+
+    // Initialize Firebase (use same config you provided earlier)
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+      authDomain: "desakarangharja-31525.firebaseapp.com",
+      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "desakarangharja-31525",
+      storageBucket: "desakarangharja-31525.firebasestorage.app",
+      messagingSenderId: "428460519406",
+      appId: "1:428460519406:web:fca8b9854de78cac5628ff",
+      measurementId: "G-T9G2VRJ5S2"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
-  </script>
-  
-  
-    <!-- Firebase and Activities Script -->
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+    const db = firebase.database();
 
-<script>
-  // Initialize Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-    authDomain: "desakarangharja-31525.firebaseapp.com",
-    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
-    projectId: "desakarangharja-31525",
-    storageBucket: "desakarangharja-31525.firebasestorage.app",
-    messagingSenderId: "428460519406",
-    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-  };
+    // DOM refs
+    const activitiesGrid = document.getElementById('activitiesGrid');
+    const activitiesState = document.getElementById('activitiesState');
 
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.database();
-  lucide.createIcons();
-
-  // Function to render activities
-  function renderActivities(activities) {
-    const container = document.getElementById('activities-container');
-    
-    if (!activities || activities.length === 0) {
-      container.innerHTML = `
-        <div class="empty-activities">
-          <div class="empty-icon">
-            <i data-lucide="calendar"></i>
-          </div>
-          <h3 class="empty-title">Belum Ada Kegiatan yang Dipublikasi</h3>
-          <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini setelah dipublikasi</p>
-        </div>
-      `;
-      lucide.createIcons();
-      return;
+    // Helper: escape to prevent HTML injection
+    function escapeHtml(str) {
+      if (!str && str !== 0) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
-    let html = '';
-    activities.slice(0, 6).forEach(activity => {
-      const date = activity.date ? new Date(activity.date).toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      }) : 'Tanggal tidak tersedia';
-      
-      // Create excerpt by removing HTML tags and limiting to 150 characters
-      const textContent = activity.content.replace(/<[^>]*>/g, '');
-      const excerpt = textContent.length > 150 ? textContent.substring(0, 150) + '...' : textContent;
+    // Helper: create excerpt (strip tags, limit chars)
+    function excerptFromHtml(html, max = 160) {
+      if (!html) return '';
+      const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (text.length <= max) return text;
+      return text.substring(0, max).trim() + '...';
+    }
 
-      html += `
-        <div class="activity-card">
-          ${activity.imageBase64 ? `
-            <div class="activity-image-container">
-              <img src="${activity.imageBase64}" alt="${activity.title}" class="activity-image">
-            </div>
-          ` : ''}
-          <div class="activity-content">
-            <h3 class="activity-title">${activity.title || 'Tanpa Judul'}</h3>
+    // Render function
+    function renderActivities(items){
+      // hide loading
+      activitiesState.style.display = 'none';
+      activitiesGrid.style.display = 'grid';
+      activitiesGrid.innerHTML = '';
+
+      if (!items || items.length === 0) {
+        activitiesGrid.style.display = 'block';
+        activitiesGrid.innerHTML = '<div class="empty-state" style="padding:18px; grid-column:1/-1; text-align:center; color:var(--muted);">Belum ada kegiatan yang dipublikasikan.</div>';
+        return;
+      }
+
+      items.forEach(item => {
+        // fields from kegiatan.html/dashboard: title, date, content, imageBase64, createdAt
+        const title = escapeHtml(item.title || item.judul || 'Tanpa Judul');
+        const dateVal = item.date || item.tanggal || item.createdAt || item.createdAt === 0 ? item.date || item.tanggal || item.createdAt : '';
+        const dateText = (item.date) ? (new Date(item.date)).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }) :
+                         (item.createdAt ? new Date(item.createdAt).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' }) : '');
+        const image = item.imageBase64 || item.imageURL || item.gambar || 'https://via.placeholder.com/800x450?text=No+Image';
+        const excerpt = excerptFromHtml(item.content || item.deskripsi || '');
+
+        const card = document.createElement('article');
+        card.className = 'activity-card';
+        card.innerHTML = `
+          <img loading="lazy" class="activity-img" src="${escapeHtml(image)}" alt="${title}">
+          <div class="activity-body">
+            <h3 class="activity-title">${title}</h3>
+            <div class="activity-excerpt">${escapeHtml(excerpt)}</div>
             <div class="activity-meta">
-              <span class="activity-date">
-                <i data-lucide="calendar"></i> ${date}
-              </span>
+              <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3M16 7V3M3 11h18M5 21h14a2 2 0 0 0 2 -2V11H3v8a2 2 0 0 0 2 2z"/></svg> &nbsp; ${escapeHtml(dateText)}</div>
+              <div><a href="#" class="read-more" style="text-decoration:none;font-weight:600;color:var(--accent);">Baca selengkapnya</a></div>
             </div>
-            <div class="activity-excerpt">${excerpt}</div>
-            <a href="#" class="activity-read-more">Baca selengkapnya</a>
           </div>
-        </div>
-      `;
+        `;
+        activitiesGrid.appendChild(card);
+      });
+
+      // render icons if any (lucide)
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    }
+
+    // Listen realtime on 'activities' and show only published ones sorted by createdAt desc
+    const activitiesRef = db.ref('activities');
+    activitiesRef.on('value', (snapshot) => {
+      const raw = snapshot.val();
+      const arr = raw ? Object.entries(raw).map(([id, val]) => ({ id, ...val })) : [];
+      // filter published === true (some posts may miss published field)
+      const published = arr.filter(a => !!a.published);
+      // sort by createdAt (ServerValue.TIMESTAMP), newest first
+      published.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      renderActivities(published);
+    }, (err) => {
+      console.error('Gagal memuat kegiatan:', err);
+      activitiesState.innerHTML = '<div style="color:#ef4444">Gagal memuat kegiatan. Cek koneksi atau konfigurasi Firebase.</div>';
+      activitiesGrid.style.display = 'none';
     });
 
-    container.innerHTML = html;
-    lucide.createIcons();
-  }
-
-  // Listen for real-time updates from Firebase
-  db.ref('activities').orderByChild('createdAt').on('value', (snapshot) => {
-    const data = snapshot.val();
-    const activities = data ? Object.entries(data)
-      .map(([key, value]) => ({ id: key, ...value }))
-      .filter(act => act.published)  // Tambah filter ini untuk only published
-      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)) : [];
-    
-    renderActivities(activities);
-  }, (error) => {
-    console.error('Error loading activities:', error);
-    document.getElementById('activities-container').innerHTML = `
-      <div class="error-message">
-        <i data-lucide="alert-circle"></i>
-        <p>Gagal memuat kegiatan. Silakan coba lagi nanti.</p>
-      </div>
-    `;
-    lucide.createIcons();
-  });
-
-  // Typewriter effect for hero section
-  const typewriterText = document.getElementById('typewriter-text');
-  if (typewriterText) {
-    const text = "SISTEM INFORMASI DESA KARANGHARJA";
-    let i = 0;
-    
-    function typeWriter() {
-      if (i < text.length) {
-        typewriterText.innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typeWriter, 100);
-      }
-    }
-    
-    typeWriter();
-  }
-</script>
+    // Ensure icons (lucide)
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+    });
+  </script>
 </body>
 </html>
