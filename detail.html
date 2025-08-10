@@ -131,69 +131,66 @@
     <a href="index.html#activities" class="back-link">← Kembali ke Kegiatan</a>
   </div>
 
-  <script>
-    // ==== Firebase Config ====
-    const firebaseConfig = {
-      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-      authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
-      messagingSenderId: "428460519406",
-      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+<script>
+  // ==== Firebase Config ====
+  const firebaseConfig = {
+    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+    authDomain: "desakarangharja-31525.firebaseapp.com",
+    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "desakarangharja-31525",
+    storageBucket: "desakarangharja-31525.firebasestorage.app",
+    messagingSenderId: "428460519406",
+    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-    // ==== Ambil ID dari URL ====
-    const urlParams = new URLSearchParams(window.location.search);
-    const activityId = urlParams.get('id');
+  // Ambil ID dari URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const activityId = urlParams.get('id');
 
-    if (!activityId) {
-      document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
-      document.getElementById('activityContent').textContent = "ID kegiatan tidak valid.";
-    } else {
-      // Ambil data langsung di root sesuai JSON
-      db.ref(activityId).once('value')
-        .then(snapshot => {
-          const data = snapshot.val();
-          if (data) {
-            // Buat judul fallback kalau kosong
-            const judul = data.title || (data.content ? data.content.replace(/<[^>]+>/g, '').slice(0, 50) + "..." : 'Tanpa Judul');
-            document.getElementById('activityTitle').textContent = judul;
+  if (!activityId) {
+    document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
+    document.getElementById('activityContent').textContent = "ID kegiatan tidak valid.";
+  } else {
+    // Ambil data langsung di root sesuai struktur Firebase
+    db.ref(activityId).once('value')
+      .then(snapshot => {
+        const data = snapshot.val();
+        if (data) {
+          // Judul
+          document.getElementById('activityTitle').textContent = data.title || 'Tanpa Judul';
 
-            // Tanggal
-            document.getElementById('activityDate').textContent = data.date 
-              ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
-              : '-';
+          // Tanggal
+          document.getElementById('activityDate').textContent = data.date 
+            ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
+            : '-';
 
-            // Views
-            document.getElementById('activityViews').textContent = data.views || 0;
+          // Views
+          document.getElementById('activityViews').textContent = data.views || 0;
 
-            // Konten
-            document.getElementById('activityContent').innerHTML = data.content || '';
+          // Konten
+          document.getElementById('activityContent').innerHTML = data.content || '';
 
-            // Gambar
-            const coverImg = document.querySelector('#coverImage img');
-            if (data.imageBase64 || data.imageUrl) {
-              coverImg.src = data.imageBase64 || data.imageUrl;
-            } else {
-              coverImg.src = "https://via.placeholder.com/1200x600?text=Tidak+Ada+Gambar";
-            }
-
+          // Gambar
+          const coverImg = document.querySelector('#coverImage img');
+          if (data.imageBase64) {
+            coverImg.src = data.imageBase64;
           } else {
-            document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
-            document.getElementById('activityContent').textContent = "Data kegiatan tidak ada di database.";
+            coverImg.src = "https://via.placeholder.com/1200x600?text=Tidak+Ada+Gambar";
           }
-          lucide.createIcons();
-        })
-        .catch(err => {
-          console.error(err);
-          document.getElementById('activityTitle').textContent = "Error memuat data";
-          document.getElementById('activityContent').textContent = "Terjadi kesalahan saat mengambil data.";
-        });
-    }
-  </script>
-
+        } else {
+          document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
+          document.getElementById('activityContent').textContent = "Data kegiatan tidak ada di database.";
+        }
+        lucide.createIcons();
+      })
+      .catch(err => {
+        console.error(err);
+        document.getElementById('activityTitle').textContent = "Error memuat data";
+        document.getElementById('activityContent').textContent = "Terjadi kesalahan saat mengambil data.";
+      });
+  }
+</script>
 </body>
 </html>
