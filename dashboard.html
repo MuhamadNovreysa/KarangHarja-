@@ -458,203 +458,177 @@
     </div>
   </div>
 
-  <!-- Firebase & Lucide JS -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
-  
-  <script>
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-      authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
-      projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
-      messagingSenderId: "428460519406",
-      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-    };
+            
+  <!-- replace existing Firebase + dashboard script with this -->
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
 
-    // Initialize Firebase
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+<script>
+  // --- Firebase config & init (compat) ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+    authDomain: "desakarangharja-31525.firebaseapp.com",
+    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "desakarangharja-31525",
+    storageBucket: "desakarangharja-31525.firebasestorage.app",
+    messagingSenderId: "428460519406",
+    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  // icons
+  lucide.createIcons();
+
+  // DOM refs
+  const activitiesTableContainer = document.getElementById('activitiesTable');
+  const totalActivitiesEl = document.getElementById('totalActivities');
+  const publishedCountEl = document.getElementById('publishedCount');
+  const draftCountEl = document.getElementById('draftCount');
+  const totalViewsEl = document.getElementById('totalViews');
+
+  // auth protection
+  auth.onAuthStateChanged(user => {
+    console.log('Auth state changed:', user);
+    if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
+      window.location.href = 'login.html';
+    } else {
+      loadActivities();
     }
-    const auth = firebase.auth();
-    const db = firebase.database();
+  });
 
-    // Initialize Lucide Icons
-    lucide.createIcons();
+  // logout
+  document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+      await auth.signOut();
+      window.location.href = 'login.html';
+    } catch (err) {
+      console.error('Logout error', err);
+      alert('Gagal logout: ' + (err.message || err));
+    }
+  });
 
-    // Auth Check
-    auth.onAuthStateChanged(user => {
-      console.log("Auth state changed:", user);
-      if (!user || user.email !== "karangharja2025@gmail.com") {
-        console.log("Redirecting to login...");
-        window.location.href = "login.html";
-      } else {
-        console.log("User authenticated:", user.email);
-        loadActivities();
-      }
-    });
-
-    // Logout functionality
-    document.getElementById('logoutBtn').addEventListener('click', (e) => {
-      e.preventDefault();
-      auth.signOut()
-        .then(() => {
-          console.log("User signed out");
-          window.location.href = "login.html";
-        })
-        .catch(error => {
-          console.error("Logout error:", error);
-          alert('Gagal logout: ' + error.message);
-        });
-    });
-
-    // Navbar toggle for mobile
-    const navbarToggle = document.getElementById('navbarToggle');
-    const navbarMenu = document.getElementById('navbarMenu');
-
+  // navbar toggle
+  const navbarToggle = document.getElementById('navbarToggle');
+  const navbarMenu = document.getElementById('navbarMenu');
+  if (navbarToggle) {
     navbarToggle.addEventListener('click', () => {
       navbarToggle.classList.toggle('active');
-      navbarMenu.classList.toggle('active');
+      if (navbarMenu) navbarMenu.classList.toggle('active');
     });
+  }
+  document.addEventListener('click', (e) => {
+    if (navbarToggle && navbarMenu && !navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
+      navbarToggle.classList.remove('active');
+      navbarMenu.classList.remove('active');
+    }
+  });
 
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
-        navbarToggle.classList.remove('active');
-        navbarMenu.classList.remove('active');
+  // load activities and update UI
+  function loadActivities() {
+    const ref = db.ref('activities');
+    // listen to realtime changes
+    ref.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {
+        showEmptyState();
+        updateStats([]);
+        return;
       }
+      const entries = Object.entries(data)
+        .map(([key, val]) => ({ id: key, ...val }))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      updateStats(entries);
+      renderActivities(entries.slice(0, 5));
+    }, (err) => {
+      console.error('firebase read error', err);
+      activitiesTableContainer.innerHTML = `<div style="padding:2rem; text-align:center; color:red;">Gagal memuat kegiatan: ${err.message || err}</div>`;
+    });
+  }
+
+  function showEmptyState() {
+    activitiesTableContainer.innerHTML = `
+      <div style="padding: 2rem; text-align: center;">
+        <i data-lucide="calendar" style="width: 3rem; height: 3rem; color: #d1d5db;"></i>
+        <h3 style="margin: 1rem 0 0.5rem; color: #111827;">Belum ada kegiatan</h3>
+        <p style="color: #6b7280;">Mulai dengan membuat kegiatan pertama Anda</p>
+      </div>
+    `;
+    lucide.createIcons();
+  }
+
+  function updateStats(entries) {
+    totalActivitiesEl.textContent = entries.length;
+    publishedCountEl.textContent = entries.filter(e => e.published).length;
+    draftCountEl.textContent = entries.filter(e => !e.published).length;
+    totalViewsEl.textContent = entries.reduce((s, e) => s + (e.views || 0), 0);
+  }
+
+  function renderActivities(entries) {
+    if (!entries || entries.length === 0) {
+      showEmptyState();
+      return;
+    }
+    let html = `<table><thead><tr>
+      <th>Judul Kegiatan</th><th>Tanggal</th><th>Status</th><th>Dilihat</th><th>Aksi</th>
+    </tr></thead><tbody>`;
+
+    entries.forEach(entry => {
+      const statusClass = entry.published ? 'badge-published' : 'badge-draft';
+      const statusText = entry.published ? 'Published' : 'Draft';
+      const dateText = entry.date ? new Date(entry.date).toLocaleDateString('id-ID') : '-';
+      html += `<tr>
+        <td>${escapeHtml(entry.title || 'Tanpa Judul')}</td>
+        <td>${dateText}</td>
+        <td><span class="badge ${statusClass}">${statusText}</span></td>
+        <td>${entry.views || 0}</td>
+        <td>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="action-btn" onclick="editActivity('${entry.id}')"><i data-lucide="edit"></i></button>
+            <button class="action-btn" onclick="deleteActivity('${entry.id}')"><i data-lucide="trash-2"></i></button>
+          </div>
+        </td>
+      </tr>`;
     });
 
-    // Load activities data
-    function loadActivities() {
-      const activitiesRef = db.ref('activities');
-      const tableContainer = document.getElementById('activitiesTable');
-      
-      activitiesRef.orderByChild('createdAt').on('value', (snapshot) => {
-        try {
-          const activities = snapshot.val();
-          
-          if (!activities) {
-            showEmptyState(tableContainer);
-            return;
-          }
+    html += `</tbody></table>`;
+    activitiesTableContainer.innerHTML = html;
+    lucide.createIcons();
+  }
 
-          updateStats(activities);
-          renderActivitiesTable(activities, tableContainer);
-          
-        } catch (error) {
-          console.error("Error loading activities:", error);
-          tableContainer.innerHTML = `
-            <div style="padding: 2rem; text-align: center; color: var(--danger);">
-              <i data-lucide="alert-triangle" style="width: 3rem; height: 3rem;"></i>
-              <h3 style="margin: 1rem 0 0.5rem;">Gagal memuat data</h3>
-              <p>${error.message || 'Terjadi kesalahan saat memuat kegiatan'}</p>
-            </div>
-          `;
-          lucide.createIcons();
-        }
-      }, (error) => {
-        console.error("Firebase error:", error);
-      });
-    }
-
-    function showEmptyState(container) {
-      container.innerHTML = `
-        <div style="padding: 2rem; text-align: center;">
-          <i data-lucide="calendar" style="width: 3rem; height: 3rem; color: #d1d5db;"></i>
-          <h3 style="margin: 1rem 0 0.5rem; color: var(--dark);">Belum ada kegiatan</h3>
-          <p style="color: var(--gray);">Mulai dengan membuat kegiatan pertama Anda</p>
-        </div>
-      `;
-      lucide.createIcons();
-    }
-
-    function updateStats(activities) {
-      const activitiesArray = Object.values(activities);
-      document.getElementById('totalActivities').textContent = activitiesArray.length;
-      document.getElementById('publishedCount').textContent = 
-        activitiesArray.filter(a => a.published).length;
-      document.getElementById('draftCount').textContent = 
-        activitiesArray.filter(a => !a.published).length;
-      document.getElementById('totalViews').textContent = 
-        activitiesArray.reduce((sum, a) => sum + (a.views || 0), 0);
-    }
-
-    function renderActivitiesTable(activities, container) {
-      let tableHTML = `
-        <table>
-          <thead>
-            <tr>
-              <th>Judul Kegiatan</th>
-              <th>Tanggal</th>
-              <th>Status</th>
-              <th>Dilihat</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-      Object.entries(activities).reverse().slice(0, 5).forEach(([key, activity]) => {
-        tableHTML += `
-          <tr>
-            <td>${activity.title || 'Tanpa Judul'}</td>
-            <td>${activity.date ? new Date(activity.date).toLocaleDateString('id-ID') : '-'}</td>
-            <td>
-              <span class="badge ${activity.published ? 'badge-published' : 'badge-draft'}">
-                ${activity.published ? 'Published' : 'Draft'}
-              </span>
-            </td>
-            <td>${activity.views || 0}</td>
-            <td>
-              <div style="display: flex; gap: 0.5rem;">
-                <button class="action-btn" onclick="editActivity('${key}')">
-                  <i data-lucide="edit"></i>
-                </button>
-                <button class="action-btn" onclick="deleteActivity('${key}')">
-                  <i data-lucide="trash-2"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      });
-
-      tableHTML += `
-          </tbody>
-        </table>
-      `;
-
-      container.innerHTML = tableHTML;
-      lucide.createIcons();
-    }
-
-    // Edit activity function
-    window.editActivity = function(id) {
-      window.location.href = `kegiatan.html?edit=${id}`;
-    };
-
-    // Delete activity function
-    window.deleteActivity = function(id) {
-      if (confirm('Apakah Anda yakin ingin menghapus kegiatan ini?')) {
-        db.ref(`activities/${id}`).remove()
-          .then(() => {
-            alert('Kegiatan berhasil dihapus');
-          })
-          .catch(error => {
-            alert('Gagal menghapus kegiatan: ' + error.message);
-          });
-      }
-    };
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log("Dashboard initialized");
+  // helper escape
+  function escapeHtml(text) {
+    return String(text).replace(/[&<>"'`=\/]/g, function (s) {
+      return ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
+        "'": '&#39;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;'
+      })[s];
     });
-  </script>
+  }
+
+  // global functions used by buttons in table
+  window.editActivity = function (id) {
+    window.location.href = `kegiatan.html?edit=${encodeURIComponent(id)}`;
+  };
+
+  window.deleteActivity = function (id) {
+    if (!confirm('Yakin ingin menghapus kegiatan ini?')) return;
+    db.ref(`activities/${id}`).remove()
+      .then(() => alert('Kegiatan dihapus'))
+      .catch(err => alert('Gagal menghapus: ' + (err.message || err)));
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('Dashboard ready');
+  });
+</script>
 </body>
 </html>
