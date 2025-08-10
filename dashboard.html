@@ -1,257 +1,277 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard Admin - Desa KarangHarja</title>
-
-  <!-- Font (optional, ikut project lo) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    :root{
+    :root {
       --navbar-height: 64px;
       --white: #ffffff;
       --muted: #6b7280;
-      --primary: #16a34a; /* hijau aksen */
+      --primary: #2ecc71; /* hijau aksen */
       --card-shadow: rgba(0,0,0,0.08);
     }
 
-    *{box-sizing:border-box}
-    body{
-      margin:0;
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
       font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      color:#111827;
-      background:#f9fafb;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+      background: #f5f6fa;
+      color: #333;
     }
 
-    /* prevent scrolling when menu open */
-    body.menu-open{
-      overflow: hidden;
-    }
+    /* Prevent scrolling when menu open */
+    body.menu-open { overflow: hidden; }
 
-    /* NAVBAR */
-    .navbar{
-      height: var(--navbar-height);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 0 1rem;
-      background: var(--white); /* putih */
+    /* Navbar */
+    .navbar {
+      background: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
       border-bottom: 1px solid #e6e6e6;
       position: fixed;
-      left:0; right:0; top:0;
-      z-index:1200;
-    }
-
-    .navbar-container{
-      width:100%;
-      max-width:1200px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:1rem;
-    }
-
-    .navbar-brand{
-      display:flex;
-      align-items:center;
-      gap:0.75rem;
-      color: #111827;
-      text-decoration:none;
-      font-weight:600;
-    }
-    .navbar-logo{
-      height:36px;
-      width:auto;
-      display:block;
-    }
-    .brand-text{
-      font-size:1rem;
-      line-height:1;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--navbar-height);
+      z-index: 1000;
     }
 
     .navbar h1 {
-      margin: 0;
       font-size: 1.25rem;
       font-weight: 600;
+      margin: 0;
+      color: #111827;
     }
 
-    /* Navbar menu (desktop: horizontal, mobile: hidden until toggled) */
-    .navbar-menu{
+    .navbar-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .navbar-toggle .bar {
+      width: 25px;
+      height: 3px;
+      background: #111827;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .navbar-toggle.active .bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .navbar-toggle.active .bar:nth-child(2) { opacity: 0; }
+    .navbar-toggle.active .bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .navbar-menu {
       display: flex;
+      gap: 15px;
       align-items: center;
-      gap: 1rem;
-      list-style: none;
-      margin: 0;
-      padding: 0;
     }
 
     .navbar-menu a,
-    .navbar-menu button{
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+    .navbar-menu button {
       color: var(--muted);
-      background: none;
-      border: none;
-      padding: 0.5rem 0.6rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 0.95rem;
       text-decoration: none;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 12px;
+      border-radius: 8px;
     }
 
     .navbar-menu a:hover,
-    .navbar-menu button:hover{
+    .navbar-menu button:hover {
       color: var(--primary);
-      background: rgba(16,185,129,0.06);
+      background: rgba(46, 204, 113, 0.06);
     }
 
-    .navbar-toggle{
-      background: none;
-      border: none;
-      padding: 8px;
-      cursor: pointer;
-      display: none; /* Shown on mobile */
-    }
-
-    .navbar-toggle .bar{
-      display: block;
-      width: 22px;
-      height: 2px;
-      background: #111827;
-      margin: 4px 0;
-      transition: transform .2s ease, opacity .2s ease;
-    }
-
-    .navbar-toggle.active .bar:nth-child(1){ transform: translateY(6px) rotate(45deg); }
-    .navbar-toggle.active .bar:nth-child(2){ opacity: 0; }
-    .navbar-toggle.active .bar:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
-
-    /* MAIN CONTENT container offset to account for fixed navbar */
-    .main-content{
-      max-width:1200px;
-      margin: 0 auto;
-      padding: calc(var(--navbar-height) + 28px) 1rem 48px;
-    }
-
-    /* Dashboard header */
-    .dashboard-header h1{
-      font-size:1.75rem;
-      margin:0 0 8px;
-    }
-    .dashboard-header p{ color:var(--muted); margin:0 0 18px; }
-
-    /* Stats grid */
-    .stats-grid{
-      display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-      gap:16px;
-      margin-bottom:20px;
-    }
-    .stat-card{
-      background:var(--white);
-      border-radius:10px;
-      padding:18px;
-      box-shadow: 0 6px 18px var(--card-shadow);
-    }
-    .stat-card-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-    .stat-card h3{ margin:0; font-size:1rem; color:#374151; font-weight:600; }
-    .stat-card-value{ font-size:1.6rem; font-weight:700; margin:8px 0; }
-    .stat-card-desc{ color:var(--muted); font-size:0.9rem; }
-
-    /* Activities */
-    .activities-table{
-      background:var(--white);
-      border-radius:10px;
-      box-shadow: 0 6px 18px var(--card-shadow);
-      padding:16px;
-    }
-    .table-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-    .btn{ display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px; font-weight:600; border:none; cursor:pointer; }
-    .btn-primary{ background:var(--primary); color:white; }
-
-    .loading{ display:flex; justify-content:center; align-items:center; height:84px; }
-    .loading-spinner{ width:28px; height:28px; border-radius:50%; border:3px solid #eee; border-top-color: var(--primary); animation: spin 1s linear infinite; }
-    @keyframes spin{ to{ transform:rotate(360deg); } }
-
-    /* MOBILE: Navbar menu becomes full dropdown below navbar */
-    @media (max-width: 768px){
-      .navbar{
+    /* Mobile */
+    @media (max-width: 768px) {
+      .navbar {
         flex-direction: column;
         align-items: flex-start;
-        height: auto;
-        padding: 1rem;
+        padding: 10px 20px;
       }
 
       .navbar h1 {
         width: 100%;
-        text-align: center;
-        margin-bottom: 0.5rem;
+        text-align: left;
       }
 
-      .navbar-toggle{
-        display: block;
+      .navbar-toggle {
+        display: flex;
         position: absolute;
-        right: 1rem;
-        top: 1rem;
+        right: 20px;
+        top: 18px;
       }
 
-      .navbar-menu{
+      .navbar-menu {
         display: none;
         flex-direction: column;
         width: 100%;
-        gap: 0.5rem;
-        padding: 1rem 0;
+        background: var(--white);
+        padding: 10px 0;
         border-top: 1px solid #e6e6e6;
       }
 
-      .navbar-menu.active{
+      .navbar-menu.active {
         display: flex;
       }
 
       .navbar-menu a,
-      .navbar-menu button{
+      .navbar-menu button {
         justify-content: center;
-        padding: 1rem;
+        padding: 12px;
         font-size: 1.125rem;
-        border-radius: 10px;
       }
 
       .navbar-menu a:hover,
-      .navbar-menu button:hover{
+      .navbar-menu button:hover {
         background: #f3f4f6;
-        color: var(--primary);
       }
+    }
+
+    /* Main content */
+    .main-content {
+      padding: calc(var(--navbar-height) + 20px) 20px 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .dashboard-header h1 {
+      margin: 0 0 10px;
+      font-size: 1.75rem;
+    }
+
+    .dashboard-header p {
+      color: var(--muted);
+      margin: 0 0 18px;
+    }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      padding: 18px;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px var(--card-shadow);
+    }
+
+    .stat-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .stat-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .stat-card-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+
+    .stat-card-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Activities table */
+    .activities-table {
+      background: var(--white);
+      margin-top: 25px;
+      border-radius: 10px;
+      box-shadow: 0 6px 18px var(--card-shadow);
+      padding: 16px;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Loading spinner */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80px;
+    }
+
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--primary);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
-  <!-- NAVBAR -->
+  <!-- Navbar -->
   <nav class="navbar" aria-label="Top navigation">
-    <div class="navbar-container">
-      <a href="index.html" class="navbar-brand" aria-label="Desa Karangharja">
-        <img class="navbar-logo" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" alt="Logo Desa Karangharja">
-        <span class="brand-text">Desa Karangharja</span>
-      </a>
-      <h1>Admin Desa KarangHarja</h1>
-      <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle menu" aria-expanded="false" type="button">
-        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-      </button>
-      <div class="navbar-menu" id="navbarMenu" aria-hidden="true">
-        <a href="index.html"><i data-lucide="home"></i> Beranda</a>
-        <a href="kegiatan.html"><i data-lucide="plus"></i> Posting Kegiatan</a>
-        <button id="logoutBtn"><i data-lucide="log-out"></i> Logout</button>
-      </div>
+    <h1>Dashboard</h1>
+    <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <div class="navbar-menu" id="navbarMenu" aria-hidden="true">
+      <a href="index.html"><i data-lucide="home"></i> Beranda</a>
+      <a href="kegiatan.html"><i data-lucide="plus"></i> Posting Kegiatan</a>
+      <button id="logoutBtn"><i data-lucide="log-out"></i> Logout</button>
     </div>
   </nav>
 
-  <!-- MAIN CONTENT -->
+  <!-- Main Content -->
   <main class="main-content" id="mainContent" role="main">
     <section class="dashboard-header">
       <h1>Selamat Datang, Admin Desa KarangHarja!</h1>
@@ -260,7 +280,7 @@
 
     <!-- Stats Cards -->
     <section class="stats-grid" aria-label="Statistik Kegiatan">
-      <div class="stat-card" aria-hidden="false">
+      <div class="stat-card">
         <div class="stat-card-header">
           <h3>Total Kegiatan</h3>
           <i data-lucide="file-text"></i>
@@ -305,21 +325,17 @@
           <a href="kegiatan.html" class="btn btn-primary"><i data-lucide="plus"></i> Tambah Baru</a>
         </div>
       </div>
-
       <div id="activitiesTable">
         <div class="loading"><div class="loading-spinner"></div></div>
       </div>
     </section>
   </main>
 
-  <!-- Firebase compat + Lucide -->
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
-
   <script>
-    // ========= Firebase init (keep your original config) =========
+    // Firebase init
     const firebaseConfig = {
       apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
       authDomain: "desakarangharja-31525.firebaseapp.com",
@@ -338,82 +354,81 @@
     // Initialize icons
     lucide.createIcons();
 
-    // ---- Navbar / Mobile menu behavior ----
-    (function setupMenu(){
-      const toggle = document.getElementById('navbarToggle');
-      const menu = document.getElementById('navbarMenu');
-      const logoutBtn = document.getElementById('logoutBtn');
+    // Hamburger menu toggle
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbarMenu = document.getElementById("navbarMenu");
 
-      function openMenu(){
-        toggle.classList.add('active');
-        toggle.setAttribute('aria-expanded','true');
-        menu.classList.add('active');
-        menu.setAttribute('aria-hidden','false');
-        document.body.classList.add('menu-open');
+    navbarToggle.addEventListener("click", () => {
+      navbarToggle.classList.toggle("active");
+      navbarMenu.classList.toggle("active");
+      document.body.classList.toggle("menu-open");
+      navbarMenu.setAttribute("aria-hidden", !navbarMenu.classList.contains("active"));
+      navbarToggle.setAttribute("aria-expanded", navbarMenu.classList.contains("active"));
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!navbarMenu.contains(e.target) && !navbarToggle.contains(e.target) && navbarMenu.classList.contains("active")) {
+        navbarToggle.classList.remove("active");
+        navbarMenu.classList.remove("active");
+        document.body.classList.remove("menu-open");
+        navbarMenu.setAttribute("aria-hidden", "true");
+        navbarToggle.setAttribute("aria-expanded", "false");
       }
-      function closeMenu(){
-        toggle.classList.remove('active');
-        toggle.setAttribute('aria-expanded','false');
-        menu.classList.remove('active');
-        menu.setAttribute('aria-hidden','true');
-        document.body.classList.remove('menu-open');
+    });
+
+    // Close menu on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navbarMenu.classList.contains("active")) {
+        navbarToggle.classList.remove("active");
+        navbarMenu.classList.remove("active");
+        document.body.classList.remove("menu-open");
+        navbarMenu.setAttribute("aria-hidden", "true");
+        navbarToggle.setAttribute("aria-expanded", "false");
       }
+    });
 
-      // click toggle
-      toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (menu.classList.contains('active')) closeMenu();
-        else openMenu();
+    // Close menu on resize to desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768 && navbarMenu.classList.contains("active")) {
+        navbarToggle.classList.remove("active");
+        navbarMenu.classList.remove("active");
+        document.body.classList.remove("menu-open");
+        navbarMenu.setAttribute("aria-hidden", "true");
+        navbarToggle.setAttribute("aria-expanded", "false");
+      }
+    }, { passive: true });
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      auth.signOut().then(() => {
+        window.location.href = "login.html";
+      }).catch(err => {
+        console.error("Logout error:", err);
+        alert("Gagal logout: " + (err.message || err));
       });
+    });
 
-      // close when clicking outside menu
-      document.addEventListener('click', (e) => {
-        if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-          closeMenu();
-        }
-      });
-
-      // close on escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && menu.classList.contains('active')) closeMenu();
-      });
-
-      // close on resize to desktop
-      window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && menu.classList.contains('active')) {
-          closeMenu();
-        }
-      }, { passive: true });
-
-      // logout button
-      if (logoutBtn) logoutBtn.addEventListener('click', async (ev) => {
-        ev.preventDefault();
-        try { await auth.signOut(); window.location.href = 'index.html'; }
-        catch(err){ console.error(err); alert('Gagal logout: ' + (err.message||err)); }
-      });
-    })();
-
-    // ========== AUTH PROTECTION & data loading ==========
-    // Use same admin email check you had originally
+    // Auth protection
     auth.onAuthStateChanged(user => {
-      console.log('Auth state changed:', user);
-      if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
-        window.location.href = 'login.html';
+      console.log("Auth state changed:", user);
+      if (!user || !user.email || user.email.toLowerCase() !== "karangharja2025@gmail.com") {
+        window.location.href = "login.html";
       } else {
         loadActivities();
       }
     });
 
     // DOM refs for stats & table
-    const activitiesTableContainer = document.getElementById('activitiesTable');
-    const totalActivitiesEl = document.getElementById('totalActivities');
-    const publishedCountEl = document.getElementById('publishedCount');
-    const draftCountEl = document.getElementById('draftCount');
-    const totalViewsEl = document.getElementById('totalViews');
+    const activitiesTableContainer = document.getElementById("activitiesTable");
+    const totalActivitiesEl = document.getElementById("totalActivities");
+    const publishedCountEl = document.getElementById("publishedCount");
+    const draftCountEl = document.getElementById("draftCount");
+    const totalViewsEl = document.getElementById("totalViews");
 
-    function loadActivities(){
-      const ref = db.ref('activities');
-      ref.on('value', (snapshot) => {
+    function loadActivities() {
+      const ref = db.ref("activities");
+      ref.on("value", (snapshot) => {
         const data = snapshot.val();
         if (!data) {
           showEmptyState();
@@ -421,17 +436,17 @@
           return;
         }
         const entries = Object.entries(data)
-          .map(([key,val]) => ({ id:key, ...val }))
-          .sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+          .map(([key, val]) => ({ id: key, ...val }))
+          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
         updateStats(entries);
-        renderActivities(entries.slice(0,5));
+        renderActivities(entries.slice(0, 5));
       }, (err) => {
-        console.error('Firebase read error', err);
+        console.error("Firebase read error:", err);
         activitiesTableContainer.innerHTML = `<div style="padding:2rem; text-align:center; color:red;">Gagal memuat kegiatan: ${err.message || err}</div>`;
       });
     }
 
-    function showEmptyState(){
+    function showEmptyState() {
       activitiesTableContainer.innerHTML = `
         <div style="padding:2rem; text-align:center; color:#374151;">
           <i data-lucide="calendar" style="width:36px;height:36px;color:#d1d5db"></i>
@@ -442,42 +457,42 @@
       lucide.createIcons();
     }
 
-    function updateStats(entries){
+    function updateStats(entries) {
       totalActivitiesEl.textContent = entries.length;
       publishedCountEl.textContent = entries.filter(e => e.published).length;
       draftCountEl.textContent = entries.filter(e => !e.published).length;
-      totalViewsEl.textContent = entries.reduce((s,e) => s + (e.views || 0), 0);
+      totalViewsEl.textContent = entries.reduce((s, e) => s + (e.views || 0), 0);
     }
 
-    function renderActivities(entries){
+    function renderActivities(entries) {
       if (!entries || entries.length === 0) { showEmptyState(); return; }
       let html = `<table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f3f4f6"><th style="padding:12px;text-align:left">Judul Kegiatan</th><th style="padding:12px;text-align:left">Tanggal</th><th style="padding:12px;text-align:left">Status</th><th style="padding:12px;text-align:left">Dilihat</th><th style="padding:12px;text-align:left">Aksi</th></tr></thead><tbody>`;
       entries.forEach(entry => {
-        const statusClass = entry.published ? 'badge-published' : 'badge-draft';
-        const statusText = entry.published ? 'Published' : 'Draft';
-        const dateText = entry.date ? new Date(entry.date).toLocaleDateString('id-ID') : '-';
-        html += `<tr><td style="padding:12px;vertical-align:top">${escapeHtml(entry.title||'Tanpa Judul')}</td><td style="padding:12px;vertical-align:top">${dateText}</td><td style="padding:12px;vertical-align:top"><span style="display:inline-block;padding:.25rem .6rem;border-radius:9999px;background:${entry.published? '#dcfce7':'#fff7ed'};color:${entry.published? '#047857':'#92400e'};font-weight:600;font-size:.85rem">${statusText}</span></td><td style="padding:12px;vertical-align:top">${entry.views||0}</td><td style="padding:12px;vertical-align:top"><div style="display:flex;gap:8px"><button class="action-btn" onclick="editActivity('${entry.id}')"><i data-lucide="edit"></i></button><button class="action-btn" onclick="deleteActivity('${entry.id}')"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        const statusClass = entry.published ? "badge-published" : "badge-draft";
+        const statusText = entry.published ? "Published" : "Draft";
+        const dateText = entry.date ? new Date(entry.date).toLocaleDateString("id-ID") : "-";
+        html += `<tr><td style="padding:12px;vertical-align:top">${escapeHtml(entry.title || "Tanpa Judul")}</td><td style="padding:12px;vertical-align:top">${dateText}</td><td style="padding:12px;vertical-align:top"><span style="display:inline-block;padding:.25rem .6rem;border-radius:9999px;background:${entry.published ? "#dcfce7" : "#fff7ed"};color:${entry.published ? "#047857" : "#92400e"};font-weight:600;font-size:.85rem">${statusText}</span></td><td style="padding:12px;vertical-align:top">${entry.views || 0}</td><td style="padding:12px;vertical-align:top"><div style="display:flex;gap:8px"><button class="action-btn" onclick="editActivity('${entry.id}')"><i data-lucide="edit"></i></button><button class="action-btn" onclick="deleteActivity('${entry.id}')"><i data-lucide="trash-2"></i></button></div></td></tr>`;
       });
       html += `</tbody></table>`;
       activitiesTableContainer.innerHTML = html;
       lucide.createIcons();
     }
 
-    function escapeHtml(text){
-      return String(text||'').replace(/[&<>"'`=\/]/g, function(s){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','/':'&#x2F;','`':'&#x60;','=':'&#x3D;'})[s]; });
+    function escapeHtml(text) {
+      return String(text || "").replace(/[&<>"'`=\/]/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;", "/": "&#x2F;", "`": "&#x60;", "=": "&#x3D;" })[s]);
     }
 
-    window.editActivity = function(id){
+    window.editActivity = function(id) {
       window.location.href = `kegiatan.html?edit=${encodeURIComponent(id)}`;
     };
 
-    window.deleteActivity = function(id){
-      if (!confirm('Yakin ingin menghapus kegiatan ini?')) return;
-      db.ref(`activities/${id}`).remove().then(()=> alert('Kegiatan dihapus')).catch(err => alert('Gagal menghapus: ' + (err.message||err)));
+    window.deleteActivity = function(id) {
+      if (!confirm("Yakin ingin menghapus kegiatan ini?")) return;
+      db.ref(`activities/${id}`).remove().then(() => alert("Kegiatan dihapus")).catch(err => alert("Gagal menghapus: " + (err.message || err)));
     };
 
-    // ensure icons created on first load
-    document.addEventListener('DOMContentLoaded', () => {
+    // Ensure icons on first load
+    document.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
     });
   </script>
