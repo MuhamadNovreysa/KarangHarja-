@@ -865,3 +865,18 @@ body {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+.loading-activities {
+  text-align: center;
+  padding: 2rem 0;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.loading-activities i {
+  width: 2rem;
+  height: 2rem;
+  color: #2563eb;
+  display: block;
+  margin: 0 auto 0.5rem;
+}
