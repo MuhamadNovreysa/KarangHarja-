@@ -8,206 +8,204 @@
   <meta name="keywords" content="desa karangharja, pebayuran, bekasi, jawa barat, sistem informasi desa">
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/lucide@latest/dist/lucide.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/lucide@latest/icons.css" rel="stylesheet">
   <style>
-    
-      
-
-    /* HERO SECTION */
-    .hero-section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                      url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/background.jpg-4g31mj8MW1IdeD2cHROPD3cFn6KSRH.jpeg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      padding: 4rem 1rem 2rem;
-      color: white;
-      text-align: center;
-    }
-    
-    .logo-img {
-      width: 120px;
-      height: auto;
-      margin-bottom: 1rem;
-    }
-    
-    .hero-title {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    
-    .hero-subtitle {
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .hero-description {
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-    
-    .scroll-indicator {
-      position: absolute;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: bounce 2s infinite;
-    }
-    
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-      40% { transform: translateY(-20px) translateX(-50%); }
-      60% { transform: translateY(-10px) translateX(-50%); }
-    }
-
-    /* ACTIVITIES SECTION */
-    .activities-section {
-      padding: 4rem 1rem;
-      background-color: #f9fafb;
-      position: relative;
-    }
-    
-    .activities-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-    
-    .activity-card {
-      background: white;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
-    }
-    
-    .activity-card:hover {
-      transform: translateY(-5px);
-    }
-    
-    .activity-image {
-      position: relative;
-      height: 200px;
-      background-color: #eee;
-    }
-    
-    .activity-image img {
+    /* Navbar Styles */
+    .navbar {
+      background-color: #fff !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .date-badge {
-      position: absolute;
-      bottom: 1rem;
-      left: 1rem;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      font-size: 0.8rem;
-    }
-    
-    .date-badge i {
-      margin-right: 0.3rem;
-    }
-    
-    .activity-content {
-      padding: 1.5rem;
-    }
-    
-    .activity-content h3 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      color: #1f2937;
-    }
-    
-    .activity-description {
-      color: #4b5563;
-      font-size: 0.9rem;
-      line-height: 1.5;
-      margin-bottom: 1rem;
-    }
-    
-    .activity-footer {
-      display: flex;
-      align-items: center;
-      color: #6b7280;
-      font-size: 0.8rem;
-    }
-    
-    .activity-footer i {
-      margin-right: 0.3rem;
-    }
-    
-    .empty-activities {
-      text-align: center;
-      padding: 3rem 0;
-      grid-column: 1 / -1;
-    }
-    
-    .empty-icon {
-      font-size: 3rem;
-      color: #d1d5db;
-      margin-bottom: 1rem;
-    }
-    
-    .empty-title {
-      font-size: 1.2rem;
-      color: #1f2937;
-      margin-bottom: 0.5rem;
-    }
-    
-    .empty-subtitle {
-      color: #6b7280;
-      font-size: 0.9rem;
+      z-index: 1000;
+      padding: 0.25rem 1rem;
+      height: 50px;
     }
 
-    /* OTHER SECTIONS (STRUCTURE, MAP) - Keep your existing styles */
+    .navbar-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #111827;
+      text-decoration: none;
+    }
+
+    .navbar-logo {
+      height: 28px;
+      width: auto;
+      margin-right: 0.25rem;
+    }
+
+    .navbar-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      display: none;
+      color: #111827;
+      position: relative;
+      width: 24px;
+      height: 24px;
+    }
+
+    .navbar-toggle .bar {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: #111827;
+      margin: 5px 0;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-toggle.active .bar:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .navbar-toggle.active .bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    .navbar-toggle.active .bar:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .navbar-menu {
+      display: flex;
+    }
+
+    .navbar-links {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar-links li {
+      margin-left: 1.5rem;
+    }
+
+    .navbar-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #4b5563;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .navbar-links a:hover {
+      color: #2563eb;
+    }
+
+    /* Mobile Menu */
+    @media (max-width: 767px) {
+      .navbar-toggle {
+        display: block;
+      }
+
+      .navbar-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem 0;
+        width: 100%;
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        visibility: hidden;
+        display: block;
+      }
+
+      .navbar-menu.active {
+        opacity: 1;
+        transform: translateY(0);
+        visibility: visible;
+      }
+
+      .navbar-links {
+        flex-direction: column;
+      }
+
+      .navbar-links li {
+        margin: 0;
+        width: 100%;
+      }
+
+      .navbar-links a {
+        display: block;
+        padding: 0.75rem 1.5rem;
+        text-align: left;
+      }
+    }
+
+    @media (min-width: 640px) {
+      .navbar-logo {
+        height: 32px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .navbar-logo {
+        height: 36px;
+      }
+    }
+
+    body {
+      padding-top: 50px;
+    }
   </style>
 </head>
 <body>
-  <!-- Navbar -->
   <nav class="navbar">
-  <div class="navbar-container">
-    <a href="#" class="navbar-brand">
-      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png"
-           alt="Logo Desa KarangHarja"
-           class="navbar-logo">
-      Desa KarangHarja
-    </a>
-    <button class="navbar-toggle" id="navbar-toggle">
-      <span class="bar"></span>
-      <span class="bar"></span>
-      <span class="bar"></span>
-    </button>
-    <div class="navbar-menu" id="navbar-menu">
-      <ul class="navbar-links">
-        <li><a href="#home"><i data-lucide="home"></i>Home</a></li>
-        <li><a href="#about"><i data-lucide="users"></i>Struktur</a></li>
-        <li><a href="#map"><i data-lucide="map"></i>Maps</a></li>
-        <li><a href="#activities"><i data-lucide="calendar"></i>Kegiatan</a></li>
-        <li><a href="login.html"><i data-lucide="log-in"></i>Login</a></li>
-      </ul>
+    <div class="navbar-container">
+      <a href="#" class="navbar-brand">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
+             alt="Logo Desa KarangHarja" 
+             class="navbar-logo">
+        Desa KarangHarja
+      </a>
+      
+      <!-- Mobile Menu Button -->
+      <button class="navbar-toggle" id="navbar-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+
+      <!-- Nav Links -->
+      <div class="navbar-menu" id="navbar-menu">
+        <ul class="navbar-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">Struktur</a></li>
+          <li><a href="#map">Maps</a></li>
+          <li><a href="#activities">Kegiatan</a></li>
+          <li><a href="login.html" id="login-btn">Login</a></li>
+        </ul>
+      </div>
     </div>
-  </div>
   </nav>
-  <!-- Hero Section -->
-  <section class="hero-section" id="home">
+
+  <!-- Section 1: Hero -->
+  <section class="hero-section">
+    <!-- Logo -->
     <div class="logo-container">
-      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png"
+      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
            alt="Logo Desa KarangHarja" class="logo-img">
     </div>
+
+    <!-- Text content -->
     <div class="hero-content">
       <h1 class="hero-title">
         <span id="typewriter-text">SISTEM INFORMASI DESA KARANGHARJA</span>
@@ -216,27 +214,194 @@
       <p class="hero-subtitle">Kec. Pebayuran Kab. Bekasi</p>
       <p class="hero-description">
         Selamat datang di Sistem Informasi Desa KarangHarja. Kami berkomitmen untuk memberikan pelayanan terbaik
-        kepada masyarakat dan membangun desa yang maju, sejahtera, dan berkelanjutan.
+        kepada masyarakat dan membangun desa yang maju, sejahtera, dan berkelanjutan. Mari bersama-sama
+        membangun KarangHarja yang lebih baik untuk generasi mendatang.
       </p>
     </div>
+
     <div class="scroll-indicator">
       <i data-lucide="chevron-down" class="scroll-icon"></i>
     </div>
   </section>
 
-  <!-- Struktur Organisasi (Keep your existing structure) -->
+  <!-- Section 2: Organizational Structure -->
   <section id="about" class="org-section">
-    <!-- Your existing organization structure content -->
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">STRUKTURAL PEMERINTAH DESA KARANGHARJA</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+      </div>
+
+      <!-- Organizational Chart -->
+      <div class="org-chart-container">
+        <!-- Level 0: Kepala Desa -->
+        <div class="org-level">
+          <div class="org-node level-0">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>KEPALA DESA</h3>
+              <p>SUKARMA</p>
+            </div>
+          </div>
+          <div class="connection-line vertical"></div>
+        </div>
+
+        <!-- Level 1: Sekretaris Desa -->
+        <div class="org-level">
+          <div class="org-node level-1">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>SEKERTARIS DESA</h3>
+              <p>SUHANDI</p>
+            </div>
+          </div>
+          <div class="connection-line vertical"></div>
+        </div>
+
+        <!-- Level 2: Kasi Pemerintah -->
+        <div class="org-level">
+          <div class="org-node level-2">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>KASI PEMERINTAH</h3>
+              <p>H. AHMADI</p>
+            </div>
+          </div>
+          <div class="connection-line vertical"></div>
+        </div>
+
+        <!-- Level 3: Staff Level 1 -->
+        <div class="org-staff-grid">
+          <div class="org-node level-3">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>MYATI STAF PELAYANAN</h3>
+              <p>LIMAN OGAN</p>
+            </div>
+          </div>
+          <div class="org-node level-3">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>STAF KESEJANTRAAN</h3>
+              <p>SATIM</p>
+            </div>
+          </div>
+          <div class="org-node level-3">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>STAF UMUM</h3>
+              <p>AMSOR</p>
+            </div>
+          </div>
+        </div>
+        <div class="connection-line vertical"></div>
+
+        <!-- Level 4: Staff Level 2 -->
+        <div class="org-staff-grid">
+          <div class="org-node level-3">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>STAF PERANCANAN</h3>
+              <p>SAMSUDIN</p>
+            </div>
+          </div>
+          <div class="org-node level-3">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>STAF TATAUSAHA</h3>
+              <p>TALA</p>
+            </div>
+          </div>
+          <div class="org-node level-3">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>STAF PEMERINTAH</h3>
+              <p>WARDI GOSERUPAS</p>
+            </div>
+          </div>
+        </div>
+        <div class="connection-line vertical"></div>
+
+        <!-- Level 5: Others -->
+        <div class="org-staff-grid cols-2">
+          <div class="org-node level-3">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>DESA</h3>
+              <p>AJI</p>
+            </div>
+          </div>
+          <div class="org-node level-3">
+            <div class="org-card">
+              <div class="org-icon">
+                <i data-lucide="users"></i>
+              </div>
+              <h3>SEKERTARIS BPD</h3>
+              <p>TOHID</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- Peta Desa -->
+  <!-- Section 3: Google Maps -->
   <section id="map" class="map-section">
-    <!-- Your existing map content -->
+    <div class="container">
+      <div class="section-header">
+        <h2>PETA WILAYAH DESA KARANGHARJA</h2>
+        <div class="header-line white"></div>
+      </div>
+
+      <div class="map-container">
+        <div class="map-card">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63457.97647!2d107.2182!3d-6.107994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6a2a135c633ae1%3A0xbf0e81e411d23543!2sKarangharja%2C%20Pebayuran%2C%20Bekasi%20Regency%2C%20West%20Java!5e0!3m2!1sen!2sid!4v1640000000000!5m2!1sen!2sid"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Peta Wilayah Desa KarangHarja dengan Batas Desa"
+            class="map-iframe"
+          ></iframe>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- Kegiatan Desa -->
+  <!-- Section 4: Village Activities -->
   <section id="activities" class="activities-section">
+    <!-- Background decorative elements -->
+    <div class="decorative-elements">
+      <div class="decorative-circle green"></div>
+      <div class="decorative-circle blue"></div>
+      <div class="decorative-circle purple"></div>
+    </div>
+
     <div class="container mx-auto px-4 relative z-10">
+      <!-- Header -->
       <div class="section-header-activities">
         <div class="calendar-icon">
           <i data-lucide="calendar"></i>
@@ -247,8 +412,14 @@
           Ikuti perkembangan terbaru dan berbagai kegiatan yang dilaksanakan untuk kemajuan desa
         </p>
       </div>
-      <div class="activities-container" id="activitiesContainer">
-        <!-- Activities will be loaded here from Firebase -->
+
+      <!-- Empty State -->
+      <div class="empty-activities">
+        <div class="empty-icon">
+          <i data-lucide="calendar"></i>
+        </div>
+        <h3 class="empty-title">Belum Ada Kegiatan</h3>
+        <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini</p>
       </div>
     </div>
   </section>
@@ -261,117 +432,44 @@
     </div>
   </footer>
 
-  <!-- Firebase & Lucide JS -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
-  
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-      authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
-      projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
-      messagingSenderId: "428460519406",
-      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-    };
-
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-
-    // Initialize Lucide Icons
     lucide.createIcons();
 
-    // Load Activities from Firebase
-    function loadActivities() {
-      const activitiesRef = db.ref('activities');
-      const container = document.getElementById('activitiesContainer');
-      
-      activitiesRef.orderByChild('createdAt').on('value', (snapshot) => {
-        const activities = snapshot.val();
-        container.innerHTML = '';
+    // Navbar Toggle Functionality for Mobile
+    document.addEventListener('DOMContentLoaded', function() {
+      const navbarToggle = document.getElementById('navbar-toggle');
+      const navbarMenu = document.getElementById('navbar-menu');
 
-        if (!activities) {
-          container.innerHTML = `
-            <div class="empty-activities">
-              <div class="empty-icon">
-                <i data-lucide="calendar"></i>
-              </div>
-              <h3 class="empty-title">Belum Ada Kegiatan</h3>
-              <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini</p>
-            </div>
-          `;
-          lucide.createIcons();
-          return;
-        }
-
-        let html = '';
-        Object.keys(activities).reverse().forEach(key => {
-          const activity = activities[key];
-          html += `
-            <div class="activity-card">
-              <div class="activity-image">
-                ${activity.imageUrl ? `<img src="${activity.imageUrl}" alt="${activity.title}">` : ''}
-                <div class="date-badge">
-                  <i data-lucide="calendar"></i>
-                  ${new Date(activity.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                </div>
-              </div>
-              <div class="activity-content">
-                <h3>${activity.title}</h3>
-                <div class="activity-description">${activity.content}</div>
-                <div class="activity-footer">
-                  <span><i data-lucide="eye"></i> ${activity.views || 0} dilihat</span>
-                </div>
-              </div>
-            </div>
-          `;
+      if (navbarToggle && navbarMenu) {
+        navbarToggle.addEventListener('click', function() {
+          this.classList.toggle('active');
+          navbarMenu.classList.toggle('active');
+          
+          // Toggle aria-expanded attribute
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !isExpanded);
         });
 
-        container.innerHTML = html;
-        lucide.createIcons();
-      });
-    }
+        // Close menu when clicking on a link
+        const navLinks = document.querySelectorAll('.navbar-links a');
+        navLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            navbarToggle.classList.remove('active');
+            navbarMenu.classList.remove('active');
+            navbarToggle.setAttribute('aria-expanded', 'false');
+          });
+        });
 
-    // Navbar Toggle Functionality
-    const navbarToggle = document.getElementById('navbar-toggle');
-    const navbarMenu = document.getElementById('navbar-menu');
-    
-    if (navbarToggle && navbarMenu) {
-      navbarToggle.addEventListener('click', () => {
-        navbarToggle.classList.toggle('active');
-        navbarMenu.classList.toggle('active');
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!navbarToggle.contains(e.target) {
-          navbarMenu.classList.remove('active');
-          navbarToggle.classList.remove('active');
-        }
-      });
-    }
-
-    // Initialize when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-      loadActivities();
-      
-      // Typewriter effect (if you want to keep it)
-      const text = "SISTEM INFORMASI DESA KARANGHARJA";
-      const element = document.getElementById("typewriter-text");
-      let i = 0;
-      
-      function typeWriter() {
-        if (i < text.length) {
-          element.innerHTML += text.charAt(i);
-          i++;
-          setTimeout(typeWriter, 100);
-        }
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!navbarToggle.contains(e.target) {
+            navbarToggle.classList.remove('active');
+            navbarMenu.classList.remove('active');
+            navbarToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
       }
-      
-      typeWriter();
     });
   </script>
 </body>
