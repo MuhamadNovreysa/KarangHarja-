@@ -168,8 +168,7 @@
         <label for="email">Email Admin</label>
         <input type="email" 
                id="email" 
-               value="karangharja2025@gmail.com" 
-               readonly
+               placeholder="Masukkan email admin" 
                required>
       </div>
       
@@ -225,7 +224,7 @@
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      const email = "karangharja2025@gmail.com";
+      const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const errorMessage = document.getElementById('errorMessage');
       const errorText = document.getElementById('errorText');
@@ -242,11 +241,14 @@
         // Sign in with Firebase Auth
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
         
+        console.log("Login berhasil", userCredential);
+        
         // Check if user is admin
         if (userCredential.user.email === "karangharja2025@gmail.com") {
           // Redirect to dashboard
           window.location.href = "dashboard.html";
         } else {
+          await auth.signOut();
           throw new Error("Anda bukan admin yang berwenang");
         }
         
@@ -258,24 +260,21 @@
           case "auth/wrong-password":
             errorMsg = "Password yang Anda masukkan salah";
             break;
-          case "auth/too-many-requests":
-            errorMsg = "Terlalu banyak percobaan gagal. Coba lagi nanti";
+          case "auth/invalid-email":
+            errorMsg = "Email tidak valid";
             break;
           case "auth/user-not-found":
             errorMsg = "Akun admin tidak ditemukan";
             break;
+          case "auth/too-many-requests":
+            errorMsg = "Terlalu banyak percobaan gagal. Coba lagi nanti";
+            break;
           default:
-            errorMsg = error.message;
+            errorMsg = error.message || "Gagal login";
         }
         
         errorText.textContent = errorMsg;
         errorMessage.style.display = 'flex';
-        
-        // Shake animation for error
-        errorMessage.style.animation = 'none';
-        setTimeout(() => {
-          errorMessage.style.animation = 'shake 0.5s';
-        }, 10);
         
       } finally {
         // Reset loading state
