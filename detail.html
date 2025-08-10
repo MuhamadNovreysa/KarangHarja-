@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Detail Kegiatan - Desa Karangharja</title>
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
   <style>
     body { margin: 0; font-family: 'Inter', sans-serif; background-color: #f9fafb; color: #1f2937; line-height: 1.6; }
     header { position: relative; width: 100%; height: 300px; overflow: hidden; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
@@ -62,6 +62,7 @@
     // ==== Ambil ID dari URL ====
     const urlParams = new URLSearchParams(window.location.search);
     const activityId = urlParams.get('id');
+    console.log("Activity ID dari URL:", activityId);
 
     if (!activityId) {
       document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
@@ -70,6 +71,8 @@
       db.ref('activities/' + activityId).once('value')
         .then(snapshot => {
           const data = snapshot.val();
+          console.log("Data dari Firebase:", data);
+
           if (data) {
             // Judul
             document.getElementById('activityTitle').textContent = data.title || 'Tanpa Judul';
@@ -92,10 +95,13 @@
             document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
             document.getElementById('activityContent').textContent = "Data kegiatan tidak ada di database.";
           }
-          lucide.createIcons();
+
+          if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+          }
         })
         .catch(err => {
-          console.error(err);
+          console.error("Firebase error:", err);
           document.getElementById('activityTitle').textContent = "Error memuat data";
           document.getElementById('activityContent').textContent = "Terjadi kesalahan saat mengambil data.";
         });
