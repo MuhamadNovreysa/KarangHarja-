@@ -162,7 +162,7 @@
 
       .navbar-menu {
         display: none;
-        position: fixed;
+        position: absolute;
         top: 60px;
         right: 1rem;
         background-color: var(--white);
@@ -171,11 +171,10 @@
         padding: 1rem;
         flex-direction: column;
         width: 220px;
-        transform-origin: top right;
+        z-index: 2000;
         opacity: 0;
         transform: translateY(-10px);
         transition: opacity 0.3s ease, transform 0.3s ease;
-        z-index: 2000;
       }
 
       .navbar-menu.active {
@@ -351,12 +350,15 @@
       const navbarMenu = document.getElementById('navbarMenu');
 
       if (navbarToggle && navbarMenu) {
+        console.log('Navbar toggle and menu found, setting up event listeners');
         navbarToggle.addEventListener('click', (ev) => {
+          ev.preventDefault();
           ev.stopPropagation();
           const isActive = navbarMenu.classList.toggle('active');
           navbarToggle.classList.toggle('active', isActive);
           navbarToggle.setAttribute('aria-expanded', isActive);
           navbarMenu.setAttribute('aria-hidden', !isActive);
+          console.log('Hamburger clicked, menu active:', isActive);
         });
 
         // Prevent menu from closing when clicking inside
@@ -373,6 +375,7 @@
             navbarToggle.classList.remove('active');
             navbarToggle.setAttribute('aria-expanded', 'false');
             navbarMenu.setAttribute('aria-hidden', 'true');
+            console.log('Clicked outside, menu closed');
           }
         });
 
@@ -383,8 +386,11 @@
             navbarToggle.classList.remove('active');
             navbarToggle.setAttribute('aria-expanded', 'false');
             navbarMenu.setAttribute('aria-hidden', 'true');
+            console.log('Escape key pressed, menu closed');
           }
         });
+      } else {
+        console.error('Navbar toggle or menu not found in DOM');
       }
     });
 
