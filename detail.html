@@ -8,108 +8,23 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
   <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #f9fafb;
-      color: #1f2937;
-      line-height: 1.6;
-    }
-
-    header {
-      position: relative;
-      width: 100%;
-      height: 300px;
-      overflow: hidden;
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-
-    header img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(0.85);
-      transition: transform 0.5s ease;
-    }
-
-    header img:hover {
-      transform: scale(1.05);
-    }
-
-    .detail-container {
-      max-width: 800px;
-      margin: -80px auto 0;
-      background: white;
-      padding: 2rem;
-      border-radius: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      position: relative;
-      z-index: 10;
-      animation: fadeIn 0.6s ease;
-    }
-
-    .detail-title {
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 0.5rem;
-    }
-
-    .detail-meta {
-      font-size: 0.9rem;
-      color: #6b7280;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .detail-meta i {
-      width: 1rem;
-      height: 1rem;
-    }
-
-    .detail-content {
-      font-size: 1rem;
-      color: #374151;
-      line-height: 1.8;
-      white-space: pre-line;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.6rem 1.2rem;
-      background: linear-gradient(to right, #10b981, #3b82f6);
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: background 0.3s ease;
-    }
-
-    .back-link:hover {
-      background: linear-gradient(to right, #0ea674, #2563eb);
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
+    /* (sama seperti style yang lu pakai) */
+    body { margin: 0; font-family: 'Inter', sans-serif; background-color: #f9fafb; color: #1f2937; line-height: 1.6; }
+    header { position: relative; width: 100%; height: 300px; overflow: hidden; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    header img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85); transition: transform 0.5s ease; }
+    header img:hover { transform: scale(1.05); }
+    .detail-container { max-width: 800px; margin: -80px auto 0; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); position: relative; z-index: 10; animation: fadeIn 0.6s ease; }
+    .detail-title { font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem; }
+    .detail-meta { font-size: 0.9rem; color: #6b7280; display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .detail-meta i { width: 1rem; height: 1rem; }
+    .detail-content { font-size: 1rem; color: #374151; line-height: 1.8; white-space: pre-line; }
+    .back-link { display: inline-block; margin-top: 2rem; padding: 0.6rem 1.2rem; background: linear-gradient(to right, #10b981, #3b82f6); color: white; border-radius: 8px; text-decoration: none; font-size: 0.9rem; transition: background 0.3s ease; }
+    .back-link:hover { background: linear-gradient(to right, #0ea674, #2563eb); }
+    @keyframes fadeIn { from {opacity: 0; transform: translateY(20px);} to {opacity: 1; transform: translateY(0);} }
     @media (max-width: 640px) {
-      header {
-        height: 220px;
-      }
-      .detail-container {
-        margin-top: -60px;
-        padding: 1.2rem;
-      }
-      .detail-title {
-        font-size: 1.4rem;
-      }
+      header { height: 220px; }
+      .detail-container { margin-top: -60px; padding: 1.2rem; }
+      .detail-title { font-size: 1.4rem; }
     }
   </style>
 </head>
@@ -145,6 +60,27 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
+    // Helper: strip html -> plain text
+    function stripHtml(html) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html || '';
+      return (tmp.textContent || tmp.innerText || '').trim();
+    }
+
+    // Helper: buat judul fallback dari content
+    function makeFallbackTitleFromContent(content) {
+      const text = stripHtml(content);
+      if (!text) return 'Tanpa Judul';
+      // ambil first meaningful line / kalimat (maks 100 char)
+      const lines = text.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      const first = lines.length ? lines[0] : text;
+      // coba ambil sampai tanda titik (.) pertama agar jadi kalimat utuh
+      const dotIdx = first.indexOf('. ');
+      let candidate = dotIdx === -1 ? first : first.slice(0, dotIdx + 1);
+      candidate = candidate.length > 100 ? candidate.slice(0, 100) + '...' : candidate;
+      return candidate;
+    }
+
     // ==== Ambil ID dari URL ====
     const urlParams = new URLSearchParams(window.location.search);
     const activityId = urlParams.get('id');
@@ -153,17 +89,44 @@
       document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
       document.getElementById('activityContent').textContent = "ID kegiatan tidak valid.";
     } else {
+      // NOTE: jika DB lu menaruh activities/{id}, pakai 'activities/' + activityId
+      //       kalau lu taruh langsung di root pakai db.ref(activityId)
+      // di kode ini gua pakai 'activities/' karena lu bilang gambar & date muncul.
       db.ref('activities/' + activityId).once('value')
         .then(snapshot => {
           const data = snapshot.val();
           if (data) {
-            document.getElementById('activityTitle').textContent = data.title || 'Tanpa Judul';
-            document.getElementById('activityDate').textContent = data.date 
-              ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
-              : '-';
-            document.getElementById('activityViews').textContent = data.views || 0;
-            document.getElementById('activityContent').innerHTML = data.content || '';
+            // TITLE: pakai data.title kalau ada, kalau tidak ambil dari content (tanpa tag HTML)
+            const titleFromField = (data.title && String(data.title).trim()) ? String(data.title).trim() : null;
+            const finalTitle = titleFromField || makeFallbackTitleFromContent(data.content || data.description || '');
+            document.getElementById('activityTitle').textContent = finalTitle;
 
+            // DATE
+            document.getElementById('activityDate').textContent = data.date
+              ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+              : '-';
+
+            // VIEWS
+            document.getElementById('activityViews').textContent = data.views || 0;
+
+            // CONTENT:
+            // Jika ada content (biasanya berisi HTML) -> tampilkan sebagai HTML.
+            // Jika tidak ada, tampilkan plain text fallback hasil stripHtml.
+            const contentEl = document.getElementById('activityContent');
+            if (data.content && String(data.content).trim()) {
+              contentEl.innerHTML = data.content;
+            } else {
+              const fallbackText = stripHtml(data.content || data.description || data.summary || '');
+              if (fallbackText) {
+                // ubah linebreak jadi paragraf
+                const paragraphs = fallbackText.split(/\r?\n/).filter(Boolean).map(p => `<p>${p}</p>`).join('');
+                contentEl.innerHTML = paragraphs || `<p>${fallbackText}</p>`;
+              } else {
+                contentEl.textContent = "Konten kegiatan belum tersedia.";
+              }
+            }
+
+            // IMAGE (tetap seperti sebelumnya)
             const coverImg = document.querySelector('#coverImage img');
             if (data.imageBase64 || data.imageUrl) {
               coverImg.src = data.imageBase64 || data.imageUrl;
