@@ -132,6 +132,27 @@
       resize: vertical;
     }
 
+    .image-upload-container {
+      margin-top: 1rem;
+    }
+
+    .image-upload-btn {
+      padding: 0.5rem 1rem;
+      background-color: var(--primary-light);
+      color: white;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background-color 0.3s;
+    }
+
+    .image-upload-btn:hover {
+      background-color: var(--primary);
+    }
+
     .image-preview {
       margin-top: 1rem;
       display: none;
@@ -141,6 +162,12 @@
       max-width: 100%;
       max-height: 200px;
       border-radius: 0.375rem;
+      margin-top: 0.5rem;
+    }
+
+    .image-info {
+      font-size: 0.875rem;
+      color: var(--gray);
       margin-top: 0.5rem;
     }
 
@@ -333,9 +360,16 @@
 
         <div class="form-group">
           <label for="image">Gambar Kegiatan (Opsional)</label>
-          <input type="file" id="image" accept="image/*">
-          <div class="image-preview" id="imagePreview">
-            <img id="previewImage" src="" alt="Preview Gambar">
+          <div class="image-upload-container">
+            <input type="file" id="image" accept="image/*" style="display: none;">
+            <button type="button" class="image-upload-btn" onclick="document.getElementById('image').click()">
+              <i data-lucide="image"></i>
+              Pilih Gambar
+            </button>
+            <div class="image-preview" id="imagePreview">
+              <img id="previewImage" src="" alt="Preview Gambar">
+              <div class="image-info" id="imageInfo"></div>
+            </div>
           </div>
         </div>
 
@@ -402,7 +436,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
   
   <script>
@@ -420,7 +453,6 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.database();
-    const storage = firebase.storage();
 
     // Initialize Lucide Icons
     lucide.createIcons();
@@ -435,7 +467,7 @@
     // Check if editing existing activity
     const urlParams = new URLSearchParams(window.location.search);
     const activityId = urlParams.get('edit');
-    let currentImageUrl = '';
+    let currentImageBase64 = '';
 
     if (activityId) {
       document.getElementById('formTitle').textContent = 'Edit Kegiatan';
@@ -451,25 +483,75 @@
             document.getElementById('published').checked = activity.published || false;
             document.getElementById('content').innerHTML = activity.content || '';
             
-            if (activity.imageUrl) {
-              currentImageUrl = activity.imageUrl;
+            if (activity.imageBase64) {
+              currentImageBase64 = activity.imageBase64;
               document.getElementById('imagePreview').style.display = 'block';
-              document.getElementById('previewImage').src = activity.imageUrl;
+              document.getElementById('previewImage').src = activity.imageBase64;
+              document.getElementById('imageInfo').textContent = 'Gambar tersimpan';
             }
           }
         });
     }
 
-    // Image preview handler
-    document.getElementById('image').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
+    // Convert image to Base64 with compression
+    function compressImage(file, maxWidth = 800, quality = 0.7) {
+      return new Promise((resolve) => {
         const reader = new FileReader();
-        reader.onload = function(event) {
-          document.getElementById('imagePreview').style.display = 'block';
-          document.getElementById('previewImage').src = event.target.result;
+        reader.onload = (e) => {
+          const img = new Image();
+          img.src = e.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const scale = Math.min(maxWidth / img.width, 1);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            canvas.toBlob(resolve, 'image/jpeg', quality);
+          };
         };
         reader.readAsDataURL(file);
+      });
+    }
+
+    // Convert image to Base64
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    // Image preview handler with compression
+    document.getElementById('image').addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        // Show loading state
+        const preview = document.getElementById('imagePreview');
+        preview.style.display = 'block';
+        preview.innerHTML = '<p>Mengkompresi gambar...</p>';
+
+        // Compress image first
+        const compressedBlob = await compressImage(file);
+        const base64 = await toBase64(new File([compressedBlob], file.name));
+
+        // Show preview
+        document.getElementById('imagePreview').innerHTML = `
+          <img src="${base64}" id="previewImage" alt="Preview Gambar" style="max-width: 100%; max-height: 200px; border-radius: 0.375rem;">
+          <div class="image-info">Ukuran: ${(compressedBlob.size / 1024).toFixed(2)} KB (setelah kompresi)</div>
+        `;
+        
+        currentImageBase64 = base64;
+      } catch (error) {
+        console.error("Error processing image:", error);
+        document.getElementById('errorText').textContent = 'Gagal memproses gambar: ' + error.message;
+        document.getElementById('errorMessage').style.display = 'flex';
       }
     });
 
@@ -491,7 +573,6 @@
       const date = document.getElementById('date').value;
       const content = document.getElementById('content').innerHTML;
       const published = document.getElementById('published').checked;
-      const imageFile = document.getElementById('image').files[0];
       const errorMessage = document.getElementById('errorMessage');
       const errorText = document.getElementById('errorText');
       const submitBtn = document.getElementById('submitBtn');
@@ -512,15 +593,6 @@
       lucide.createIcons();
       
       try {
-        let imageUrl = currentImageUrl;
-        
-        // Upload new image if selected
-        if (imageFile) {
-          const storageRef = storage.ref(`kegiatan/${Date.now()}_${imageFile.name}`);
-          const snapshot = await storageRef.put(imageFile);
-          imageUrl = await snapshot.ref.getDownloadURL();
-        }
-        
         // Prepare activity data
         const activityData = {
           title,
@@ -531,8 +603,14 @@
           views: 0
         };
         
-        if (imageUrl) {
-          activityData.imageUrl = imageUrl;
+        // Add image if exists
+        if (currentImageBase64) {
+          // Check if image size is too big (Firebase RTDB limit is ~1MB per node)
+          const base64Size = (currentImageBase64.length * 3/4) / 1024; // KB
+          if (base64Size > 500) {
+            throw new Error('Ukuran gambar terlalu besar setelah kompresi (max 500KB)');
+          }
+          activityData.imageBase64 = currentImageBase64;
         }
         
         // Save to Firebase
