@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tambah Kegiatan - Desa KarangHarja</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Times+New+Roman&family=Poppins&family=Montserrat&family=Arial&family=Roboto&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/lucide@latest/dist/lucide.min.css" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --primary: #1e40af;
@@ -19,769 +20,387 @@
       --gray: #6b7280;
       --white: #ffffff;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--light);
+      background: var(--light);
       color: var(--dark);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* NAVBAR STYLES */
+    /* NAVBAR */
     .navbar {
       background-color: var(--white);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
       position: fixed;
       top: 0;
-      width: 100%;
+      left: 0; right: 0;
       z-index: 1000;
       padding: 0.75rem 1rem;
     }
-
     .navbar-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      max-width: 1100px; margin: 0 auto; display:flex; align-items:center; justify-content:space-between;
     }
+    .navbar-brand { display:flex; align-items:center; gap:0.75rem; text-decoration:none; color:var(--dark); font-weight:600; }
+    .navbar-logo { height:34px; }
 
-    .navbar-brand {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--dark);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
+    .btn { padding:0.55rem 0.9rem; border-radius:8px; display:inline-flex; align-items:center; gap:0.5rem; cursor:pointer; border:none; font-weight:600; }
+    .btn-outline { background:transparent; border:1px solid #e5e7eb; color:var(--dark); }
+    .btn-primary { background:var(--primary); color:var(--white); }
+
+    /* MAIN */
+    .main-content { max-width:900px; margin: 96px auto 48px; padding: 0 1rem; }
+    .form-container { background:var(--white); padding:24px; border-radius:12px; box-shadow:0 6px 20px rgba(16,24,40,0.06); }
+
+    .form-header h1 { font-size:20px; display:flex; align-items:center; gap:0.5rem; margin-bottom:16px; }
+
+    .form-group { margin-bottom:16px; }
+    label { display:block; margin-bottom:8px; font-weight:600; color:var(--dark); }
+    input[type="text"], input[type="date"], .editor-content {
+      width:100%; padding:10px 12px; border-radius:8px; border:1px solid #e6e7eb; font-size:14px;
     }
+    .editor-content { min-height:180px; outline:none; resize:vertical; font-family: 'Times New Roman', Times, serif; }
 
-    .navbar-logo {
-      height: 30px;
-      margin-right: 10px;
-    }
+    .image-upload-btn { background:var(--primary-light); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; display:inline-flex; gap:8px; align-items:center; }
+    .image-upload-btn:hover { background:var(--primary-dark); }
 
-    /* MAIN CONTENT */
-    .main-content {
-      padding-top: 70px;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 80px 1rem 2rem;
-    }
+    .image-preview { margin-top:10px; display:none; }
+    .image-preview img { max-width:100%; border-radius:8px; max-height:260px; display:block; }
 
-    /* FORM STYLES */
-    .form-container {
-      background-color: var(--white);
-      border-radius: 0.5rem;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      padding: 2rem;
-    }
+    .image-info { font-size:13px; color:var(--gray); margin-top:6px; }
 
-    .form-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #e5e7eb;
-    }
+    .checkbox-group { display:flex; align-items:center; gap:8px; margin-top:6px; }
 
-    .form-header h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    .loading { display:none; justify-content:center; padding:10px 0; }
+    .loading-spinner { width:28px; height:28px; border:4px solid rgba(59,130,246,0.2); border-top-color:var(--primary); border-radius:50%; animation:spin 1s linear infinite; }
+    @keyframes spin { to { transform:rotate(360deg); } }
 
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
+    .error-message { display:none; margin-top:10px; background:rgba(220,38,38,0.06); color:var(--danger); padding:10px; border-radius:8px; align-items:center; gap:8px; }
 
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: var(--dark);
-    }
-
-    input[type="text"],
-    input[type="date"],
-    textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 0.375rem;
-      font-size: 1rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    input[type="text"]:focus,
-    input[type="date"]:focus,
-    textarea:focus {
-      outline: none;
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
-    textarea {
-      min-height: 200px;
-      resize: vertical;
-    }
-
-    .image-upload-container {
-      margin-top: 1rem;
-    }
-
-    .image-upload-btn {
-      padding: 0.5rem 1rem;
-      background-color: var(--primary-light);
-      color: white;
-      border: none;
-      border-radius: 0.375rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: background-color 0.3s;
-    }
-
-    .image-upload-btn:hover {
-      background-color: var(--primary);
-    }
-
-    .image-preview {
-      margin-top: 1rem;
-      display: none;
-    }
-
-    .image-preview img {
-      max-width: 100%;
-      max-height: 200px;
-      border-radius: 0.375rem;
-      margin-top: 0.5rem;
-    }
-
-    .image-info {
-      font-size: 0.875rem;
-      color: var(--gray);
-      margin-top: 0.5rem;
-    }
-
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .checkbox-group input {
-      margin-right: 0.5rem;
-    }
-
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-
-    .btn {
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.375rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.3s;
-    }
-
-    .btn-primary {
-      background-color: var(--primary);
-      color: var(--white);
-      border: none;
-    }
-
-    .btn-primary:hover {
-      background-color: var(--primary-dark);
-    }
-
-    .btn-outline {
-      background-color: transparent;
-      border: 1px solid #e5e7eb;
-      color: var(--dark);
-    }
-
-    .btn-outline:hover {
-      background-color: #f9fafb;
-    }
-
-    /* Enhanced Editor Styles */
-    .enhanced-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      padding: 0.75rem;
-      background-color: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-bottom: none;
-      border-radius: 0.375rem 0.375rem 0 0;
-    }
-
-    .enhanced-toolbar button {
-      background: none;
-      border: none;
-      padding: 0.5rem;
-      cursor: pointer;
-      border-radius: 0.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--gray);
-      transition: all 0.2s;
-    }
-
-    .enhanced-toolbar button:hover {
-      background-color: #e5e7eb;
-      color: var(--dark);
-    }
-
-    .enhanced-toolbar button.active {
-      background-color: #e5e7eb;
-      color: var(--primary);
-    }
-
-    .toolbar-group {
-      display: flex;
-      gap: 0.25rem;
-      align-items: center;
-      padding-right: 0.5rem;
-      border-right: 1px solid #e5e7eb;
-    }
-
-    .toolbar-group:last-child {
-      border-right: none;
-    }
-
-    .font-selector select {
-      padding: 0.5rem;
-      border-radius: 0.25rem;
-      border: 1px solid #e5e7eb;
-      font-family: inherit;
-    }
-
-    .size-selector input {
-      width: 60px;
-      padding: 0.5rem;
-      border-radius: 0.25rem;
-      border: 1px solid #e5e7eb;
-    }
-
-    .color-picker {
-      display: inline-flex;
-      align-items: center;
-      margin-right: 0.5rem;
-    }
-
-    .color-picker input {
-      width: 30px;
-      height: 30px;
-      padding: 0;
-      border: 1px solid #e5e7eb;
-      cursor: pointer;
-    }
-
-    .editor-content {
-      min-height: 200px;
-      padding: 1rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 0 0 0.375rem 0.375rem;
-      outline: none;
-      font-family: 'Times New Roman', serif;
-      font-size: 16px;
-      color: #000000;
-    }
-
-    .editor-content:focus {
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
-    /* LOADING STATE */
-    .loading {
-      display: none;
-      justify-content: center;
-      padding: 1rem;
-    }
-
-    .loading-spinner {
-      width: 1.5rem;
-      height: 1.5rem;
-      border: 3px solid rgba(59, 130, 246, 0.2);
-      border-radius: 50%;
-      border-top-color: var(--primary);
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* ERROR MESSAGE */
-    .error-message {
-      color: var(--danger);
-      margin-top: 1rem;
-      font-size: 0.875rem;
-      display: none;
-      background-color: rgba(220, 38, 38, 0.1);
-      padding: 0.75rem;
-      border-radius: 0.375rem;
-    }
-
-    /* MOBILE STYLES */
-    @media (max-width: 768px) {
-      .main-content {
-        padding: 70px 1rem 1rem;
-      }
-      
-      .form-container {
-        padding: 1.5rem;
-      }
-      
-      .form-actions {
-        flex-direction: column-reverse;
-      }
-      
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .enhanced-toolbar {
-        gap: 0.25rem;
-        padding: 0.5rem;
-      }
-
-      .toolbar-group {
-        padding-right: 0.25rem;
-        margin-right: 0.25rem;
-      }
-
-      .font-selector select,
-      .size-selector input {
-        padding: 0.25rem;
-        font-size: 0.875rem;
-      }
+    .form-actions { display:flex; justify-content:flex-end; gap:12px; margin-top:18px; flex-wrap:wrap; }
+    @media (max-width:640px) {
+      .form-actions { flex-direction:column-reverse; }
+      .btn { width:100%; justify-content:center; }
     }
   </style>
 </head>
 <body>
-  <!-- Navbar -->
+  <!-- NAV -->
   <nav class="navbar">
     <div class="navbar-container">
-      <a href="#" class="navbar-brand">
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" 
-             alt="Logo Desa KarangHarja" 
-             class="navbar-logo">
+      <a class="navbar-brand" href="#">
+        <img class="navbar-logo" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" alt="Logo">
         Tambah Kegiatan
       </a>
-      <a href="dashboard.html" class="btn btn-outline">
-        <i data-lucide="arrow-left"></i>
-        Kembali
-      </a>
+      <div>
+        <a href="dashboard.html" class="btn btn-outline"><i data-lucide="arrow-left"></i> Kembali</a>
+      </div>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="main-content">
+  <!-- MAIN -->
+  <main class="main-content">
     <div class="form-container">
       <div class="form-header">
-        <h1>
-          <i data-lucide="calendar-plus"></i>
-          <span id="formTitle">Tambah Kegiatan Baru</span>
-        </h1>
+        <h1><i data-lucide="calendar-plus"></i> <span id="formTitle">Tambah Kegiatan Baru</span></h1>
       </div>
 
-      <form id="activityForm">
+      <form id="activityForm" autocomplete="off">
         <div class="form-group">
           <label for="title">Judul Kegiatan</label>
-          <input type="text" id="title" placeholder="Masukkan judul kegiatan" required>
+          <input id="title" type="text" placeholder="Masukkan judul kegiatan" required>
         </div>
 
         <div class="form-group">
           <label for="date">Tanggal Kegiatan</label>
-          <input type="date" id="date" required>
+          <input id="date" type="date" required>
         </div>
 
         <div class="form-group">
           <label for="image">Gambar Kegiatan (Opsional)</label>
           <div class="image-upload-container">
-            <input type="file" id="image" accept="image/*" style="display: none;">
-            <button type="button" class="image-upload-btn" onclick="document.getElementById('image').click()">
-              <i data-lucide="image"></i>
-              Pilih Gambar
-            </button>
+            <input id="image" type="file" accept="image/*" style="display:none;">
+            <button type="button" class="image-upload-btn" id="pickImageBtn"><i data-lucide="image"></i> Pilih Gambar</button>
             <div class="image-preview" id="imagePreview">
-              <img id="previewImage" src="" alt="Preview Gambar">
+              <img id="previewImage" src="" alt="Preview">
               <div class="image-info" id="imageInfo"></div>
             </div>
           </div>
         </div>
 
+        <!-- Enhanced editor toolbar (simple) -->
         <div class="form-group">
           <label for="content">Deskripsi Kegiatan</label>
-          <div class="enhanced-toolbar" id="toolbar">
-            <div class="toolbar-group">
-              <button type="button" data-command="bold" title="Bold">
-                <i data-lucide="bold"></i>
-              </button>
-              <button type="button" data-command="italic" title="Italic">
-                <i data-lucide="italic"></i>
-              </button>
-              <button type="button" data-command="underline" title="Underline">
-                <i data-lucide="underline"></i>
-              </button>
-            </div>
-            
-            <div class="toolbar-group">
-              <button type="button" data-command="insertUnorderedList" title="Bullet List">
-                <i data-lucide="list"></i>
-              </button>
-              <button type="button" data-command="insertOrderedList" title="Numbered List">
-                <i data-lucide="list-ordered"></i>
-              </button>
-            </div>
-            
-            <div class="toolbar-group">
-              <button type="button" data-command="justifyLeft" title="Align Left">
-                <i data-lucide="align-left"></i>
-              </button>
-              <button type="button" data-command="justifyCenter" title="Center">
-                <i data-lucide="align-center"></i>
-              </button>
-              <button type="button" data-command="justifyRight" title="Align Right">
-                <i data-lucide="align-right"></i>
-              </button>
-            </div>
-            
-            <div class="toolbar-group">
-              <div class="font-selector">
-                <select id="fontFamily">
-                  <option value="'Times New Roman', serif">Times New Roman</option>
-                  <option value="'Poppins', sans-serif">Poppins</option>
-                  <option value="'Montserrat', sans-serif">Montserrat</option>
-                  <option value="Arial, sans-serif">Arial</option>
-                  <option value="'Roboto', sans-serif">Roboto</option>
-                </select>
-              </div>
-            </div>
-            
-            <div class="toolbar-group">
-              <div class="size-selector">
-                <input type="number" id="fontSize" min="4" max="50" value="16" placeholder="Ukuran">
-              </div>
-            </div>
-            
-            <div class="toolbar-group">
-              <div class="color-picker">
-                <input type="color" id="textColor" value="#000000">
-              </div>
-            </div>
+          <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-outline" data-cmd="bold"><i data-lucide="bold"></i></button>
+            <button type="button" class="btn btn-outline" data-cmd="italic"><i data-lucide="italic"></i></button>
+            <button type="button" class="btn btn-outline" data-cmd="underline"><i data-lucide="underline"></i></button>
+            <button type="button" class="btn btn-outline" data-cmd="insertUnorderedList"><i data-lucide="list"></i></button>
+            <button type="button" class="btn btn-outline" data-cmd="insertOrderedList"><i data-lucide="list-ordered"></i></button>
           </div>
-          <div id="content" class="editor-content" contenteditable="true"></div>
+          <div id="content" class="editor-content" contenteditable="true" placeholder="Tulis deskripsi kegiatan di sini..."></div>
         </div>
 
         <div class="checkbox-group">
-          <input type="checkbox" id="published">
+          <input id="published" type="checkbox">
           <label for="published">Publikasikan langsung</label>
         </div>
 
-        <div class="error-message" id="errorMessage">
-          <i data-lucide="alert-circle"></i>
-          <span id="errorText"></span>
-        </div>
-
-        <div class="loading" id="loading">
-          <div class="loading-spinner"></div>
-        </div>
+        <div class="error-message" id="errorMessage"><i data-lucide="alert-circle"></i><span id="errorText"></span></div>
+        <div class="loading" id="loading"><div class="loading-spinner"></div></div>
 
         <div class="form-actions">
-          <a href="dashboard.html" class="btn btn-outline">
-            <i data-lucide="x"></i>
-            Batal
-          </a>
-          <button type="submit" class="btn btn-primary" id="submitBtn">
-            <i data-lucide="save"></i>
-            <span id="submitText">Posting Kegiatan</span>
-          </button>
+          <a href="dashboard.html" class="btn btn-outline"><i data-lucide="x"></i> Batal</a>
+          <button id="submitBtn" type="submit" class="btn btn-primary"><i data-lucide="save"></i> <span id="submitText">Posting Kegiatan</span></button>
         </div>
       </form>
     </div>
-  </div>
+  </main>
 
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <!-- Firebase libs (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
 
-<script>
-  // Initialize Lucide icons first
-  lucide.createIcons();
+  <!-- Lucide icons JS (must be loaded before calling createIcons) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-  // Firebase config & init
-  const firebaseConfig = {
-    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-    authDomain: "desakarangharja-31525.firebaseapp.com",
-    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "desakarangharja-31525",
-    storageBucket: "desakarangharja-31525.firebasestorage.app",
-    messagingSenderId: "428460519406",
-    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-  };
+  <script>
+    // --- Firebase config (ganti kalau perlu) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+      authDomain: "desakarangharja-31525.firebaseapp.com",
+      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "desakarangharja-31525",
+      storageBucket: "desakarangharja-31525.firebasestorage.app",
+      messagingSenderId: "428460519406",
+      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+    };
 
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const auth = firebase.auth();
-  const db = firebase.database();
-
-  // Check user authentication
-  auth.onAuthStateChanged(user => {
-    if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
-      alert("Anda tidak memiliki akses ke halaman ini");
-      window.location.href = 'login.html';
-    } else {
-      const urlParams = new URLSearchParams(window.location.search);
-      const activityId = urlParams.get('edit');
-      
-      if (activityId) {
-        document.getElementById('formTitle').textContent = 'Edit Kegiatan';
-        document.getElementById('submitText').textContent = 'Update Kegiatan';
-        
-        db.ref(`activities/${activityId}`).once('value').then(snapshot => {
-          const activity = snapshot.val();
-          if (!activity) {
-            alert('Kegiatan tidak ditemukan');
-            return;
-          }
-          
-          document.getElementById('title').value = activity.title || '';
-          document.getElementById('date').value = activity.date || '';
-          document.getElementById('published').checked = !!activity.published;
-          document.getElementById('content').innerHTML = activity.content || '';
-          
-          if (activity.imageBase64) {
-            currentImageBase64 = activity.imageBase64;
-            document.getElementById('imagePreview').style.display = 'block';
-            document.getElementById('previewImage').src = activity.imageBase64;
-            document.getElementById('imageInfo').textContent = 'Gambar tersimpan';
-          }
-        }).catch(err => {
-          alert('Gagal memuat data kegiatan: ' + err.message);
-        });
-      }
+    // --- Init Firebase once ---
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
-  });
+    const auth = firebase.auth();
+    const db = firebase.database();
 
-  // Editor functionality
-  document.addEventListener('DOMContentLoaded', () => {
-    // Reinitialize icons for any dynamically added elements
-    lucide.createIcons();
+    // --- Helper UI funcs ---
+    function showError(msg) {
+      const el = document.getElementById('errorMessage');
+      document.getElementById('errorText').textContent = msg;
+      el.style.display = 'flex';
+      setTimeout(()=> { el.style.display = 'none'; }, 6000);
+    }
 
-    const contentEditable = document.getElementById('content');
-    const fontFamilySelect = document.getElementById('fontFamily');
-    const fontSizeInput = document.getElementById('fontSize');
-    const textColorInput = document.getElementById('textColor');
-    
-    fontFamilySelect.addEventListener('change', () => {
-      document.execCommand('fontName', false, fontFamilySelect.value);
-      contentEditable.style.fontFamily = fontFamilySelect.value;
-    });
-    
-    fontSizeInput.addEventListener('change', () => {
-      const size = fontSizeInput.value + 'px';
-      document.execCommand('fontSize', false, '7');
-      const fontTags = contentEditable.getElementsByTagName('font');
-      if (fontTags.length > 0) {
-        const lastFontTag = fontTags[fontTags.length - 1];
-        lastFontTag.removeAttribute('size');
-        lastFontTag.style.fontSize = size;
+    function setLoading(isLoading) {
+      document.getElementById('loading').style.display = isLoading ? 'flex' : 'none';
+      document.getElementById('submitBtn').disabled = isLoading;
+    }
+
+    // --- Image compression & conversion ---
+    function compressImage(file, maxWidth = 1200, quality = 0.75) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('Gagal membaca file gambar'));
+        reader.onload = () => {
+          const img = new Image();
+          img.onerror = () => reject(new Error('Gagal memuat gambar'));
+          img.onload = () => {
+            const ratio = Math.min(1, maxWidth / img.width);
+            const canvas = document.createElement('canvas');
+            canvas.width = Math.round(img.width * ratio);
+            canvas.height = Math.round(img.height * ratio);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob((blob) => {
+              if (blob) resolve(blob);
+              else reject(new Error('Gagal mengkompres gambar'));
+            }, 'image/jpeg', quality);
+          };
+          img.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function blobToBase64(blob) {
+      return new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(r.result);
+        r.onerror = () => rej(new Error('Konversi base64 gagal'));
+        r.readAsDataURL(blob);
+      });
+    }
+
+    // --- Main logic after DOM loaded ---
+    document.addEventListener('DOMContentLoaded', () => {
+      // initialize lucide icons
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
       }
-      contentEditable.style.fontSize = size;
-    });
-    
-    textColorInput.addEventListener('input', () => {
-      document.execCommand('foreColor', false, textColorInput.value);
-      contentEditable.style.color = textColorInput.value;
-    });
-    
-    document.querySelectorAll('#toolbar button[data-command]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const cmd = btn.dataset.command;
-        document.execCommand(cmd, false, null);
-        contentEditable.focus();
-        
-        if (cmd.startsWith('justify')) {
-          document.querySelectorAll('#toolbar button[data-command^="justify"]')
-            .forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const editId = urlParams.get('edit'); // ?edit=<id> untuk mode edit
+
+      const titleInput = document.getElementById('title');
+      const dateInput = document.getElementById('date');
+      const contentDiv = document.getElementById('content');
+      const publishedInput = document.getElementById('published');
+      const imageInput = document.getElementById('image');
+      const pickImageBtn = document.getElementById('pickImageBtn');
+      const imagePreview = document.getElementById('imagePreview');
+      const previewImage = document.getElementById('previewImage');
+      const imageInfo = document.getElementById('imageInfo');
+      const submitBtn = document.getElementById('submitBtn');
+      const submitTextSpan = document.getElementById('submitText');
+
+      let currentImageBase64 = ''; // akan disimpan di db jika ada
+
+      // Protect route: pastikan user login dan email sesuai
+      auth.onAuthStateChanged(user => {
+        if (!user) {
+          alert('Anda belum login, mohon login terlebih dahulu.');
+          window.location.href = 'login.html';
+          return;
+        }
+        // contoh pembatasan: hanya email organisasi
+        const allowedEmail = 'karangharja2025@gmail.com';
+        if (!user.email || user.email.toLowerCase() !== allowedEmail) {
+          alert('Akses ditolak: bukan akun yang berwenang.');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        // jika edit mode, load data
+        if (editId) {
+          document.getElementById('formTitle').textContent = 'Edit Kegiatan';
+          submitTextSpan.textContent = 'Update Kegiatan';
+          db.ref(`activities/${editId}`).once('value').then(snap => {
+            const data = snap.val();
+            if (!data) {
+              showError('Data kegiatan tidak ditemukan.');
+              return;
+            }
+            titleInput.value = data.title || '';
+            dateInput.value = data.date || '';
+            contentDiv.innerHTML = data.content || '';
+            publishedInput.checked = !!data.published;
+            if (data.imageBase64) {
+              currentImageBase64 = data.imageBase64;
+              previewImage.src = data.imageBase64;
+              imageInfo.textContent = 'Gambar tersimpan';
+              imagePreview.style.display = 'block';
+            }
+          }).catch(err => {
+            console.error(err);
+            showError('Gagal memuat data kegiatan: ' + (err.message || err));
+          });
         }
       });
-    });
-  });
 
-  // Image handling
-  let currentImageBase64 = '';
-  const fileInput = document.getElementById('image');
-  const imagePreviewContainer = document.getElementById('imagePreview');
+      // Toolbar simple execCommand buttons
+      document.querySelectorAll('[data-cmd]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const cmd = btn.getAttribute('data-cmd');
+          document.execCommand(cmd, false, null);
+          contentDiv.focus();
+        });
+      });
 
-  fileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    imagePreviewContainer.style.display = 'block';
-    imagePreviewContainer.innerHTML = '<p>Mengkompresi gambar...</p>';
-
-    try {
-      let compressedBlob = await compressImage(file);
-      if (compressedBlob.size > 500 * 1024) {
-        compressedBlob = await compressImage(file, 800, 0.6);
-        if (compressedBlob.size > 500 * 1024) {
-          throw new Error('Gambar terlalu besar setelah kompresi. Gunakan gambar lebih kecil.');
+      // image pick handling
+      pickImageBtn.addEventListener('click', () => imageInput.click());
+      imageInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          imagePreview.style.display = 'block';
+          imageInfo.textContent = 'Mengkompres gambar...';
+          // kompres terlebih dahulu
+          let blob = await compressImage(file, 1200, 0.75);
+          // jika masih besar (>600KB) coba lagi dengan quality lebih rendah
+          if (blob.size > 600 * 1024) {
+            blob = await compressImage(file, 1000, 0.6);
+          }
+          if (blob.size > 800 * 1024) {
+            throw new Error('Gambar terlalu besar setelah kompresi. Gunakan gambar yang lebih kecil.');
+          }
+          currentImageBase64 = await blobToBase64(blob);
+          previewImage.src = currentImageBase64;
+          imageInfo.textContent = `Ukuran: ${(blob.size / 1024).toFixed(1)} KB`;
+        } catch (err) {
+          console.error(err);
+          currentImageBase64 = '';
+          imagePreview.style.display = 'block';
+          previewImage.src = '';
+          imageInfo.textContent = 'Gagal memuat gambar: ' + (err.message || err);
+          showError('Gagal memproses gambar: ' + (err.message || ''));
         }
-      }
-      currentImageBase64 = await blobToBase64(compressedBlob);
-      showImagePreview(currentImageBase64, compressedBlob.size);
-    } catch (error) {
-      alert('Gagal memproses gambar: ' + error.message);
-      currentImageBase64 = '';
-      imagePreviewContainer.innerHTML = '<div class="image-info">Gagal memuat gambar</div>';
-    }
-  });
+      });
 
-  function compressImage(file, maxWidth = 1200, quality = 0.7) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const scale = Math.min(1, maxWidth / img.width);
-          canvas.width = img.width * scale;
-          canvas.height = img.height * scale;
-          
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          
-          canvas.toBlob(blob => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(new Error('Konversi gambar gagal'));
-            }
-          }, 'image/jpeg', quality);
-        };
-        img.onerror = () => reject(new Error('Gagal memuat gambar'));
-        img.src = event.target.result;
-      };
-      reader.onerror = () => reject(new Error('Gagal membaca file'));
-      reader.readAsDataURL(file);
+      // Form submit
+      document.getElementById('activityForm').addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        // ambil nilai
+        const title = titleInput.value.trim();
+        const date = dateInput.value;
+        const content = contentDiv.innerHTML.trim();
+        const published = publishedInput.checked;
+
+        if (!title || !date || !content) {
+          showError('Harap isi judul, tanggal, dan deskripsi.');
+          return;
+        }
+
+        try {
+          setLoading(true);
+          submitTextSpan.textContent = editId ? 'Memperbarui...' : 'Memproses...';
+
+          const activityData = {
+            title,
+            date,
+            content,
+            published,
+            updatedAt: firebase.database.ServerValue.TIMESTAMP
+          };
+
+          if (!editId) {
+            activityData.createdAt = firebase.database.ServerValue.TIMESTAMP;
+            activityData.views = 0;
+          }
+
+          if (currentImageBase64) {
+            activityData.imageBase64 = currentImageBase64;
+          }
+
+          if (editId) {
+            await db.ref(`activities/${editId}`).update(activityData);
+            alert('Kegiatan berhasil diupdate.');
+          } else {
+            const newRef = await db.ref('activities').push(activityData);
+            console.log('Created activity ID:', newRef.key);
+            alert('Kegiatan berhasil diposting.');
+          }
+
+          // redirect ke dashboard
+          window.location.href = 'dashboard.html';
+        } catch (err) {
+          console.error('Save error', err);
+          showError('Gagal menyimpan: ' + (err.message || err));
+        } finally {
+          setLoading(false);
+          submitTextSpan.textContent = editId ? 'Update Kegiatan' : 'Posting Kegiatan';
+          // refresh icons (in case button icons changed)
+          if (typeof lucide !== 'undefined' && lucide.createIcons) lucide.createIcons();
+        }
+      });
+
+      // ensure lucide icons exist for dynamic elements
+      if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+      }
     });
-  }
-
-  function blobToBase64(blob) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = () => reject(new Error('Konversi base64 gagal'));
-      reader.readAsDataURL(blob);
-    });
-  }
-
-  function showImagePreview(base64String, sizeInBytes) {
-    const sizeInKB = (sizeInBytes / 1024).toFixed(1);
-    imagePreviewContainer.innerHTML = `
-      <img src="${base64String}" alt="Preview" id="previewImage">
-      <div class="image-info" id="imageInfo">Ukuran: ${sizeInKB} KB</div>
-    `;
-  }
-
-  function showError(message) {
-    const errorElement = document.getElementById('errorMessage');
-    errorElement.style.display = 'flex';
-    document.getElementById('errorText').textContent = message;
-    setTimeout(() => errorElement.style.display = 'none', 5000);
-  }
-
-  // Form submission
-  document.getElementById('activityForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const title = document.getElementById('title').value.trim();
-    const date = document.getElementById('date').value;
-    const content = document.getElementById('content').innerHTML.trim();
-    const published = document.getElementById('published').checked;
-    const submitBtn = document.getElementById('submitBtn');
-    const loadingElement = document.getElementById('loading');
-    const errorElement = document.getElementById('errorMessage');
-    
-    if (!title || !date || !content) {
-      showError('Harap isi judul, tanggal, dan deskripsi');
-      return;
-    }
-    
-    try {
-      // Update button state with loading animation
-      submitBtn.disabled = true;
-      const originalContent = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> Memproses...';
-      lucide.createIcons();
-      
-      loadingElement.style.display = 'flex';
-      errorElement.style.display = 'none';
-      
-      const activityData = {
-        title,
-        date,
-        content,
-        published,
-        createdAt: firebase.database.ServerValue.TIMESTAMP,
-        updatedAt: firebase.database.ServerValue.TIMESTAMP,
-        views: 0
-      };
-      
-      if (currentImageBase64) {
-        activityData.imageBase64 = currentImageBase64;
-      }
-      
-      const urlParams = new URLSearchParams(window.location.search);
-      const activityId = urlParams.get('edit');
-      
-      if (activityId) {
-        await db.ref(`activities/${activityId}`).update(activityData);
-        alert('Kegiatan berhasil diupdate!');
-      } else {
-        const newRef = await db.ref('activities').push(activityData);
-        alert('Kegiatan berhasil diposting!');
-      }
-      
-      window.location.href = 'dashboard.html';
-    } catch (error) {
-      showError('Gagal menyimpan: ' + (error.message || 'Kesalahan tidak diketahui. Cek koneksi atau rules Firebase.'));
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalContent || '<i data-lucide="save"></i> <span id="submitText">Posting Kegiatan</span>';
-      loadingElement.style.display = 'none';
-      lucide.createIcons();
-    }
-  });
-</script>
-      
-            
+  </script>
 </body>
 </html>
