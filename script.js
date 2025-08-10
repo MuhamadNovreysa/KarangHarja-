@@ -154,13 +154,14 @@ function setupNavbarToggle() {
   const navbarMenu = document.getElementById('navbar-menu');
   
   if (navbarToggle && navbarMenu) {
-    navbarToggle.addEventListener('click', () => {
+    navbarToggle.addEventListener('click', (e) => {
+      e.stopPropagation(); // Mencegah event bubbling
       navbarMenu.classList.toggle('active');
       navbarToggle.classList.toggle('active');
     });
 
     document.addEventListener('click', (e) => {
-      if (!navbarToggle.contains(e.target) {
+      if (!navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
         navbarMenu.classList.remove('active');
         navbarToggle.classList.remove('active');
       }
