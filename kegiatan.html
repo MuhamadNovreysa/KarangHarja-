@@ -538,7 +538,18 @@
     messagingSenderId: "428460519406",
     appId: "1:428460519406:web:fca8b9854de78cac5628ff"
   };
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
 
+  // Cek login user
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user) {
+      alert("Anda belum login, mohon untuk login terlebih dahulu");
+      window.location.href = "login.html";  // Redirect ke login
+    }
+  });
+  
   if (!firebase.apps.length) {
     console.log('Initializing Firebase...'); // Debug
     firebase.initializeApp(firebaseConfig);
