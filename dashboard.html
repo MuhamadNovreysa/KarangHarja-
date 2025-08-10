@@ -74,58 +74,63 @@
       line-height:1;
     }
 
-    /* Desktop menu */
+    .navbar h1 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    /* Navbar menu (desktop: horizontal, mobile: hidden until toggled) */
     .navbar-menu{
-      display:flex;
-      align-items:center;
-      gap:1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
-    .navbar-links{
-      display:flex;
-      gap:1rem;
-      list-style:none;
-      margin:0;
-      padding:0;
-      align-items:center;
+
+    .navbar-menu a,
+    .navbar-menu button{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      background: none;
+      border: none;
+      padding: 0.5rem 0.6rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
     }
-    .navbar-links a,
-    .navbar-links button{
-      display:inline-flex;
-      align-items:center;
-      gap:0.5rem;
-      color:var(--muted);
-      background:none;
-      border:none;
-      padding:0.5rem 0.6rem;
-      border-radius:8px;
-      cursor:pointer;
-      font-weight:500;
-      font-size:0.95rem;
-      text-decoration:none;
-    }
-    .navbar-links a:hover,
-    .navbar-links button:hover{
-      color:var(--primary);
+
+    .navbar-menu a:hover,
+    .navbar-menu button:hover{
+      color: var(--primary);
       background: rgba(16,185,129,0.06);
     }
 
     .navbar-toggle{
-      display:none; /* shown only on mobile */
-      background:none;
-      border:none;
-      padding:8px;
-      cursor:pointer;
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+      display: none; /* Shown on mobile */
     }
+
     .navbar-toggle .bar{
-      display:block;
-      width:22px;
-      height:2px;
-      background:#111827;
-      margin:4px 0;
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #111827;
+      margin: 4px 0;
       transition: transform .2s ease, opacity .2s ease;
     }
+
     .navbar-toggle.active .bar:nth-child(1){ transform: translateY(6px) rotate(45deg); }
-    .navbar-toggle.active .bar:nth-child(2){ opacity:0; }
+    .navbar-toggle.active .bar:nth-child(2){ opacity: 0; }
     .navbar-toggle.active .bar:nth-child(3){ transform: translateY(-6px) rotate(-45deg); }
 
     /* MAIN CONTENT container offset to account for fixed navbar */
@@ -175,65 +180,54 @@
     .loading-spinner{ width:28px; height:28px; border-radius:50%; border:3px solid #eee; border-top-color: var(--primary); animation: spin 1s linear infinite; }
     @keyframes spin{ to{ transform:rotate(360deg); } }
 
-    /* MOBILE: Fullscreen dropdown below navbar, centered items */
+    /* MOBILE: Navbar menu becomes full dropdown below navbar */
     @media (max-width: 768px){
-      .navbar-menu{ /* desktop menu hidden on small screens; we still keep node for desktop fallback */
-        display:none;
-      }
-      .navbar-toggle{
-        display:block;
+      .navbar{
+        flex-direction: column;
+        align-items: flex-start;
+        height: auto;
+        padding: 1rem;
       }
 
-      /* Overlay menu: fixed, full-screen under navbar */
-      .mobile-overlay{
-        position: fixed;
-        left: 0;
-        right: 0;
-        top: var(--navbar-height);
-        height: calc(100vh - var(--navbar-height));
-        background: var(--white);
-        z-index: 1150;
-        display: none; /* toggled to block when active */
-        box-shadow: 0 12px 40px rgba(0,0,0,0.08);
-        transition: opacity 220ms ease, transform 220ms ease;
-        overflow: auto;
+      .navbar h1 {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0.5rem;
       }
-      .mobile-overlay.active{
+
+      .navbar-toggle{
         display: block;
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
       }
-      .mobile-overlay-inner{
-        min-height: 100%;
-        display:flex;
-        align-items:center;
-        justify-content:center;
+
+      .navbar-menu{
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+        padding: 1rem 0;
+        border-top: 1px solid #e6e6e6;
       }
-      .mobile-nav-list{
-        list-style:none;
-        padding:0;
-        margin:0;
-        display:flex;
-        flex-direction:column;
-        gap:22px;
-        align-items:center;
-        text-align:center;
+
+      .navbar-menu.active{
+        display: flex;
       }
-      .mobile-nav-list a,
-      .mobile-nav-list button{
-        font-size:1.125rem;
-        font-weight:600;
-        color:#111827;
-        background:none;
-        border:none;
-        padding:12px 18px;
-        border-radius:10px;
-        width:260px;
-        display:inline-flex;
-        align-items:center;
-        gap:12px;
-        justify-content:center;
+
+      .navbar-menu a,
+      .navbar-menu button{
+        justify-content: center;
+        padding: 1rem;
+        font-size: 1.125rem;
+        border-radius: 10px;
       }
-      .mobile-nav-list a:hover,
-      .mobile-nav-list button:hover{ background: #f3f4f6; color:var(--primary); }
+
+      .navbar-menu a:hover,
+      .navbar-menu button:hover{
+        background: #f3f4f6;
+        color: var(--primary);
+      }
     }
   </style>
 </head>
@@ -245,33 +239,17 @@
         <img class="navbar-logo" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png" alt="Logo Desa Karangharja">
         <span class="brand-text">Desa Karangharja</span>
       </a>
-
-      <!-- Desktop menu (kehilangan di mobile) -->
-      <div class="navbar-menu" id="desktopMenu" aria-hidden="false">
-        <ul class="navbar-links">
-          <li><a href="index.html"><span style="display:inline-flex;align-items:center;gap:.5rem"><svg style="width:18px;height:18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9.75L12 4l9 5.75v7.5A2 2 0 0 1 19 19H5a2 2 0 0 1-2-2V9.75z"></path><path d="M9 22V12h6v10"></path></svg>Beranda</span></a></li>
-          <li><a href="kegiatan.html"><span style="display:inline-flex;align-items:center;gap:.5rem"><svg style="width:18px;height:18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"></path></svg>Posting Kegiatan</span></a></li>
-          <li><button id="logoutBtnDesktop"><span style="display:inline-flex;align-items:center;gap:.5rem"><svg style="width:18px;height:18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>Logout</span></button></li>
-        </ul>
-      </div>
-
-      <!-- Hamburger shown on mobile -->
+      <h1>Admin Desa KarangHarja</h1>
       <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle menu" aria-expanded="false" type="button">
         <span class="bar"></span><span class="bar"></span><span class="bar"></span>
       </button>
+      <div class="navbar-menu" id="navbarMenu" aria-hidden="true">
+        <a href="index.html"><i data-lucide="home"></i> Beranda</a>
+        <a href="kegiatan.html"><i data-lucide="plus"></i> Posting Kegiatan</a>
+        <button id="logoutBtn"><i data-lucide="log-out"></i> Logout</button>
+      </div>
     </div>
   </nav>
-
-  <!-- MOBILE OVERLAY (full height below navbar) -->
-  <div class="mobile-overlay" id="mobileOverlay" aria-hidden="true" role="dialog" aria-label="Mobile menu">
-    <div class="mobile-overlay-inner">
-      <ul class="mobile-nav-list" role="menu">
-        <li role="none"><a role="menuitem" href="index.html"><i data-lucide="home"></i> Beranda</a></li>
-        <li role="none"><a role="menuitem" href="kegiatan.html"><i data-lucide="plus"></i> Posting Kegiatan</a></li>
-        <li role="none"><button role="menuitem" id="logoutBtn" style="background:none;border:none;"><i data-lucide="log-out"></i> Logout</button></li>
-      </ul>
-    </div>
-  </div>
 
   <!-- MAIN CONTENT -->
   <main class="main-content" id="mainContent" role="main">
@@ -363,71 +341,57 @@
     // ---- Navbar / Mobile menu behavior ----
     (function setupMenu(){
       const toggle = document.getElementById('navbarToggle');
-      const overlay = document.getElementById('mobileOverlay');
-      const desktopLogout = document.getElementById('logoutBtnDesktop');
-      const mobileLogout = document.getElementById('logoutBtn');
+      const menu = document.getElementById('navbarMenu');
+      const logoutBtn = document.getElementById('logoutBtn');
 
       function openMenu(){
         toggle.classList.add('active');
         toggle.setAttribute('aria-expanded','true');
-        overlay.classList.add('active');
-        overlay.setAttribute('aria-hidden','false');
+        menu.classList.add('active');
+        menu.setAttribute('aria-hidden','false');
         document.body.classList.add('menu-open');
       }
       function closeMenu(){
         toggle.classList.remove('active');
         toggle.setAttribute('aria-expanded','false');
-        overlay.classList.remove('active');
-        overlay.setAttribute('aria-hidden','true');
+        menu.classList.remove('active');
+        menu.setAttribute('aria-hidden','true');
         document.body.classList.remove('menu-open');
       }
 
       // click toggle
       toggle.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (overlay.classList.contains('active')) closeMenu();
+        if (menu.classList.contains('active')) closeMenu();
         else openMenu();
       });
 
-      // close when clicking outside overlay content
-      overlay.addEventListener('click', (e) => {
-        // if clicked directly on overlay (not inner content) -> close
-        if (e.target === overlay) closeMenu();
+      // close when clicking outside menu
+      document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+          closeMenu();
+        }
       });
 
       // close on escape
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && overlay.classList.contains('active')) closeMenu();
+        if (e.key === 'Escape' && menu.classList.contains('active')) closeMenu();
       });
 
       // close on resize to desktop
       window.addEventListener('resize', () => {
-        if (window.innerWidth > 768 && overlay.classList.contains('active')) {
+        if (window.innerWidth > 768 && menu.classList.contains('active')) {
           closeMenu();
         }
       }, { passive: true });
 
-      // desktop logout (if present)
-      if (desktopLogout) desktopLogout.addEventListener('click', async (ev) => {
+      // logout button
+      if (logoutBtn) logoutBtn.addEventListener('click', async (ev) => {
         ev.preventDefault();
         try { await auth.signOut(); window.location.href = 'index.html'; }
         catch(err){ console.error(err); alert('Gagal logout: ' + (err.message||err)); }
       });
-
-      // mobile logout button exists (already wired below in shared handler)
     })();
-
-    // ---- Shared logout handler for mobile overlay button ----
-    document.addEventListener('click', (ev) => {
-      const t = ev.target.closest && ev.target.closest('#logoutBtn');
-      if (t) {
-        ev.preventDefault();
-        auth.signOut().then(()=> window.location.href = 'index.html').catch(err => {
-          console.error('Logout error', err);
-          alert('Gagal logout: ' + (err.message || err));
-        });
-      }
-    });
 
     // ========== AUTH PROTECTION & data loading ==========
     // Use same admin email check you had originally
