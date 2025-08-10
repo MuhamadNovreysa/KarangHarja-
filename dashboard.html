@@ -433,223 +433,224 @@
     </section>
   </main>
 
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script>
-    // Firebase init
-    const firebaseConfig = {
-      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-      authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
-      messagingSenderId: "428460519406",
-      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-    };
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+<script>
+  // Firebase init
+  const firebaseConfig = {
+    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+    authDomain: "desakarangharja-31525.firebaseapp.com",
+    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "desakarangharja-31525",
+    storageBucket: "desakarangharja-31525.firebasestorage.app",
+    messagingSenderId: "428460519406",
+    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+  };
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  // Initialize icons
+  lucide.createIcons();
+
+  // Hamburger menu toggle
+  const navbarToggle = document.getElementById("navbarToggle");
+  const navbarMenu = document.getElementById("navbarMenu");
+
+  navbarToggle.addEventListener("click", () => {
+    navbarToggle.classList.toggle("active");
+    navbarMenu.classList.toggle("active");
+    document.body.classList.toggle("menu-open");
+    navbarMenu.setAttribute("aria-hidden", !navbarMenu.classList.contains("active"));
+    navbarToggle.setAttribute("aria-expanded", navbarMenu.classList.contains("active"));
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!navbarMenu.contains(e.target) && !navbarToggle.contains(e.target) && navbarMenu.classList.contains("active")) {
+      navbarToggle.classList.remove("active");
+      navbarMenu.classList.remove("active");
+      document.body.classList.remove("menu-open");
+      navbarMenu.setAttribute("aria-hidden", "true");
+      navbarToggle.setAttribute("aria-expanded", "false");
     }
-    const auth = firebase.auth();
-    const db = firebase.database();
+  });
 
-    // Initialize icons
-    lucide.createIcons();
-
-    // Hamburger menu toggle
-    const navbarToggle = document.getElementById("navbarToggle");
-    const navbarMenu = document.getElementById("navbarMenu");
-
-    navbarToggle.addEventListener("click", () => {
-      navbarToggle.classList.toggle("active");
-      navbarMenu.classList.toggle("active");
-      document.body.classList.toggle("menu-open");
-      navbarMenu.setAttribute("aria-hidden", !navbarMenu.classList.contains("active"));
-      navbarToggle.setAttribute("aria-expanded", navbarMenu.classList.contains("active"));
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener("click", (e) => {
-      if (!navbarMenu.contains(e.target) && !navbarToggle.contains(e.target) && navbarMenu.classList.contains("active")) {
-        navbarToggle.classList.remove("active");
-        navbarMenu.classList.remove("active");
-        document.body.classList.remove("menu-open");
-        navbarMenu.setAttribute("aria-hidden", "true");
-        navbarToggle.setAttribute("aria-expanded", "false");
-      }
-    });
-
-    // Close menu on Escape key
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && navbarMenu.classList.contains("active")) {
-        navbarToggle.classList.remove("active");
-        navbarMenu.classList.remove("active");
-        document.body.classList.remove("menu-open");
-        navbarMenu.setAttribute("aria-hidden", "true");
-        navbarToggle.setAttribute("aria-expanded", "false");
-      }
-    });
-
-    // Close menu on resize to desktop
-    window.addEventListener("resize", () => {
-      if (window.innerWidth > 768 && navbarMenu.classList.contains("active")) {
-        navbarToggle.classList.remove("active");
-        navbarMenu.classList.remove("active");
-        document.body.classList.remove("menu-open");
-        navbarMenu.setAttribute("aria-hidden", "true");
-        navbarToggle.setAttribute("aria-expanded", "false");
-      }
-    }, { passive: true });
-
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      auth.signOut().then(() => {
-        window.location.href = "login.html";
-      }).catch(err => {
-        console.error("Logout error:", err);
-        alert("Gagal logout: " + (err.message || err));
-      });
-    });
-
-    // Auth protection
-    auth.onAuthStateChanged(user => {
-      console.log("Auth state changed:", user);
-      if (!user || !user.email || user.email.toLowerCase() !== "karangharja2025@gmail.com") {
-        window.location.href = "login.html";
-      } else {
-        loadActivities();
-      }
-    });
-
-    // DOM refs for stats & table
-    const activitiesTableContainer = document.getElementById("activitiesTable");
-    const totalActivitiesEl = document.getElementById("totalActivities");
-    const publishedCountEl = document.getElementById("publishedCount");
-    const draftCountEl = document.getElementById("draftCount");
-    const totalViewsEl = document.getElementById("totalViews");
-
-    function loadActivities() {
-      const ref = db.ref("activities");
-      ref.on("value", (snapshot) => {
-        const data = snapshot.val();
-        if (!data) {
-          showEmptyState();
-          updateStats([]);
-          return;
-        }
-        const entries = Object.entries(data)
-          .map(([key, val]) => ({ id: key, ...val }))
-          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-        updateStats(entries);
-        renderActivities(entries.slice(0, 5));
-      }, (err) => {
-        console.error("Firebase read error:", err);
-        showErrorState(err);
-      });
+  // Close menu on Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && navbarMenu.classList.contains("active")) {
+      navbarToggle.classList.remove("active");
+      navbarMenu.classList.remove("active");
+      document.body.classList.remove("menu-open");
+      navbarMenu.setAttribute("aria-hidden", "true");
+      navbarToggle.setAttribute("aria-expanded", "false");
     }
+  });
 
-    function showEmptyState() {
-      activitiesTableContainer.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">
-            <i data-lucide="calendar" width="36" height="36"></i>
-          </div>
-          <h3 class="empty-title">Belum ada kegiatan</h3>
-          <p class="empty-subtitle">Mulai dengan membuat kegiatan pertama Anda</p>
-        </div>
-      `;
-      lucide.createIcons();
+  // Close menu on resize to desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768 && navbarMenu.classList.contains("active")) {
+      navbarToggle.classList.remove("active");
+      navbarMenu.classList.remove("active");
+      document.body.classList.remove("menu-open");
+      navbarMenu.setAttribute("aria-hidden", "true");
+      navbarToggle.setAttribute("aria-expanded", "false");
     }
+  }, { passive: true });
 
-    function showErrorState(error) {
-      activitiesTableContainer.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">
-            <i data-lucide="alert-circle" width="36" height="36"></i>
-          </div>
-          <h3 class="empty-title">Gagal memuat kegiatan</h3>
-          <p class="empty-subtitle">${error.message || "Terjadi kesalahan saat memuat data"}</p>
-        </div>
-      `;
-      lucide.createIcons();
+  // Logout
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    auth.signOut().then(() => {
+      window.location.href = "login.html";
+    }).catch(err => {
+      console.error("Logout error:", err);
+      alert("Gagal logout: " + (err.message || err));
+    });
+  });
+
+  // Auth protection
+  auth.onAuthStateChanged(user => {
+    console.log("Auth state changed:", user);
+    if (!user || !user.email || user.email.toLowerCase() !== "karangharja2025@gmail.com") {
+      window.location.href = "login.html";
+    } else {
+      loadActivities();
     }
+  });
 
-    function updateStats(entries) {
-      totalActivitiesEl.textContent = entries.length;
-      publishedCountEl.textContent = entries.filter(e => e.published).length;
-      draftCountEl.textContent = entries.filter(e => !e.published).length;
-      totalViewsEl.textContent = entries.reduce((s, e) => s + (e.views || 0), 0);
-    }
+  // DOM refs for stats & table
+  const activitiesTableContainer = document.getElementById("activitiesTable");
+  const totalActivitiesEl = document.getElementById("totalActivities");
+  const publishedCountEl = document.getElementById("publishedCount");
+  const draftCountEl = document.getElementById("draftCount");
+  const totalViewsEl = document.getElementById("totalViews");
 
-    function renderActivities(entries) {
-      if (!entries || entries.length === 0) {
+  function loadActivities() {
+    console.log('Loading activities...'); // Tambah log untuk debug
+    const ref = db.ref("activities");
+    ref.on("value", (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {
         showEmptyState();
+        updateStats([]);
         return;
       }
+      const entries = Object.entries(data)
+        .map(([key, val]) => ({ id: key, ...val }))
+        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      updateStats(entries);
+      renderActivities(entries.slice(0, 5));
+    }, (err) => {
+      console.error("Firebase read error:", err);
+      showErrorState(err);
+    });
+  }
 
-      let html = '';
-      entries.forEach(entry => {
-        const dateText = entry.date ? new Date(entry.date).toLocaleDateString("id-ID") : "-";
-        const statusClass = entry.published ? "status-published" : "status-draft";
-        const statusText = entry.published ? "Published" : "Draft";
-        
-        // Create excerpt from HTML content
-        const textContent = entry.content ? entry.content.replace(/<[^>]*>/g, '').substring(0, 100) + (entry.content.length > 100 ? '...' : '') : '';
+  function showEmptyState() {
+    activitiesTableContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i data-lucide="calendar" width="36" height="36"></i>
+        </div>
+        <h3 class="empty-title">Belum ada kegiatan</h3>
+        <p class="empty-subtitle">Mulai dengan membuat kegiatan pertama Anda</p>
+      </div>
+    `;
+    lucide.createIcons();
+  }
 
-        html += `
-          <div class="activity-card">
-            ${entry.imageBase64 ? `
-              <img src="${entry.imageBase64}" alt="${entry.title}" class="activity-image">
-            ` : '<div style="width:120px; height:80px; background:#f3f4f6; border-radius:8px; display:flex; align-items:center; justify-content:center;"><i data-lucide="image" width="24" height="24" color="#9ca3af"></i></div>'}
-            <div class="activity-content">
-              <h3 class="activity-title">${escapeHtml(entry.title || "Tanpa Judul")}</h3>
-              <div class="activity-meta">
-                <span><i data-lucide="calendar" width="16" height="16"></i> ${dateText}</span>
-                <span class="activity-status ${statusClass}">${statusText}</span>
-                <span><i data-lucide="eye" width="16" height="16"></i> ${entry.views || 0} dilihat</span>
-              </div>
-              <p>${escapeHtml(textContent)}</p>
-              <div class="activity-actions">
-                <button class="action-btn" onclick="editActivity('${entry.id}')" title="Edit">
-                  <i data-lucide="edit" width="16" height="16"></i>
-                </button>
-                <button class="action-btn" onclick="deleteActivity('${entry.id}')" title="Hapus">
-                  <i data-lucide="trash-2" width="16" height="16"></i>
-                </button>
-              </div>
+  function showErrorState(error) {
+    activitiesTableContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">
+          <i data-lucide="alert-circle" width="36" height="36"></i>
+        </div>
+        <h3 class="empty-title">Gagal memuat kegiatan</h3>
+        <p class="empty-subtitle">${error.message || "Terjadi kesalahan saat memuat data"}</p>
+      </div>
+    `;
+    lucide.createIcons();
+  }
+
+  function updateStats(entries) {
+    totalActivitiesEl.textContent = entries.length;
+    publishedCountEl.textContent = entries.filter(e => e.published).length;
+    draftCountEl.textContent = entries.filter(e => !e.published).length;
+    totalViewsEl.textContent = entries.reduce((s, e) => s + (e.views || 0), 0);
+  }
+
+  function renderActivities(entries) {
+    if (!entries || entries.length === 0) {
+      showEmptyState();
+      return;
+    }
+
+    let html = '';
+    entries.forEach(entry => {
+      const dateText = entry.date ? new Date(entry.date).toLocaleDateString("id-ID") : "-";
+      const statusClass = entry.published ? "status-published" : "status-draft";
+      const statusText = entry.published ? "Published" : "Draft";
+      
+      // Create excerpt from HTML content
+      const textContent = entry.content ? entry.content.replace(/<[^>]*>/g, '').substring(0, 100) + (entry.content.length > 100 ? '...' : '') : '';
+
+      html += `
+        <div class="activity-card">
+          ${entry.imageBase64 ? `
+            <img src="${entry.imageBase64}" alt="${entry.title}" class="activity-image">
+          ` : '<div style="width:120px; height:80px; background:#f3f4f6; border-radius:8px; display:flex; align-items:center; justify-content:center;"><i data-lucide="image" width="24" height="24" color="#9ca3af"></i></div>'}
+          <div class="activity-content">
+            <h3 class="activity-title">${escapeHtml(entry.title || "Tanpa Judul")}</h3>
+            <div class="activity-meta">
+              <span><i data-lucide="calendar" width="16" height="16"></i> ${dateText}</span>
+              <span class="activity-status ${statusClass}">${statusText}</span>
+              <span><i data-lucide="eye" width="16" height="16"></i> ${entry.views || 0} dilihat</span>
+            </div>
+            <p>${escapeHtml(textContent)}</p>
+            <div class="activity-actions">
+              <button class="action-btn" onclick="editActivity('${entry.id}')" title="Edit">
+                <i data-lucide="edit" width="16" height="16"></i>
+              </button>
+              <button class="action-btn" onclick="deleteActivity('${entry.id}')" title="Hapus">
+                <i data-lucide="trash-2" width="16" height="16"></i>
+              </button>
             </div>
           </div>
-        `;
-      });
-
-      activitiesTableContainer.innerHTML = html;
-      lucide.createIcons();
-    }
-
-    function escapeHtml(text) {
-      return String(text || "").replace(/[&<>"'`=\/]/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;", "/": "&#x2F;", "`": "&#x60;", "=": "&#x3D;" })[s]);
-    }
-
-    window.editActivity = function(id) {
-      window.location.href = `kegiatan.html?edit=${encodeURIComponent(id)}`;
-    };
-
-    window.deleteActivity = function(id) {
-      if (!confirm("Yakin ingin menghapus kegiatan ini?")) return;
-      db.ref(`activities/${id}`).remove()
-        .then(() => {
-          alert("Kegiatan berhasil dihapus");
-          // No need to reload, Firebase listener will update automatically
-        })
-        .catch(err => {
-          alert("Gagal menghapus: " + (err.message || err));
-        });
-    };
-
-    // Ensure icons on first load
-    document.addEventListener("DOMContentLoaded", () => {
-      lucide.createIcons();
+        </div>
+      `;
     });
-  </script>
+
+    activitiesTableContainer.innerHTML = html;
+    lucide.createIcons();
+  }
+
+  function escapeHtml(text) {
+    return String(text || "").replace(/[&<>"'`=\/]/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;", "/": "&#x2F;", "`": "&#x60;", "=": "&#x3D;" })[s]);
+  }
+
+  window.editActivity = function(id) {
+    window.location.href = `kegiatan.html?edit=${encodeURIComponent(id)}`;
+  };
+
+  window.deleteActivity = function(id) {
+    if (!confirm("Yakin ingin menghapus kegiatan ini?")) return;
+    db.ref(`activities/${id}`).remove()
+      .then(() => {
+        alert("Kegiatan berhasil dihapus");
+      })
+      .catch(err => {
+        alert("Gagal menghapus: " + err.message);
+      });
+  };
+
+  // Ensure icons on first load
+  document.addEventListener("DOMContentLoaded", () => {
+    lucide.createIcons();
+  });
+</script>
+      
 </body>
 </html>
