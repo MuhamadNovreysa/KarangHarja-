@@ -750,6 +750,13 @@ body {
   }
 }
 
+/* === Activities Section (Blog Style) === */
+.activities-section {
+  padding: 4rem 0;
+  background: linear-gradient(to bottom right, #f9fafb, white);
+  position: relative;
+  overflow: hidden;
+}
 
 .activities-grid {
   display: grid;
@@ -765,12 +772,36 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.activity-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.activity-image {
+  position: relative;
 }
 
 .activity-image img {
   width: 100%;
   height: 200px;
   object-fit: cover;
+}
+
+.date-badge {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
 }
 
 .activity-content {
@@ -807,6 +838,7 @@ body {
   border-radius: 6px;
   text-decoration: none;
   transition: background 0.2s;
+  margin-top: auto; /* selalu di bawah */
 }
 
 .read-more:hover {
@@ -821,6 +853,7 @@ body {
   align-items: center;
 }
 
+/* Responsive */
 @media (min-width: 640px) {
   .activities-grid {
     grid-template-columns: repeat(2, 1fr);
