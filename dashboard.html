@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Dashboard Admin - Desa KarangHarja</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/lucide@latest/dist/lucide.min.css" rel="stekit">
+  <link href="https://unpkg.com/lucide@latest/dist/lucide.min.css" rel="stylesheet">
   <style>
     :root {
       --primary: #1e40af;
@@ -85,7 +85,7 @@
     }
 
     .navbar-menu { display: flex; }
-    .navbar-links { display: flex; gap: 1.5rem; list-style: none; align-items:center; }
+    .navbar-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
     .navbar-links a, .navbar-links button {
       color: var(--gray);
       text-decoration: none;
@@ -123,81 +123,82 @@
       margin-bottom: 2rem;
     }
     .stat-card { background: var(--white); border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    .stat-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
-    .stat-card h3 { font-size:0.875rem; font-weight:500; color:var(--gray); }
-    .stat-card-value { font-size:1.75rem; font-weight:700; margin-bottom:0.5rem; }
-    .stat-card-desc { font-size:0.75rem; color:var(--gray); }
+    .stat-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .stat-card h3 { font-size: 0.875rem; font-weight: 500; color: var(--gray); }
+    .stat-card-value { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .stat-card-desc { font-size: 0.75rem; color: var(--gray); }
 
-    .activities-table { width:100%; background:var(--white); border-radius:0.5rem; box-shadow:0 1px 3px rgba(0,0,0,0.1); overflow:hidden; }
-    .table-header { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem; border-bottom:1px solid #e5e7eb; }
-    .table-header h2 { font-size:1.25rem; font-weight:600; }
-    .table-actions { display:flex; gap:0.5rem; }
+    .activities-table { width: 100%; background: var(--white); border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+    .table-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; }
+    .table-header h2 { font-size: 1.25rem; font-weight: 600; }
+    .table-actions { display: flex; gap: 0.5rem; }
 
-    .btn { padding:0.5rem 1rem; border-radius:0.375rem; font-weight:500; cursor:pointer; display:flex; align-items:center; gap:0.5rem; transition:all 0.3s; }
-    .btn-primary { background-color:var(--primary); color:var(--white); border:none; }
-    .btn-primary:hover { background-color:var(--primary-dark); }
-    .btn-outline { background-color:transparent; border:1px solid #e5e7eb; color:var(--dark); }
-    .btn-outline:hover { background-color:#f9fafb; }
+    .btn { padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s; }
+    .btn-primary { background-color: var(--primary); color: var(--white); border: none; }
+    .btn-primary:hover { background-color: var(--primary-dark); }
+    .btn-outline { background-color: transparent; border: 1px solid #e5e7eb; color: var(--dark); }
+    .btn-outline:hover { background-color: #f9fafb; }
 
-    table { width:100%; border-collapse: collapse; }
-    th, td { padding:1rem 1.5rem; text-align:left; }
-    th { font-size:0.75rem; font-weight:500; color:var(--gray); text-transform:uppercase; letter-spacing:0.05em; background-color:#f9fafb; }
-    tr { border-bottom:1px SOLID #e5e7eb; }
-    tr:last-child { border-bottom:none; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 1rem 1.5rem; text-align: left; }
+    th { font-size: 0.75rem; font-weight: 500; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; background-color: #f9fafb; }
+    tr { border-bottom: 1px solid #e5e7eb; }
+    tr:last-child { border-bottom: none; }
 
-    .badge { display:inline-flex; align-items:center; padding:0.25rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:500; }
-    .badge-published { background-color:#dcfce7; color:var(--secondary-dark); }
-    .badge-draft { background-color:#fef3c7; color:#92400e; }
+    .badge { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
+    .badge-published { background-color: #dcfce7; color: var(--secondary-dark); }
+    .badge-draft { background-color: #fef3c7; color: #92400e; }
 
-    .action-btn { background:none; border:none; cursor:pointer; color:var(--gray); transition:color 0.3s; }
-    .action-btn:hover { color:var(--primary); }
+    .action-btn { background: none; border: none; cursor: pointer; color: var(--gray); transition: color 0.3s; }
+    .action-btn:hover { color: var(--primary); }
 
-    .loading { display:flex; justify-content:center; padding:2rem; }
-    .loading-spinner { width:2rem; height:2rem; border:3px solid rgba(59,130,246,0.2); border-radius:50%; border-top-color:var(--primary); animation:spin 1s linear infinite; }
+    .loading { display: flex; justify-content: center; padding: 2rem; }
+    .loading-spinner { width: 2rem; height: 2rem; border: 3px solid rgba(59,130,246,0.2); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* MOBILE STYLES - adjusted so navbar-menu is hidden by default and shown when .active */
+    /* MOBILE STYLES */
     @media (max-width: 768px) {
       .navbar-toggle { display: block; }
 
-      /* Hide menu by default on mobile; show when .active */
       .navbar-menu {
         display: none;
         position: fixed;
-        top: 70px;
+        top: 60px;
         right: 1rem;
         background-color: var(--white);
         box-shadow: 0 6px 18px rgba(0,0,0,0.08);
         border-radius: 0.5rem;
-        padding: 0.75rem;
+        padding: 1rem;
         flex-direction: column;
         width: 220px;
         transform-origin: top right;
         opacity: 0;
-        transform: translateY(-10px) scale(0.98);
-        pointer-events: none;
-        transition: opacity 0.22s ease, transform 0.22s ease;
-        z-index: 1500;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        z-index: 2000;
       }
 
       .navbar-menu.active {
         display: flex;
         opacity: 1;
-        transform: translateY(0) scale(1);
-        pointer-events: auto;
+        transform: translateY(0);
       }
 
-      .navbar-links { flex-direction: column; gap: 0.25rem; align-items: stretch; }
+      .navbar-links {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: stretch;
+      }
 
       .navbar-links a, .navbar-links button {
-        padding: 0.5rem 0.75rem;
+        padding: 0.75rem;
         justify-content: flex-start;
         border-radius: 0.375rem;
       }
       .navbar-links a:hover, .navbar-links button:hover { background: #f3f4f6; }
 
       .stats-grid { grid-template-columns: 1fr; }
-      table { display:block; overflow-x:auto; }
+      table { display: block; overflow-x: auto; }
     }
   </style>
 </head>
@@ -211,7 +212,7 @@
         Dashboard Admin
       </a>
 
-      <button class="navbar-toggle" id="navbarToggle" aria-label="Menu" aria-expanded="false" type="button">
+      <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle Menu" aria-expanded="false" type="button">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
@@ -219,7 +220,7 @@
 
       <div class="navbar-menu" id="navbarMenu" role="menu" aria-hidden="true">
         <ul class="navbar-links" role="none">
-          <li role="none"><a role="menuitem" href="index.html"><i data-lucide="home"></i>Kembali ke Home</a></li>
+          <li role="none"><a role="menuitem" href="index.html"><i data-lucide="home"></i>Beranda</a></li>
           <li role="none"><a role="menuitem" href="kegiatan.html"><i data-lucide="plus"></i>Posting Kegiatan</a></li>
           <li role="none"><button role="menuitem" class="logout" id="logoutBtn" type="button"><i data-lucide="log-out"></i>Logout</button></li>
         </ul>
@@ -288,203 +289,199 @@
     </div>
   </div>
 
-  <!-- Firebase & Lucide + Dashboard script (preserved logic, with fixed menu JS) -->
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+  <!-- Firebase & Lucide + Dashboard script -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
 
-<script>
-  // --- Firebase config & init (compat) ---
-  const firebaseConfig = {
-    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-    authDomain: "desakarangharja-31525.firebaseapp.com",
-    databaseURL: "https://desakarangja-31525-default-rtdb.asia-southeast1.firebasedatabase.app".replace('desakarangja','desakarangharja'), // preserve same URL value as you had
-    projectId: "desakarangharja-31525",
-    storageBucket: "desakarangharja-31525.firebasestorage.app",
-    messagingSenderId: "428460519406",
-    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-  };
+  <script>
+    // Firebase config & init
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+      authDomain: "desakarangharja-31525.firebaseapp.com",
+      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "desakarangharja-31525",
+      storageBucket: "desakarangharja-31525.firebasestorage.app",
+      messagingSenderId: "428460519406",
+      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+    };
 
-  // IMPORTANT: above line keeps your original DB config - if you changed DB URL elsewhere, use the correct one.
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const auth = firebase.auth();
-  const db = firebase.database();
-
-  // icons
-  lucide.createIcons();
-
-  // DOM refs
-  const activitiesTableContainer = document.getElementById('activitiesTable');
-  const totalActivitiesEl = document.getElementById('totalActivities');
-  const publishedCountEl = document.getElementById('publishedCount');
-  const draftCountEl = document.getElementById('draftCount');
-  const totalViewsEl = document.getElementById('totalViews');
-
-  // AUTH protection
-  auth.onAuthStateChanged(user => {
-    console.log('Auth state changed:', user);
-    if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
-      window.location.href = 'login.html';
-    } else {
-      loadActivities();
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
     }
-  });
+    const auth = firebase.auth();
+    const db = firebase.database();
 
-  // LOGOUT handler (unchanged behavior)
-  document.getElementById('logoutBtn').addEventListener('click', async (e) => {
-    e.preventDefault();
-    try {
-      await auth.signOut();
-      // after sign out, go to index (as requested)
-      window.location.href = 'index.html';
-    } catch (err) {
-      console.error('Logout error', err);
-      alert('Gagal logout: ' + (err.message || err));
-    }
-  });
+    // Initialize Lucide icons
+    lucide.createIcons();
 
-  // NAVBAR TOGGLE - robust handlers
-  document.addEventListener('DOMContentLoaded', () => {
-    const navbarToggle = document.getElementById('navbarToggle');
-    const navbarMenu = document.getElementById('navbarMenu');
+    // DOM refs
+    const activitiesTableContainer = document.getElementById('activitiesTable');
+    const totalActivitiesEl = document.getElementById('totalActivities');
+    const publishedCountEl = document.getElementById('publishedCount');
+    const draftCountEl = document.getElementById('draftCount');
+    const totalViewsEl = document.getElementById('totalViews');
 
-    if (navbarToggle && navbarMenu) {
-      // toggle on click
-      navbarToggle.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        const isActive = navbarMenu.classList.toggle('active');
-        navbarToggle.classList.toggle('active', isActive);
-        navbarToggle.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-        navbarMenu.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-      });
+    // AUTH protection
+    auth.onAuthStateChanged(user => {
+      console.log('Auth state changed:', user);
+      if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
+        window.location.href = 'login.html';
+      } else {
+        loadActivities();
+      }
+    });
 
-      // clicking inside menu shouldn't close it immediately
-      navbarMenu.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-      });
+    // LOGOUT handler
+    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+      e.preventDefault();
+      try {
+        await auth.signOut();
+        window.location.href = 'index.html';
+      } catch (err) {
+        console.error('Logout error', err);
+        alert('Gagal logout: ' + (err.message || err));
+      }
+    });
 
-      // close when clicking outside
-      document.addEventListener('click', (ev) => {
-        if (!navbarMenu.classList.contains('active')) return;
-        if (!navbarMenu.contains(ev.target) && !navbarToggle.contains(ev.target)) {
-          navbarMenu.classList.remove('active');
-          navbarToggle.classList.remove('active');
-          navbarToggle.setAttribute('aria-expanded', 'false');
-          navbarMenu.setAttribute('aria-hidden', 'true');
+    // NAVBAR TOGGLE
+    document.addEventListener('DOMContentLoaded', () => {
+      const navbarToggle = document.getElementById('navbarToggle');
+      const navbarMenu = document.getElementById('navbarMenu');
+
+      if (navbarToggle && navbarMenu) {
+        navbarToggle.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          const isActive = navbarMenu.classList.toggle('active');
+          navbarToggle.classList.toggle('active', isActive);
+          navbarToggle.setAttribute('aria-expanded', isActive);
+          navbarMenu.setAttribute('aria-hidden', !isActive);
+        });
+
+        // Prevent menu from closing when clicking inside
+        navbarMenu.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (ev) => {
+          if (navbarMenu.classList.contains('active') &&
+              !navbarMenu.contains(ev.target) &&
+              !navbarToggle.contains(ev.target)) {
+            navbarMenu.classList.remove('active');
+            navbarToggle.classList.remove('active');
+            navbarToggle.setAttribute('aria-expanded', 'false');
+            navbarMenu.setAttribute('aria-hidden', 'true');
+          }
+        });
+
+        // Close menu with Escape key
+        document.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Escape' && navbarMenu.classList.contains('active')) {
+            navbarMenu.classList.remove('active');
+            navbarToggle.classList.remove('active');
+            navbarToggle.setAttribute('aria-expanded', 'false');
+            navbarMenu.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+    });
+
+    // Load activities and update UI
+    function loadActivities() {
+      const ref = db.ref('activities');
+      ref.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (!data) {
+          showEmptyState();
+          updateStats([]);
+          return;
         }
-      });
-
-      // support Escape key to close
-      document.addEventListener('keydown', (ev) => {
-        if (ev.key === 'Escape' && navbarMenu.classList.contains('active')) {
-          navbarMenu.classList.remove('active');
-          navbarToggle.classList.remove('active');
-          navbarToggle.setAttribute('aria-expanded', 'false');
-          navbarMenu.setAttribute('aria-hidden', 'true');
-        }
+        const entries = Object.entries(data)
+          .map(([key, val]) => ({ id: key, ...val }))
+          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        updateStats(entries);
+        renderActivities(entries.slice(0, 5));
+      }, (err) => {
+        console.error('Firebase read error', err);
+        activitiesTableContainer.innerHTML = `<div style="padding:2rem; text-align:center; color:red;">Gagal memuat kegiatan: ${err.message || err}</div>`;
       });
     }
-  });
 
-  // load activities and update UI (kept original behavior)
-  function loadActivities() {
-    const ref = db.ref('activities');
-    ref.on('value', (snapshot) => {
-      const data = snapshot.val();
-      if (!data) {
+    function showEmptyState() {
+      activitiesTableContainer.innerHTML = `
+        <div style="padding: 2rem; text-align: center;">
+          <i data-lucide="calendar" style="width: 3rem; height: 3rem; color: #d1d5db;"></i>
+          <h3 style="margin: 1rem 0 0.5rem; color: #111827;">Belum ada kegiatan</h3>
+          <p style="color: #6b7280;">Mulai dengan membuat kegiatan pertama Anda</p>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function updateStats(entries) {
+      totalActivitiesEl.textContent = entries.length;
+      publishedCountEl.textContent = entries.filter(e => e.published).length;
+      draftCountEl.textContent = entries.filter(e => !e.published).length;
+      totalViewsEl.textContent = entries.reduce((s, e) => s + (e.views || 0), 0);
+    }
+
+    function renderActivities(entries) {
+      if (!entries || entries.length === 0) {
         showEmptyState();
-        updateStats([]);
         return;
       }
-      const entries = Object.entries(data)
-        .map(([key, val]) => ({ id: key, ...val }))
-        .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-      updateStats(entries);
-      renderActivities(entries.slice(0, 5));
-    }, (err) => {
-      console.error('firebase read error', err);
-      activitiesTableContainer.innerHTML = `<div style="padding:2rem; text-align:center; color:red;">Gagal memuat kegiatan: ${err.message || err}</div>`;
-    });
-  }
+      let html = `<table><thead><tr>
+        <th>Judul Kegiatan</th><th>Tanggal</th><th>Status</th><th>Dilihat</th><th>Aksi</th>
+      </tr></thead><tbody>`;
 
-  function showEmptyState() {
-    activitiesTableContainer.innerHTML = `
-      <div style="padding: 2rem; text-align: center;">
-        <i data-lucide="calendar" style="width: 3rem; height: 3rem; color: #d1d5db;"></i>
-        <h3 style="margin: 1rem 0 0.5rem; color: #111827;">Belum ada kegiatan</h3>
-        <p style="color: #6b7280;">Mulai dengan membuat kegiatan pertama Anda</p>
-      </div>
-    `;
-    lucide.createIcons();
-  }
+      entries.forEach(entry => {
+        const statusClass = entry.published ? 'badge-published' : 'badge-draft';
+        const statusText = entry.published ? 'Published' : 'Draft';
+        const dateText = entry.date ? new Date(entry.date).toLocaleDateString('id-ID') : '-';
+        html += `<tr>
+          <td>${escapeHtml(entry.title || 'Tanpa Judul')}</td>
+          <td>${dateText}</td>
+          <td><span class="badge ${statusClass}">${statusText}</span></td>
+          <td>${entry.views || 0}</td>
+          <td>
+            <div style="display:flex; gap:0.5rem;">
+              <button class="action-btn" onclick="editActivity('${entry.id}')"><i data-lucide="edit"></i></button>
+              <button class="action-btn" onclick="deleteActivity('${entry.id}')"><i data-lucide="trash-2"></i></button>
+            </div>
+          </td>
+        </tr>`;
+      });
 
-  function updateStats(entries) {
-    totalActivitiesEl.textContent = entries.length;
-    publishedCountEl.textContent = entries.filter(e => e.published).length;
-    draftCountEl.textContent = entries.filter(e => !e.published).length;
-    totalViewsEl.textContent = entries.reduce((s, e) => s + (e.views || 0), 0);
-  }
-
-  function renderActivities(entries) {
-    if (!entries || entries.length === 0) {
-      showEmptyState();
-      return;
+      html += `</tbody></table>`;
+      activitiesTableContainer.innerHTML = html;
+      lucide.createIcons();
     }
-    let html = `<table><thead><tr>
-      <th>Judul Kegiatan</th><th>Tanggal</th><th>Status</th><th>Dilihat</th><th>Aksi</th>
-    </tr></thead><tbody>`;
 
-    entries.forEach(entry => {
-      const statusClass = entry.published ? 'badge-published' : 'badge-draft';
-      const statusText = entry.published ? 'Published' : 'Draft';
-      const dateText = entry.date ? new Date(entry.date).toLocaleDateString('id-ID') : '-';
-      html += `<tr>
-        <td>${escapeHtml(entry.title || 'Tanpa Judul')}</td>
-        <td>${dateText}</td>
-        <td><span class="badge ${statusClass}">${statusText}</span></td>
-        <td>${entry.views || 0}</td>
-        <td>
-          <div style="display:flex; gap:0.5rem;">
-            <button class="action-btn" onclick="editActivity('${entry.id}')"><i data-lucide="edit"></i></button>
-            <button class="action-btn" onclick="deleteActivity('${entry.id}')"><i data-lucide="trash-2"></i></button>
-          </div>
-        </td>
-      </tr>`;
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"'`=\/]/g, function (s) {
+        return ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
+          "'": '&#39;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;'
+        })[s];
+      });
+    }
+
+    window.editActivity = function (id) {
+      window.location.href = `kegiatan.html?edit=${encodeURIComponent(id)}`;
+    };
+
+    window.deleteActivity = function (id) {
+      if (!confirm('Yakin ingin menghapus kegiatan ini?')) return;
+      db.ref(`activities/${id}`).remove()
+        .then(() => alert('Kegiatan dihapus'))
+        .catch(err => alert('Gagal menghapus: ' + (err.message || err)));
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Dashboard ready');
     });
-
-    html += `</tbody></table>`;
-    activitiesTableContainer.innerHTML = html;
-    lucide.createIcons();
-  }
-
-  // helper escape
-  function escapeHtml(text) {
-    return String(text).replace(/[&<>"'`=\/]/g, function (s) {
-      return ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
-        "'": '&#39;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;'
-      })[s];
-    });
-  }
-
-  // global functions used by buttons in table
-  window.editActivity = function (id) {
-    window.location.href = `kegiatan.html?edit=${encodeURIComponent(id)}`;
-  };
-
-  window.deleteActivity = function (id) {
-    if (!confirm('Yakin ingin menghapus kegiatan ini?')) return;
-    db.ref(`activities/${id}`).remove()
-      .then(() => alert('Kegiatan dihapus'))
-      .catch(err => alert('Gagal menghapus: ' + (err.message || err)));
-  };
-
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('Dashboard ready');
-  });
-</script>
+  </script>
 </body>
 </html>
