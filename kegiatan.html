@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tambah Kegiatan - Desa KarangHarja</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Times+New+Roman&family=Poppins&family=Montserrat&family=Arial&family=Roboto&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/lucide@latest/dist/lucide.min.css" rel="stylesheet">
   <style>
     :root {
@@ -219,19 +220,19 @@
       background-color: #f9fafb;
     }
 
-    /* EDITOR TOOLBAR */
-    .editor-toolbar {
+    /* Enhanced Editor Styles */
+    .enhanced-toolbar {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.25rem;
-      padding: 0.5rem;
+      gap: 0.5rem;
+      padding: 0.75rem;
       background-color: #f9fafb;
       border: 1px solid #e5e7eb;
       border-bottom: none;
       border-radius: 0.375rem 0.375rem 0 0;
     }
 
-    .editor-toolbar button {
+    .enhanced-toolbar button {
       background: none;
       border: none;
       padding: 0.5rem;
@@ -241,18 +242,57 @@
       align-items: center;
       justify-content: center;
       color: var(--gray);
+      transition: all 0.2s;
     }
 
-    .editor-toolbar button:hover {
+    .enhanced-toolbar button:hover {
       background-color: #e5e7eb;
       color: var(--dark);
     }
 
-    .editor-toolbar select {
-      padding: 0.25rem;
+    .enhanced-toolbar button.active {
+      background-color: #e5e7eb;
+      color: var(--primary);
+    }
+
+    .toolbar-group {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+      padding-right: 0.5rem;
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .toolbar-group:last-child {
+      border-right: none;
+    }
+
+    .font-selector select {
+      padding: 0.5rem;
       border-radius: 0.25rem;
       border: 1px solid #e5e7eb;
-      background-color: var(--white);
+      font-family: inherit;
+    }
+
+    .size-selector input {
+      width: 60px;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    .color-picker {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 0.5rem;
+    }
+
+    .color-picker input {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
     }
 
     .editor-content {
@@ -261,6 +301,9 @@
       border: 1px solid #e5e7eb;
       border-radius: 0 0 0.375rem 0.375rem;
       outline: none;
+      font-family: 'Times New Roman', serif;
+      font-size: 16px;
+      color: #000000;
     }
 
     .editor-content:focus {
@@ -316,6 +359,22 @@
       .btn {
         width: 100%;
         justify-content: center;
+      }
+
+      .enhanced-toolbar {
+        gap: 0.25rem;
+        padding: 0.5rem;
+      }
+
+      .toolbar-group {
+        padding-right: 0.25rem;
+        margin-right: 0.25rem;
+      }
+
+      .font-selector select,
+      .size-selector input {
+        padding: 0.25rem;
+        font-size: 0.875rem;
       }
     }
   </style>
@@ -375,31 +434,63 @@
 
         <div class="form-group">
           <label for="content">Deskripsi Kegiatan</label>
-          <div class="editor-toolbar" id="toolbar">
-            <button type="button" data-command="bold" title="Bold">
-              <i data-lucide="bold"></i>
-            </button>
-            <button type="button" data-command="italic" title="Italic">
-              <i data-lucide="italic"></i>
-            </button>
-            <button type="button" data-command="underline" title="Underline">
-              <i data-lucide="underline"></i>
-            </button>
-            <button type="button" data-command="insertUnorderedList" title="Bullet List">
-              <i data-lucide="list"></i>
-            </button>
-            <button type="button" data-command="insertOrderedList" title="Numbered List">
-              <i data-lucide="list-ordered"></i>
-            </button>
-            <button type="button" data-command="justifyLeft" title="Align Left">
-              <i data-lucide="align-left"></i>
-            </button>
-            <button type="button" data-command="justifyCenter" title="Center">
-              <i data-lucide="align-center"></i>
-            </button>
-            <button type="button" data-command="justifyRight" title="Align Right">
-              <i data-lucide="align-right"></i>
-            </button>
+          <div class="enhanced-toolbar" id="toolbar">
+            <div class="toolbar-group">
+              <button type="button" data-command="bold" title="Bold">
+                <i data-lucide="bold"></i>
+              </button>
+              <button type="button" data-command="italic" title="Italic">
+                <i data-lucide="italic"></i>
+              </button>
+              <button type="button" data-command="underline" title="Underline">
+                <i data-lucide="underline"></i>
+              </button>
+            </div>
+            
+            <div class="toolbar-group">
+              <button type="button" data-command="insertUnorderedList" title="Bullet List">
+                <i data-lucide="list"></i>
+              </button>
+              <button type="button" data-command="insertOrderedList" title="Numbered List">
+                <i data-lucide="list-ordered"></i>
+              </button>
+            </div>
+            
+            <div class="toolbar-group">
+              <button type="button" data-command="justifyLeft" title="Align Left">
+                <i data-lucide="align-left"></i>
+              </button>
+              <button type="button" data-command="justifyCenter" title="Center">
+                <i data-lucide="align-center"></i>
+              </button>
+              <button type="button" data-command="justifyRight" title="Align Right">
+                <i data-lucide="align-right"></i>
+              </button>
+            </div>
+            
+            <div class="toolbar-group">
+              <div class="font-selector">
+                <select id="fontFamily">
+                  <option value="'Times New Roman', serif">Times New Roman</option>
+                  <option value="'Poppins', sans-serif">Poppins</option>
+                  <option value="'Montserrat', sans-serif">Montserrat</option>
+                  <option value="Arial, sans-serif">Arial</option>
+                  <option value="'Roboto', sans-serif">Roboto</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="toolbar-group">
+              <div class="size-selector">
+                <input type="number" id="fontSize" min="4" max="50" value="16" placeholder="Ukuran">
+              </div>
+            </div>
+            
+            <div class="toolbar-group">
+              <div class="color-picker">
+                <input type="color" id="textColor" value="#000000">
+              </div>
+            </div>
           </div>
           <div id="content" class="editor-content" contenteditable="true"></div>
         </div>
@@ -425,220 +516,277 @@
           </a>
           <button type="submit" class="btn btn-primary" id="submitBtn">
             <i data-lucide="save"></i>
-            <span id="submitText">Simpan Kegiatan</span>
+            <span id="submitText">Posting Kegiatan</span>
           </button>
         </div>
       </form>
     </div>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+
+  <script>
+    // Firebase config & init
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+      authDomain: "desakarangharja-31525.firebaseapp.com",
+      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "desakarangharja-31525",
+      storageBucket: "desakarangharja-31525.firebasestorage.app",
+      messagingSenderId: "428460519406",
+      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+    const db = firebase.database();
+
+    // Initialize icons
+    lucide.createIcons();
+
+    // Protect route
+    auth.onAuthStateChanged(user => {
+      if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
+        window.location.href = 'login.html';
+      } else {
+        // Check if editing existing activity
+        const urlParams = new URLSearchParams(window.location.search);
+        const activityId = urlParams.get('edit');
+        if (activityId) {
+          document.getElementById('formTitle').textContent = 'Edit Kegiatan';
+          document.getElementById('submitText').textContent = 'Update Kegiatan';
+          
+          // Load activity data
+          db.ref(`activities/${activityId}`).once('value').then(snapshot => {
+            const activity = snapshot.val();
+            if (!activity) return;
             
-  <!-- replace existing Firebase + kegiatan script with this -->
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
-
-<script>
-  // --- Firebase config & init (compat) ---
-  const firebaseConfig = {
-    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-    authDomain: "desakarangharja-31525.firebaseapp.com",
-    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "desakarangharja-31525",
-    storageBucket: "desakarangharja-31525.firebasestorage.app",
-    messagingSenderId: "428460519406",
-    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-  };
-
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const auth = firebase.auth();
-  const db = firebase.database();
-
-  // icons
-  lucide.createIcons();
-
-  // protect route
-  auth.onAuthStateChanged(user => {
-    if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
-      window.location.href = 'login.html';
-    } else {
-      // ok
-    }
-  });
-
-  // editor toolbar (execCommand, still ok for simple usage)
-  document.querySelectorAll('#toolbar button').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const cmd = btn.dataset.command;
-      document.execCommand(cmd, false, null);
-      document.getElementById('content').focus();
-    });
-  });
-
-  // utilities for image compress -> return Blob
-  function compressImageToBlob(file, maxWidth = 800, quality = 0.7) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = function (ev) {
-        const img = new Image();
-        img.onload = () => {
-          const scale = Math.min(1, maxWidth / img.width);
-          const canvas = document.createElement('canvas');
-          canvas.width = Math.round(img.width * scale);
-          canvas.height = Math.round(img.height * scale);
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          canvas.toBlob((blob) => {
-            if (blob) resolve(blob);
-            else reject(new Error('Gagal membuat blob dari canvas'));
-          }, 'image/jpeg', quality);
-        };
-        img.onerror = (err) => reject(err);
-        img.src = ev.target.result;
-      };
-      reader.onerror = (er) => reject(er);
-      reader.readAsDataURL(file);
-    });
-  }
-
-  function blobToDataURL(blob) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (e) => reject(e);
-      reader.readAsDataURL(blob);
-    });
-  }
-
-  // image input handling
-  let currentImageBase64 = '';
-  const fileInput = document.getElementById('image');
-  const imagePreviewContainer = document.getElementById('imagePreview');
-
-  fileInput.addEventListener('change', async (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-
-    imagePreviewContainer.style.display = 'block';
-    imagePreviewContainer.innerHTML = '<p>Mengkompresi gambar...</p>';
-
-    try {
-      const compressedBlob = await compressImageToBlob(f, 1200, 0.7); // compress
-      // check size (use blob.size)
-      const maxSizeBytes = 500 * 1024; // 500 KB
-      if (compressedBlob.size > maxSizeBytes) {
-        // try lower quality
-        const compressed2 = await compressImageToBlob(f, 1000, 0.5);
-        if (compressed2.size <= maxSizeBytes) {
-          const b64 = await blobToDataURL(compressed2);
-          currentImageBase64 = b64;
-          imagePreviewContainer.innerHTML = `<img src="${b64}" alt="Preview"><div class="image-info">Ukuran: ${(compressed2.size/1024).toFixed(1)} KB</div>`;
-        } else {
-          // still too big, show warning and allow submit but skip image
-          currentImageBase64 = '';
-          imagePreviewContainer.innerHTML = `<div class="image-info">Gagal kompres cukup kecil. Ukuran ${(compressed2.size/1024).toFixed(1)} KB — coba pilih gambar lain.</div>`;
+            document.getElementById('title').value = activity.title || '';
+            document.getElementById('date').value = activity.date || '';
+            document.getElementById('published').checked = !!activity.published;
+            document.getElementById('content').innerHTML = activity.content || '';
+            
+            if (activity.imageBase64) {
+              currentImageBase64 = activity.imageBase64;
+              document.getElementById('imagePreview').style.display = 'block';
+              document.getElementById('imagePreview').innerHTML = `
+                <img src="${activity.imageBase64}" alt="Preview">
+                <div class="image-info">Gambar tersimpan</div>
+              `;
+            }
+          }).catch(err => {
+            console.error('Error loading activity:', err);
+          });
         }
-      } else {
-        const b64 = await blobToDataURL(compressedBlob);
-        currentImageBase64 = b64;
-        imagePreviewContainer.innerHTML = `<img src="${b64}" alt="Preview"><div class="image-info">Ukuran: ${(compressedBlob.size/1024).toFixed(1)} KB</div>`;
       }
-    } catch (err) {
-      console.error('Image error', err);
-      document.getElementById('errorText').textContent = 'Gagal memproses gambar: ' + (err.message || err);
-      document.getElementById('errorMessage').style.display = 'flex';
-      currentImageBase64 = '';
-    } finally {
-      lucide.createIcons();
-    }
-  });
-
-  // detect if editing
-  const urlParams = new URLSearchParams(window.location.search);
-  const activityId = urlParams.get('edit');
-  if (activityId) {
-    document.getElementById('formTitle').textContent = 'Edit Kegiatan';
-    document.getElementById('submitText').textContent = 'Update Kegiatan';
-    // load data
-    db.ref(`activities/${activityId}`).once('value').then(snap => {
-      const activity = snap.val();
-      if (!activity) return;
-      document.getElementById('title').value = activity.title || '';
-      document.getElementById('date').value = activity.date || '';
-      document.getElementById('published').checked = !!activity.published;
-      document.getElementById('content').innerHTML = activity.content || '';
-      if (activity.imageBase64) {
-        currentImageBase64 = activity.imageBase64;
-        document.getElementById('imagePreview').style.display = 'block';
-        document.getElementById('imagePreview').innerHTML = `<img src="${activity.imageBase64}" alt="Preview"><div class="image-info">Gambar tersimpan</div>`;
-      }
-    }).catch(err => {
-      console.error('Fetch activity error', err);
     });
-  }
 
-  // submit form
-  const form = document.getElementById('activityForm');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const title = document.getElementById('title').value.trim();
-    const date = document.getElementById('date').value;
-    const content = document.getElementById('content').innerHTML.trim();
-    const published = document.getElementById('published').checked;
-    const submitBtn = document.getElementById('submitBtn');
-    const submitText = document.getElementById('submitText');
-    const loading = document.getElementById('loading');
-    const errorMessageEl = document.getElementById('errorMessage');
-    const errorTextEl = document.getElementById('errorText');
+    // Enhanced editor functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const contentEditable = document.getElementById('content');
+      const fontFamilySelect = document.getElementById('fontFamily');
+      const fontSizeInput = document.getElementById('fontSize');
+      const textColorInput = document.getElementById('textColor');
+      
+      // Apply font family
+      fontFamilySelect.addEventListener('change', () => {
+        document.execCommand('fontName', false, fontFamilySelect.value);
+        contentEditable.style.fontFamily = fontFamilySelect.value;
+      });
+      
+      // Apply font size
+      fontSizeInput.addEventListener('change', () => {
+        const size = fontSizeInput.value + 'px';
+        document.execCommand('fontSize', false, '7');
+        const fontTags = contentEditable.getElementsByTagName('font');
+        if (fontTags.length > 0) {
+          const lastFontTag = fontTags[fontTags.length - 1];
+          lastFontTag.removeAttribute('size');
+          lastFontTag.style.fontSize = size;
+        }
+        contentEditable.style.fontSize = size;
+      });
+      
+      // Apply text color
+      textColorInput.addEventListener('input', () => {
+        document.execCommand('foreColor', false, textColorInput.value);
+        contentEditable.style.color = textColorInput.value;
+      });
+      
+      // Toolbar buttons
+      document.querySelectorAll('#toolbar button[data-command]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const cmd = btn.dataset.command;
+          document.execCommand(cmd, false, null);
+          contentEditable.focus();
+          
+          // Toggle active state for alignment buttons
+          if (cmd.startsWith('justify')) {
+            document.querySelectorAll('#toolbar button[data-command^="justify"]')
+              .forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          }
+        });
+      });
+    });
 
-    errorMessageEl.style.display = 'none';
-    if (!title || !date || !content) {
-      errorTextEl.textContent = 'Harap isi semua field yang wajib diisi';
-      errorMessageEl.style.display = 'flex';
-      return;
+    // Image handling
+    let currentImageBase64 = '';
+    const fileInput = document.getElementById('image');
+    const imagePreviewContainer = document.getElementById('imagePreview');
+
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      imagePreviewContainer.style.display = 'block';
+      imagePreviewContainer.innerHTML = '<p>Mengkompresi gambar...</p>';
+
+      try {
+        const compressedBlob = await compressImage(file);
+        const base64String = await blobToBase64(compressedBlob);
+        
+        if (compressedBlob.size > 500 * 1024) { // 500KB limit
+          const furtherCompressed = await compressImage(file, 800, 0.6);
+          if (furtherCompressed.size <= 500 * 1024) {
+            currentImageBase64 = await blobToBase64(furtherCompressed);
+            showImagePreview(currentImageBase64, furtherCompressed.size);
+          } else {
+            throw new Error('Gambar terlalu besar setelah kompresi');
+          }
+        } else {
+          currentImageBase64 = base64String;
+          showImagePreview(base64String, compressedBlob.size);
+        }
+      } catch (error) {
+        console.error('Image processing error:', error);
+        showError('Gagal memproses gambar: ' + (error.message || error));
+        currentImageBase64 = '';
+        imagePreviewContainer.innerHTML = '<div class="image-info">Gagal memuat gambar</div>';
+      }
+    });
+
+    function compressImage(file, maxWidth = 1200, quality = 0.7) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const scale = Math.min(1, maxWidth / img.width);
+            canvas.width = img.width * scale;
+            canvas.height = img.height * scale;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            canvas.toBlob(blob => {
+              if (blob) resolve(blob);
+              else reject(new Error('Canvas to Blob conversion failed'));
+            }, 'image/jpeg', quality);
+          };
+          img.onerror = reject;
+          img.src = event.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
     }
 
-    try {
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i><span>Menyimpan...</span>';
-      loading.style.display = 'flex';
-      lucide.createIcons();
-
-      const activityData = {
-        title, date, content, published,
-        createdAt: firebase.database.ServerValue.TIMESTAMP,
-        views: 0
-      };
-
-      if (currentImageBase64) {
-        // use size of base64 by estimating bytes using blob size would be better,
-        // but since we already checked blob.size earlier, accept it.
-        activityData.imageBase64 = currentImageBase64;
-      }
-
-      if (activityId) {
-        await db.ref(`activities/${activityId}`).update(activityData);
-      } else {
-        await db.ref('activities').push(activityData);
-      }
-
-      // success -> redirect to dashboard
-      window.location.href = 'dashboard.html';
-    } catch (err) {
-      console.error('Save error', err);
-      errorTextEl.textContent = 'Gagal menyimpan kegiatan: ' + (err.message || err);
-      errorMessageEl.style.display = 'flex';
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `<i data-lucide="save"></i><span>${activityId ? 'Update' : 'Simpan'} Kegiatan</span>`;
-      loading.style.display = 'none';
-      lucide.createIcons();
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
     }
-  });
-</script>
+
+    function showImagePreview(base64String, sizeInBytes) {
+      const sizeInKB = (sizeInBytes / 1024).toFixed(1);
+      imagePreviewContainer.innerHTML = `
+        <img src="${base64String}" alt="Preview">
+        <div class="image-info">Ukuran: ${sizeInKB} KB</div>
+      `;
+    }
+
+    function showError(message) {
+      const errorElement = document.getElementById('errorMessage');
+      errorElement.style.display = 'flex';
+      document.getElementById('errorText').textContent = message;
+    }
+
+    // Form submission
+    document.getElementById('activityForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('title').value.trim();
+      const date = document.getElementById('date').value;
+      const content = document.getElementById('content').innerHTML.trim();
+      const published = document.getElementById('published').checked;
+      const submitBtn = document.getElementById('submitBtn');
+      const loadingElement = document.getElementById('loading');
+      const errorElement = document.getElementById('errorMessage');
+      
+      // Validation
+      if (!title || !date || !content) {
+        showError('Harap isi semua field yang wajib diisi');
+        return;
+      }
+      
+      try {
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> Memproses...';
+        loadingElement.style.display = 'flex';
+        errorElement.style.display = 'none';
+        lucide.createIcons();
+        
+        // Prepare activity data
+        const activityData = {
+          title,
+          date,
+          content,
+          published,
+          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          updatedAt: firebase.database.ServerValue.TIMESTAMP,
+          views: 0
+        };
+        
+        // Add image if available
+        if (currentImageBase64) {
+          activityData.imageBase64 = currentImageBase64;
+        }
+        
+        // Check if editing or creating new
+        const urlParams = new URLSearchParams(window.location.search);
+        const activityId = urlParams.get('edit');
+        
+        // Save to Firebase
+        if (activityId) {
+          await db.ref(`activities/${activityId}`).update(activityData);
+        } else {
+          await db.ref('activities').push(activityData);
+        }
+        
+        // Redirect to dashboard on success
+        window.location.href = 'dashboard.html';
+      } catch (error) {
+        console.error('Error saving activity:', error);
+        showError('Gagal menyimpan kegiatan: ' + (error.message || error));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i data-lucide="save"></i> Posting Kegiatan';
+        loadingElement.style.display = 'none';
+        lucide.createIcons();
+      }
+    });
+  </script>
 </body>
 </html>
