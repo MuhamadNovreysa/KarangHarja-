@@ -3,239 +3,178 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard Admin - Desa KarangHarja</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/lucide@latest/dist/lucide.min.css" rel="stylesheet">
+  <title>Dashboard Admin Desa KarangHarja</title>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    :root {
-      --primary: #1e40af;
-      --primary-light: #3b82f6;
-      --primary-dark: #1e3a8a;
-      --secondary: #10b981;
-      --secondary-dark: #047857;
-      --danger: #dc2626;
-      --warning: #f59e0b;
-      --light: #f9fafb;
-      --dark: #111827;
-      --gray: #6b7280;
-      --white: #ffffff;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--light);
-      color: var(--dark);
-      min-height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #333;
     }
 
-    /* NAVBAR STYLES */
+    /* Navbar */
     .navbar {
-      background-color: var(--white);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      position: fixed;
+      background: #2ecc71;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      color: white;
+      position: sticky;
       top: 0;
-      width: 100%;
       z-index: 1000;
-      padding: 0.75rem 1rem;
+    }
+    .navbar h1 {
+      font-size: 1.2rem;
+      margin: 0;
+    }
+    .navbar-menu {
+      display: flex;
+      gap: 15px;
+    }
+    .navbar-menu a, .navbar-menu button {
+      color: white;
+      text-decoration: none;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
 
-    .navbar-container {
+    /* Hamburger Button */
+    .navbar-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .navbar-toggle .bar {
+      width: 25px;
+      height: 3px;
+      background: white;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+        flex-direction: column;
+        background: #27ae60;
+        width: 100%;
+        padding: 10px 0;
+      }
+      .navbar-menu.active {
+        display: flex;
+      }
+      .navbar-toggle {
+        display: flex;
+      }
+    }
+
+    /* Main content */
+    .main-content {
+      padding: 20px;
       max-width: 1200px;
-      margin: 0 auto;
+      margin: auto;
+    }
+    .dashboard-header h1 {
+      margin: 0 0 10px;
+    }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .stat-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .stat-card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+    .stat-card-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    .stat-card-desc {
+      font-size: 0.9rem;
+      color: #666;
+    }
 
-    .navbar-brand {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--dark);
-      text-decoration: none;
+    /* Activities table */
+    .activities-table {
+      background: white;
+      margin-top: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 15px;
+    }
+    .table-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
+      margin-bottom: 15px;
     }
-
-    .navbar-logo { height: 30px; margin-right: 10px; }
-
-    /* hamburger button */
-    .navbar-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      z-index: 1100; /* above the menu */
-    }
-
-    .navbar-toggle .bar {
-      display: block;
-      width: 18px;
-      height: 2px;
-      background-color: var(--dark);
-      margin: 3px 0;
-      transition: all 0.3s ease;
-    }
-
-    .navbar-toggle.active .bar:nth-child(1) {
-      transform: translateY(5px) rotate(45deg);
-    }
-    .navbar-toggle.active .bar:nth-child(2) { opacity: 0; }
-    .navbar-toggle.active .bar:nth-child(3) {
-      transform: translateY(-5px) rotate(-45deg);
-    }
-
-    .navbar-menu { display: flex; }
-    .navbar-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
-    .navbar-links a, .navbar-links button {
-      color: var(--gray);
+    .btn {
+      padding: 8px 12px;
+      border-radius: 5px;
       text-decoration: none;
-      font-weight: 500;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      transition: color 0.3s;
-      background: none;
-      border: none;
-      cursor: pointer;
+      gap: 5px;
     }
-    .navbar-links a:hover, .navbar-links button:hover { color: var(--primary); }
-    .navbar-links button.logout:hover { color: var(--danger); }
-
-    /* MAIN CONTENT */
-    .main-content {
-      padding-top: 70px;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 80px 1rem 2rem;
+    .btn-primary {
+      background: #2ecc71;
+      color: white;
     }
 
-    /* rest styles (unchanged) */
-    .dashboard-header { margin-bottom: 2rem; }
-    .dashboard-header h1 {
-      font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--dark);
+    /* Loading spinner */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80px;
     }
-    .dashboard-header p { color: var(--gray); }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #2ecc71;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
     }
-    .stat-card { background: var(--white); border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    .stat-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-    .stat-card h3 { font-size: 0.875rem; font-weight: 500; color: var(--gray); }
-    .stat-card-value { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .stat-card-desc { font-size: 0.75rem; color: var(--gray); }
-
-    .activities-table { width: 100%; background: var(--white); border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
-    .table-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; }
-    .table-header h2 { font-size: 1.25rem; font-weight: 600; }
-    .table-actions { display: flex; gap: 0.5rem; }
-
-    .btn { padding: 0.5rem 1rem; border-radius: 0.375rem; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s; }
-    .btn-primary { background-color: var(--primary); color: var(--white); border: none; }
-    .btn-primary:hover { background-color: var(--primary-dark); }
-    .btn-outline { background-color: transparent; border: 1px solid #e5e7eb; color: var(--dark); }
-    .btn-outline:hover { background-color: #f9fafb; }
-
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 1rem 1.5rem; text-align: left; }
-    th { font-size: 0.75rem; font-weight: 500; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; background-color: #f9fafb; }
-    tr { border-bottom: 1px solid #e5e7eb; }
-    tr:last-child { border-bottom: none; }
-
-    .badge { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500; }
-    .badge-published { background-color: #dcfce7; color: var(--secondary-dark); }
-    .badge-draft { background-color: #fef3c7; color: #92400e; }
-
-    .action-btn { background: none; border: none; cursor: pointer; color: var(--gray); transition: color 0.3s; }
-    .action-btn:hover { color: var(--primary); }
-
-    .loading { display: flex; justify-content: center; padding: 2rem; }
-    .loading-spinner { width: 2rem; height: 2rem; border: 3px solid rgba(59,130,246,0.2); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* MOBILE STYLES (improved) */
-    @media (max-width: 768px) {
-      .navbar-toggle { display: block; }
-
-      /* base mobile: hide desktop menu */
-      .navbar-menu {
-        display: none;
-        position: absolute;
-        top: 60px;
-        right: 1rem;
-        background-color: var(--white);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-        border-radius: 0.5rem;
-        padding: 0.5rem;
-        flex-direction: column;
-        width: calc(100% - 2rem);
-        max-width: 320px;
-        z-index: 1200;
-        opacity: 0;
-        transform: translateY(-8px);
-        transition: opacity 220ms ease, transform 220ms ease;
-        will-change: opacity, transform;
-      }
-
-      /* visible state */
-      .navbar-menu.active {
-        display: flex; /* important so children render */
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .navbar-links {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: stretch;
-      }
-
-      .navbar-links a, .navbar-links button {
-        padding: 0.75rem;
-        justify-content: flex-start;
-        border-radius: 0.375rem;
-        color: var(--dark);
-      }
-      .navbar-links a:hover, .navbar-links button:hover { background: #f3f4f6; }
-
-      .stats-grid { grid-template-columns: 1fr; }
-      table { display: block; overflow-x: auto; }
+    @keyframes spin {
+      0% {transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
     }
-
-    /* small visual helper: ensure menu not covered */
-    .navbar, .navbar-menu { -webkit-font-smoothing:antialiased; }
   </style>
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar" aria-label="Top navigation">
-    <div class="navbar-container">
-      <a href="#" class="navbar-brand">
-        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logoterbaru-kgQaweRbiUUGoGKhzIEJcXSvBx7mcU.png"
-             alt="Logo Desa KarangHarja" class="navbar-logo">
-        Dashboard Admin
-      </a>
-
-      <!-- Mobile hamburger button (visible on <=768px) -->
-      <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle menu" aria-expanded="false" type="button">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
-
-      <!-- Nav Links (desktop + mobile) -->
-      <div class="navbar-menu" id="navbarMenu" role="menu" aria-hidden="true">
-        <ul class="navbar-links" role="none">
-          <li role="none"><a role="menuitem" href="index.html"><i data-lucide="home"></i>Beranda</a></li>
-          <li role="none"><a role="menuitem" href="kegiatan.html"><i data-lucide="plus"></i>Posting Kegiatan</a></li>
-          <li role="none"><button role="menuitem" class="logout" id="logoutBtn" type="button"><i data-lucide="log-out"></i>Logout</button></li>
-        </ul>
-      </div>
+  <nav class="navbar">
+    <h1>Admin Desa KarangHarja</h1>
+    <button class="navbar-toggle" id="navbarToggle" aria-label="Toggle menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <div class="navbar-menu" id="navbarMenu">
+      <a href="index.html"><i data-lucide="home"></i> Beranda</a>
+      <a href="kegiatan.html"><i data-lucide="plus"></i> Posting Kegiatan</a>
+      <button id="logoutBtn"><i data-lucide="log-out"></i> Logout</button>
     </div>
   </nav>
 
@@ -262,7 +201,7 @@
           <h3>Dipublikasi</h3>
           <i data-lucide="check-circle"></i>
         </div>
-        <div class="stat-card-value text-green-600" id="publishedCount">0</div>
+        <div class="stat-card-value" id="publishedCount">0</div>
         <div class="stat-card-desc">Kegiatan yang sudah dipublikasi</div>
       </div>
 
@@ -271,7 +210,7 @@
           <h3>Draft</h3>
           <i data-lucide="edit"></i>
         </div>
-        <div class="stat-card-value text-yellow-600" id="draftCount">0</div>
+        <div class="stat-card-value" id="draftCount">0</div>
         <div class="stat-card-desc">Kegiatan dalam draft</div>
       </div>
 
@@ -280,7 +219,7 @@
           <h3>Total Pengunjung</h3>
           <i data-lucide="users"></i>
         </div>
-        <div class="stat-card-value text-blue-600" id="totalViews">0</div>
+        <div class="stat-card-value" id="totalViews">0</div>
         <div class="stat-card-desc">Total kunjungan website</div>
       </div>
     </div>
@@ -293,239 +232,43 @@
           <a href="kegiatan.html" class="btn btn-primary"><i data-lucide="plus"></i>Tambah Baru</a>
         </div>
       </div>
-
       <div id="activitiesTable">
         <div class="loading"><div class="loading-spinner"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- Firebase & Lucide + Dashboard script -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  <script>
-    // Firebase config & init (preserved as original)
     const firebaseConfig = {
       apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
       authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
       projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
+      storageBucket: "desakarangharja-31525.appspot.com",
       messagingSenderId: "428460519406",
       appId: "1:428460519406:web:fca8b9854de78cac5628ff"
     };
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const auth = firebase.auth();
-    const db = firebase.database();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    // Initialize Lucide icons
+    // Hamburger menu toggle
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbarMenu = document.getElementById("navbarMenu");
+    navbarToggle.addEventListener("click", () => {
+      navbarMenu.classList.toggle("active");
+    });
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      });
+    });
+
     lucide.createIcons();
-
-    // DOM refs (preserved)
-    const activitiesTableContainer = document.getElementById('activitiesTable');
-    const totalActivitiesEl = document.getElementById('totalActivities');
-    const publishedCountEl = document.getElementById('publishedCount');
-    const draftCountEl = document.getElementById('draftCount');
-    const totalViewsEl = document.getElementById('totalViews');
-
-    // AUTH protection (preserved)
-    auth.onAuthStateChanged(user => {
-      console.log('Auth state changed:', user);
-      if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
-        window.location.href = 'login.html';
-      } else {
-        loadActivities();
-      }
-    });
-
-    // LOGOUT handler (preserved)
-    document.getElementById('logoutBtn').addEventListener('click', async (e) => {
-      e.preventDefault();
-      try {
-        await auth.signOut();
-        window.location.href = 'index.html';
-      } catch (err) {
-        console.error('Logout error', err);
-        alert('Gagal logout: ' + (err.message || err));
-      }
-    });
-
-    // NAVBAR TOGGLE (robust version: keeps original behaviour but ensures it always works)
-    (function setupNavbarToggle() {
-      const navbarToggle = document.getElementById('navbarToggle');
-      const navbarMenu = document.getElementById('navbarMenu');
-
-      // fallback: if elements not present yet, try again after short delay
-      if (!navbarToggle || !navbarMenu) {
-        document.addEventListener('DOMContentLoaded', () => {
-          const nT = document.getElementById('navbarToggle');
-          const nM = document.getElementById('navbarMenu');
-          attachToggleHandlers(nT, nM);
-        });
-      } else {
-        attachToggleHandlers(navbarToggle, navbarMenu);
-      }
-
-      function attachToggleHandlers(toggleEl, menuEl) {
-        if (!toggleEl || !menuEl) {
-          console.error('Navbar toggle or menu not found in DOM');
-          return;
-        }
-
-        // Ensure initial aria states
-        toggleEl.setAttribute('aria-expanded', 'false');
-        menuEl.setAttribute('aria-hidden', 'true');
-
-        // Toggle on click
-        toggleEl.addEventListener('click', (ev) => {
-          ev.preventDefault();
-          ev.stopPropagation();
-          const isActive = menuEl.classList.toggle('active');
-          toggleEl.classList.toggle('active', isActive);
-          toggleEl.setAttribute('aria-expanded', isActive ? 'true' : 'false');
-          menuEl.setAttribute('aria-hidden', (!isActive).toString());
-        });
-
-        // Prevent menu from closing when clicking inside
-        menuEl.addEventListener('click', (ev) => {
-          ev.stopPropagation();
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (ev) => {
-          if (menuEl.classList.contains('active') &&
-              !menuEl.contains(ev.target) &&
-              !toggleEl.contains(ev.target)) {
-            menuEl.classList.remove('active');
-            toggleEl.classList.remove('active');
-            toggleEl.setAttribute('aria-expanded', 'false');
-            menuEl.setAttribute('aria-hidden', 'true');
-          }
-        });
-
-        // Close menu with Escape key
-        document.addEventListener('keydown', (ev) => {
-          if (ev.key === 'Escape' && menuEl.classList.contains('active')) {
-            menuEl.classList.remove('active');
-            toggleEl.classList.remove('active');
-            toggleEl.setAttribute('aria-expanded', 'false');
-            menuEl.setAttribute('aria-hidden', 'true');
-            toggleEl.focus();
-          }
-        });
-
-        // Optional: close menu on resize above breakpoint (so desktop always shows desktop menu)
-        window.addEventListener('resize', () => {
-          if (window.innerWidth > 768 && menuEl.classList.contains('active')) {
-            menuEl.classList.remove('active');
-            toggleEl.classList.remove('active');
-            toggleEl.setAttribute('aria-expanded', 'false');
-            menuEl.setAttribute('aria-hidden', 'true');
-          }
-        }, { passive: true });
-      }
-    })();
-
-    // Load activities and update UI (preserved)
-    function loadActivities() {
-      const ref = db.ref('activities');
-      ref.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (!data) {
-          showEmptyState();
-          updateStats([]);
-          return;
-        }
-        const entries = Object.entries(data)
-          .map(([key, val]) => ({ id: key, ...val }))
-          .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-        updateStats(entries);
-        renderActivities(entries.slice(0, 5));
-      }, (err) => {
-        console.error('Firebase read error', err);
-        activitiesTableContainer.innerHTML = `<div style="padding:2rem; text-align:center; color:red;">Gagal memuat kegiatan: ${err.message || err}</div>`;
-      });
-    }
-
-    function showEmptyState() {
-      activitiesTableContainer.innerHTML = `
-        <div style="padding: 2rem; text-align: center;">
-          <i data-lucide="calendar" style="width: 3rem; height: 3rem; color: #d1d5db;"></i>
-          <h3 style="margin: 1rem 0 0.5rem; color: #111827;">Belum ada kegiatan</h3>
-          <p style="color: #6b7280;">Mulai dengan membuat kegiatan pertama Anda</p>
-        </div>
-      `;
-      lucide.createIcons();
-    }
-
-    function updateStats(entries) {
-      totalActivitiesEl.textContent = entries.length;
-      publishedCountEl.textContent = entries.filter(e => e.published).length;
-      draftCountEl.textContent = entries.filter(e => !e.published).length;
-      totalViewsEl.textContent = entries.reduce((s, e) => s + (e.views || 0), 0);
-    }
-
-    function renderActivities(entries) {
-      if (!entries || entries.length === 0) {
-        showEmptyState();
-        return;
-      }
-      let html = `<table><thead><tr>
-        <th>Judul Kegiatan</th><th>Tanggal</th><th>Status</th><th>Dilihat</th><th>Aksi</th>
-      </tr></thead><tbody>`;
-
-      entries.forEach(entry => {
-        const statusClass = entry.published ? 'badge-published' : 'badge-draft';
-        const statusText = entry.published ? 'Published' : 'Draft';
-        const dateText = entry.date ? new Date(entry.date).toLocaleDateString('id-ID') : '-';
-        html += `<tr>
-          <td>${escapeHtml(entry.title || 'Tanpa Judul')}</td>
-          <td>${dateText}</td>
-          <td><span class="badge ${statusClass}">${statusText}</span></td>
-          <td>${entry.views || 0}</td>
-          <td>
-            <div style="display:flex; gap:0.5rem;">
-              <button class="action-btn" onclick="editActivity('${entry.id}')"><i data-lucide="edit"></i></button>
-              <button class="action-btn" onclick="deleteActivity('${entry.id}')"><i data-lucide="trash-2"></i></button>
-            </div>
-          </td>
-        </tr>`;
-      });
-
-      html += `</tbody></table>`;
-      activitiesTableContainer.innerHTML = html;
-      lucide.createIcons();
-    }
-
-    function escapeHtml(text) {
-      return String(text).replace(/[&<>"'`=\/]/g, function (s) {
-        return ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;',
-          "'": '&#39;', '/': '&#x2F;', '`': '&#x60;', '=': '&#x3D;'
-        })[s];
-      });
-    }
-
-    window.editActivity = function (id) {
-      window.location.href = `kegiatan.html?edit=${encodeURIComponent(id)}`;
-    };
-
-    window.deleteActivity = function (id) {
-      if (!confirm('Yakin ingin menghapus kegiatan ini?')) return;
-      db.ref(`activities/${id}`).remove()
-        .then(() => alert('Kegiatan dihapus'))
-        .catch(err => alert('Gagal menghapus: ' + (err.message || err)));
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('Dashboard ready');
-    });
   </script>
 </body>
-</html> 
+</html>
