@@ -432,212 +432,213 @@
     </div>
   </div>
 
-  <!-- Firebase & Lucide JS -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
-  
-  <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-      authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
-      projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
-      messagingSenderId: "428460519406",
-      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-    };
-
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
-
-    // Initialize Lucide Icons
-    lucide.createIcons();
-
-    // Check authentication
-    auth.onAuthStateChanged(user => {
-      if (!user || user.email !== "karangharja2025@gmail.com") {
-        window.location.href = "login.html";
-      }
-    });
-
-    // Check if editing existing activity
-    const urlParams = new URLSearchParams(window.location.search);
-    const activityId = urlParams.get('edit');
-    let currentImageBase64 = '';
-
-    if (activityId) {
-      document.getElementById('formTitle').textContent = 'Edit Kegiatan';
-      document.getElementById('submitText').textContent = 'Update Kegiatan';
-      
-      // Load activity data
-      db.ref(`activities/${activityId}`).once('value')
-        .then(snapshot => {
-          const activity = snapshot.val();
-          if (activity) {
-            document.getElementById('title').value = activity.title || '';
-            document.getElementById('date').value = activity.date || '';
-            document.getElementById('published').checked = activity.published || false;
-            document.getElementById('content').innerHTML = activity.content || '';
             
-            if (activity.imageBase64) {
-              currentImageBase64 = activity.imageBase64;
-              document.getElementById('imagePreview').style.display = 'block';
-              document.getElementById('previewImage').src = activity.imageBase64;
-              document.getElementById('imageInfo').textContent = 'Gambar tersimpan';
-            }
-          }
-        });
+  <!-- replace existing Firebase + kegiatan script with this -->
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+
+<script>
+  // --- Firebase config & init (compat) ---
+  const firebaseConfig = {
+    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+    authDomain: "desakarangharja-31525.firebaseapp.com",
+    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "desakarangharja-31525",
+    storageBucket: "desakarangharja-31525.firebasestorage.app",
+    messagingSenderId: "428460519406",
+    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const auth = firebase.auth();
+  const db = firebase.database();
+
+  // icons
+  lucide.createIcons();
+
+  // protect route
+  auth.onAuthStateChanged(user => {
+    if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
+      window.location.href = 'login.html';
+    } else {
+      // ok
     }
+  });
 
-    // Convert image to Base64 with compression
-    function compressImage(file, maxWidth = 800, quality = 0.7) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.src = e.target.result;
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const scale = Math.min(maxWidth / img.width, 1);
-            canvas.width = img.width * scale;
-            canvas.height = img.height * scale;
-            
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            
-            canvas.toBlob(resolve, 'image/jpeg', quality);
-          };
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    // Convert image to Base64
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
-
-    // Image preview handler with compression
-    document.getElementById('image').addEventListener('change', async function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      try {
-        // Show loading state
-        const preview = document.getElementById('imagePreview');
-        preview.style.display = 'block';
-        preview.innerHTML = '<p>Mengkompresi gambar...</p>';
-
-        // Compress image first
-        const compressedBlob = await compressImage(file);
-        const base64 = await toBase64(new File([compressedBlob], file.name));
-
-        // Show preview
-        document.getElementById('imagePreview').innerHTML = `
-          <img src="${base64}" id="previewImage" alt="Preview Gambar" style="max-width: 100%; max-height: 200px; border-radius: 0.375rem;">
-          <div class="image-info">Ukuran: ${(compressedBlob.size / 1024).toFixed(2)} KB (setelah kompresi)</div>
-        `;
-        
-        currentImageBase64 = base64;
-      } catch (error) {
-        console.error("Error processing image:", error);
-        document.getElementById('errorText').textContent = 'Gagal memproses gambar: ' + error.message;
-        document.getElementById('errorMessage').style.display = 'flex';
-      }
-    });
-
-    // Rich text editor functionality
-    document.querySelectorAll('#toolbar button').forEach(button => {
-      button.addEventListener('click', function(e) {
-        e.preventDefault();
-        const command = this.dataset.command;
-        document.execCommand(command, false, null);
-        document.getElementById('content').focus();
-      });
-    });
-
-    // Form submission
-    document.getElementById('activityForm').addEventListener('submit', async function(e) {
+  // editor toolbar (execCommand, still ok for simple usage)
+  document.querySelectorAll('#toolbar button').forEach(btn => {
+    btn.addEventListener('click', (e) => {
       e.preventDefault();
-      
-      const title = document.getElementById('title').value;
-      const date = document.getElementById('date').value;
-      const content = document.getElementById('content').innerHTML;
-      const published = document.getElementById('published').checked;
-      const errorMessage = document.getElementById('errorMessage');
-      const errorText = document.getElementById('errorText');
-      const submitBtn = document.getElementById('submitBtn');
-      const loading = document.getElementById('loading');
-      
-      // Validate form
-      if (!title || !date || !content) {
-        errorText.textContent = 'Harap isi semua field yang wajib diisi';
-        errorMessage.style.display = 'flex';
-        return;
+      const cmd = btn.dataset.command;
+      document.execCommand(cmd, false, null);
+      document.getElementById('content').focus();
+    });
+  });
+
+  // utilities for image compress -> return Blob
+  function compressImageToBlob(file, maxWidth = 800, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = function (ev) {
+        const img = new Image();
+        img.onload = () => {
+          const scale = Math.min(1, maxWidth / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('Gagal membuat blob dari canvas'));
+          }, 'image/jpeg', quality);
+        };
+        img.onerror = (err) => reject(err);
+        img.src = ev.target.result;
+      };
+      reader.onerror = (er) => reject(er);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function blobToDataURL(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (e) => reject(e);
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  // image input handling
+  let currentImageBase64 = '';
+  const fileInput = document.getElementById('image');
+  const imagePreviewContainer = document.getElementById('imagePreview');
+
+  fileInput.addEventListener('change', async (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+
+    imagePreviewContainer.style.display = 'block';
+    imagePreviewContainer.innerHTML = '<p>Mengkompresi gambar...</p>';
+
+    try {
+      const compressedBlob = await compressImageToBlob(f, 1200, 0.7); // compress
+      // check size (use blob.size)
+      const maxSizeBytes = 500 * 1024; // 500 KB
+      if (compressedBlob.size > maxSizeBytes) {
+        // try lower quality
+        const compressed2 = await compressImageToBlob(f, 1000, 0.5);
+        if (compressed2.size <= maxSizeBytes) {
+          const b64 = await blobToDataURL(compressed2);
+          currentImageBase64 = b64;
+          imagePreviewContainer.innerHTML = `<img src="${b64}" alt="Preview"><div class="image-info">Ukuran: ${(compressed2.size/1024).toFixed(1)} KB</div>`;
+        } else {
+          // still too big, show warning and allow submit but skip image
+          currentImageBase64 = '';
+          imagePreviewContainer.innerHTML = `<div class="image-info">Gagal kompres cukup kecil. Ukuran ${(compressed2.size/1024).toFixed(1)} KB — coba pilih gambar lain.</div>`;
+        }
+      } else {
+        const b64 = await blobToDataURL(compressedBlob);
+        currentImageBase64 = b64;
+        imagePreviewContainer.innerHTML = `<img src="${b64}" alt="Preview"><div class="image-info">Ukuran: ${(compressedBlob.size/1024).toFixed(1)} KB</div>`;
       }
-      
-      // Show loading state
+    } catch (err) {
+      console.error('Image error', err);
+      document.getElementById('errorText').textContent = 'Gagal memproses gambar: ' + (err.message || err);
+      document.getElementById('errorMessage').style.display = 'flex';
+      currentImageBase64 = '';
+    } finally {
+      lucide.createIcons();
+    }
+  });
+
+  // detect if editing
+  const urlParams = new URLSearchParams(window.location.search);
+  const activityId = urlParams.get('edit');
+  if (activityId) {
+    document.getElementById('formTitle').textContent = 'Edit Kegiatan';
+    document.getElementById('submitText').textContent = 'Update Kegiatan';
+    // load data
+    db.ref(`activities/${activityId}`).once('value').then(snap => {
+      const activity = snap.val();
+      if (!activity) return;
+      document.getElementById('title').value = activity.title || '';
+      document.getElementById('date').value = activity.date || '';
+      document.getElementById('published').checked = !!activity.published;
+      document.getElementById('content').innerHTML = activity.content || '';
+      if (activity.imageBase64) {
+        currentImageBase64 = activity.imageBase64;
+        document.getElementById('imagePreview').style.display = 'block';
+        document.getElementById('imagePreview').innerHTML = `<img src="${activity.imageBase64}" alt="Preview"><div class="image-info">Gambar tersimpan</div>`;
+      }
+    }).catch(err => {
+      console.error('Fetch activity error', err);
+    });
+  }
+
+  // submit form
+  const form = document.getElementById('activityForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = document.getElementById('title').value.trim();
+    const date = document.getElementById('date').value;
+    const content = document.getElementById('content').innerHTML.trim();
+    const published = document.getElementById('published').checked;
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const loading = document.getElementById('loading');
+    const errorMessageEl = document.getElementById('errorMessage');
+    const errorTextEl = document.getElementById('errorText');
+
+    errorMessageEl.style.display = 'none';
+    if (!title || !date || !content) {
+      errorTextEl.textContent = 'Harap isi semua field yang wajib diisi';
+      errorMessageEl.style.display = 'flex';
+      return;
+    }
+
+    try {
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i><span>Menyimpan...</span>';
       loading.style.display = 'flex';
-      errorMessage.style.display = 'none';
       lucide.createIcons();
-      
-      try {
-        // Prepare activity data
-        const activityData = {
-          title,
-          date,
-          content,
-          published,
-          createdAt: firebase.database.ServerValue.TIMESTAMP,
-          views: 0
-        };
-        
-        // Add image if exists
-        if (currentImageBase64) {
-          // Check if image size is too big (Firebase RTDB limit is ~1MB per node)
-          const base64Size = (currentImageBase64.length * 3/4) / 1024; // KB
-          if (base64Size > 500) {
-            throw new Error('Ukuran gambar terlalu besar setelah kompresi (max 500KB)');
-          }
-          activityData.imageBase64 = currentImageBase64;
-        }
-        
-        // Save to Firebase
-        if (activityId) {
-          // Update existing activity
-          await db.ref(`activities/${activityId}`).update(activityData);
-        } else {
-          // Create new activity
-          await db.ref('activities').push(activityData);
-        }
-        
-        // Redirect to dashboard
-        window.location.href = "dashboard.html";
-        
-      } catch (error) {
-        console.error("Error saving activity:", error);
-        errorText.textContent = 'Gagal menyimpan kegiatan: ' + error.message;
-        errorMessage.style.display = 'flex';
-        
-      } finally {
-        // Reset loading state
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i data-lucide="save"></i><span>${activityId ? 'Update' : 'Simpan'} Kegiatan</span>`;
-        loading.style.display = 'none';
-        lucide.createIcons();
+
+      const activityData = {
+        title, date, content, published,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+        views: 0
+      };
+
+      if (currentImageBase64) {
+        // use size of base64 by estimating bytes using blob size would be better,
+        // but since we already checked blob.size earlier, accept it.
+        activityData.imageBase64 = currentImageBase64;
       }
-    });
-  </script>
+
+      if (activityId) {
+        await db.ref(`activities/${activityId}`).update(activityData);
+      } else {
+        await db.ref('activities').push(activityData);
+      }
+
+      // success -> redirect to dashboard
+      window.location.href = 'dashboard.html';
+    } catch (err) {
+      console.error('Save error', err);
+      errorTextEl.textContent = 'Gagal menyimpan kegiatan: ' + (err.message || err);
+      errorMessageEl.style.display = 'flex';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i data-lucide="save"></i><span>${activityId ? 'Update' : 'Simpan'} Kegiatan</span>`;
+      loading.style.display = 'none';
+      lucide.createIcons();
+    }
+  });
+</script>
 </body>
 </html>
