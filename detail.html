@@ -158,19 +158,29 @@
         .then(snapshot => {
           const data = snapshot.val();
           if (data) {
-            document.getElementById('activityTitle').textContent = data.title || 'Tanpa Judul';
+            // Buat judul fallback kalau kosong
+            const judul = data.title || (data.content ? data.content.replace(/<[^>]+>/g, '').slice(0, 50) + "..." : 'Tanpa Judul');
+            document.getElementById('activityTitle').textContent = judul;
+
+            // Tanggal
             document.getElementById('activityDate').textContent = data.date 
               ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
               : '-';
+
+            // Views
             document.getElementById('activityViews').textContent = data.views || 0;
+
+            // Konten
             document.getElementById('activityContent').innerHTML = data.content || '';
 
+            // Gambar
             const coverImg = document.querySelector('#coverImage img');
             if (data.imageBase64 || data.imageUrl) {
               coverImg.src = data.imageBase64 || data.imageUrl;
             } else {
               coverImg.src = "https://via.placeholder.com/1200x600?text=Tidak+Ada+Gambar";
             }
+
           } else {
             document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
             document.getElementById('activityContent').textContent = "Data kegiatan tidak ada di database.";
