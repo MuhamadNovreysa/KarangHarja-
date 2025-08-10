@@ -522,12 +522,16 @@
       </form>
     </div>
   </div>
+
+  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
 
 <script>
+  // Initialize Lucide icons first
+  lucide.createIcons();
+
   // Firebase config & init
   const firebaseConfig = {
     apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
@@ -538,50 +542,33 @@
     messagingSenderId: "428460519406",
     appId: "1:428460519406:web:fca8b9854de78cac5628ff"
   };
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
 
-  // Cek login user
-  firebase.auth().onAuthStateChanged(user => {
-    if (!user) {
-      alert("Anda belum login, mohon untuk login terlebih dahulu");
-      window.location.href = "login.html";  // Redirect ke login
-    }
-  });
-  
   if (!firebase.apps.length) {
-    console.log('Initializing Firebase...'); // Debug
     firebase.initializeApp(firebaseConfig);
   }
   const auth = firebase.auth();
   const db = firebase.database();
 
-  // Initialize icons
-  lucide.createIcons();
-
-  // Protect route
+  // Check user authentication
   auth.onAuthStateChanged(user => {
-    console.log('Auth state:', user ? user.email : 'No user'); // Debug
     if (!user || !user.email || user.email.toLowerCase() !== 'karangharja2025@gmail.com') {
-      console.log('Redirecting to login.html: Unauthorized'); // Debug
+      alert("Anda tidak memiliki akses ke halaman ini");
       window.location.href = 'login.html';
     } else {
       const urlParams = new URLSearchParams(window.location.search);
       const activityId = urlParams.get('edit');
+      
       if (activityId) {
-        console.log('Editing activity ID:', activityId); // Debug
         document.getElementById('formTitle').textContent = 'Edit Kegiatan';
         document.getElementById('submitText').textContent = 'Update Kegiatan';
         
         db.ref(`activities/${activityId}`).once('value').then(snapshot => {
           const activity = snapshot.val();
           if (!activity) {
-            console.error('Activity not found:', activityId); // Debug
             alert('Kegiatan tidak ditemukan');
             return;
           }
-          console.log('Loaded activity:', activity); // Debug
+          
           document.getElementById('title').value = activity.title || '';
           document.getElementById('date').value = activity.date || '';
           document.getElementById('published').checked = !!activity.published;
@@ -590,35 +577,33 @@ if (!firebase.apps.length) {
           if (activity.imageBase64) {
             currentImageBase64 = activity.imageBase64;
             document.getElementById('imagePreview').style.display = 'block';
-            document.getElementById('imagePreview').innerHTML = `
-              <img src="${activity.imageBase64}" alt="Preview">
-              <div class="image-info">Gambar tersimpan</div>
-            `;
+            document.getElementById('previewImage').src = activity.imageBase64;
+            document.getElementById('imageInfo').textContent = 'Gambar tersimpan';
           }
         }).catch(err => {
-          console.error('Error loading activity:', err); // Debug
           alert('Gagal memuat data kegiatan: ' + err.message);
         });
       }
     }
   });
 
-  // Enhanced editor functionality
+  // Editor functionality
   document.addEventListener('DOMContentLoaded', () => {
+    // Reinitialize icons for any dynamically added elements
+    lucide.createIcons();
+
     const contentEditable = document.getElementById('content');
     const fontFamilySelect = document.getElementById('fontFamily');
     const fontSizeInput = document.getElementById('fontSize');
     const textColorInput = document.getElementById('textColor');
     
     fontFamilySelect.addEventListener('change', () => {
-      console.log('Changing font to:', fontFamilySelect.value); // Debug
       document.execCommand('fontName', false, fontFamilySelect.value);
       contentEditable.style.fontFamily = fontFamilySelect.value;
     });
     
     fontSizeInput.addEventListener('change', () => {
       const size = fontSizeInput.value + 'px';
-      console.log('Changing font size to:', size); // Debug
       document.execCommand('fontSize', false, '7');
       const fontTags = contentEditable.getElementsByTagName('font');
       if (fontTags.length > 0) {
@@ -630,7 +615,6 @@ if (!firebase.apps.length) {
     });
     
     textColorInput.addEventListener('input', () => {
-      console.log('Changing text color to:', textColorInput.value); // Debug
       document.execCommand('foreColor', false, textColorInput.value);
       contentEditable.style.color = textColorInput.value;
     });
@@ -639,7 +623,6 @@ if (!firebase.apps.length) {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         const cmd = btn.dataset.command;
-        console.log('Executing command:', cmd); // Debug
         document.execCommand(cmd, false, null);
         contentEditable.focus();
         
@@ -659,29 +642,22 @@ if (!firebase.apps.length) {
 
   fileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
-    if (!file) {
-      console.log('No file selected'); // Debug
-      return;
-    }
+    if (!file) return;
 
-    console.log('Processing image, size:', file.size); // Debug
     imagePreviewContainer.style.display = 'block';
     imagePreviewContainer.innerHTML = '<p>Mengkompresi gambar...</p>';
 
     try {
       let compressedBlob = await compressImage(file);
       if (compressedBlob.size > 500 * 1024) {
-        console.log('Image too large, retrying with lower quality'); // Debug
         compressedBlob = await compressImage(file, 800, 0.6);
         if (compressedBlob.size > 500 * 1024) {
           throw new Error('Gambar terlalu besar setelah kompresi. Gunakan gambar lebih kecil.');
         }
       }
       currentImageBase64 = await blobToBase64(compressedBlob);
-      console.log('Image compressed successfully, size:', compressedBlob.size); // Debug
       showImagePreview(currentImageBase64, compressedBlob.size);
     } catch (error) {
-      console.error('Image processing error:', error); // Debug
       alert('Gagal memproses gambar: ' + error.message);
       currentImageBase64 = '';
       imagePreviewContainer.innerHTML = '<div class="image-info">Gagal memuat gambar</div>';
@@ -690,7 +666,6 @@ if (!firebase.apps.length) {
 
   function compressImage(file, maxWidth = 1200, quality = 0.7) {
     return new Promise((resolve, reject) => {
-      console.log('Compressing image, maxWidth:', maxWidth, 'quality:', quality); // Debug
       const reader = new FileReader();
       reader.onload = function(event) {
         const img = new Image();
@@ -705,7 +680,6 @@ if (!firebase.apps.length) {
           
           canvas.toBlob(blob => {
             if (blob) {
-              console.log('Image compressed, size:', blob.size); // Debug
               resolve(blob);
             } else {
               reject(new Error('Konversi gambar gagal'));
@@ -722,7 +696,6 @@ if (!firebase.apps.length) {
 
   function blobToBase64(blob) {
     return new Promise((resolve, reject) => {
-      console.log('Converting to base64'); // Debug
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
       reader.onerror = () => reject(new Error('Konversi base64 gagal'));
@@ -732,15 +705,13 @@ if (!firebase.apps.length) {
 
   function showImagePreview(base64String, sizeInBytes) {
     const sizeInKB = (sizeInBytes / 1024).toFixed(1);
-    console.log('Showing image preview, size:', sizeInKB, 'KB'); // Debug
     imagePreviewContainer.innerHTML = `
-      <img src="${base64String}" alt="Preview">
-      <div class="image-info">Ukuran: ${sizeInKB} KB</div>
+      <img src="${base64String}" alt="Preview" id="previewImage">
+      <div class="image-info" id="imageInfo">Ukuran: ${sizeInKB} KB</div>
     `;
   }
 
   function showError(message) {
-    console.log('Error:', message); // Debug
     const errorElement = document.getElementById('errorMessage');
     errorElement.style.display = 'flex';
     document.getElementById('errorText').textContent = message;
@@ -749,8 +720,7 @@ if (!firebase.apps.length) {
 
   // Form submission
   document.getElementById('activityForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Harus di paling atas
-    console.log('Form submitted'); // Debug
+    e.preventDefault();
     
     const title = document.getElementById('title').value.trim();
     const date = document.getElementById('date').value;
@@ -760,19 +730,20 @@ if (!firebase.apps.length) {
     const loadingElement = document.getElementById('loading');
     const errorElement = document.getElementById('errorMessage');
     
-    console.log('Form data:', { title, date, content, published, image: !!currentImageBase64 }); // Debug
-    
     if (!title || !date || !content) {
       showError('Harap isi judul, tanggal, dan deskripsi');
       return;
     }
     
     try {
+      // Update button state with loading animation
       submitBtn.disabled = true;
+      const originalContent = submitBtn.innerHTML;
       submitBtn.innerHTML = '<i data-lucide="loader-2" class="animate-spin"></i> Memproses...';
+      lucide.createIcons();
+      
       loadingElement.style.display = 'flex';
       errorElement.style.display = 'none';
-      lucide.createIcons();
       
       const activityData = {
         title,
@@ -791,24 +762,20 @@ if (!firebase.apps.length) {
       const urlParams = new URLSearchParams(window.location.search);
       const activityId = urlParams.get('edit');
       
-      console.log('Saving to Firebase, activityId:', activityId); // Debug
       if (activityId) {
         await db.ref(`activities/${activityId}`).update(activityData);
-        console.log('Activity updated:', activityId); // Debug
         alert('Kegiatan berhasil diupdate!');
       } else {
         const newRef = await db.ref('activities').push(activityData);
-        console.log('Activity created, ID:', newRef.key); // Debug
         alert('Kegiatan berhasil diposting!');
       }
       
       window.location.href = 'dashboard.html';
     } catch (error) {
-      console.error('Error saving activity:', error); // Debug
       showError('Gagal menyimpan: ' + (error.message || 'Kesalahan tidak diketahui. Cek koneksi atau rules Firebase.'));
     } finally {
       submitBtn.disabled = false;
-      submitBtn.innerHTML = '<i data-lucide="save"></i> <span id="submitText">Posting Kegiatan</span>';
+      submitBtn.innerHTML = originalContent || '<i data-lucide="save"></i> <span id="submitText">Posting Kegiatan</span>';
       loadingElement.style.display = 'none';
       lucide.createIcons();
     }
