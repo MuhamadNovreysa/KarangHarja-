@@ -146,42 +146,42 @@
     const db = firebase.database();
 
     // ==== Ambil ID dari URL ====
-    const urlParams = new URLSearchParams(window.location.search);
-    const activityId = urlParams.get('id');
+const urlParams = new URLSearchParams(window.location.search);
+const activityId = urlParams.get('id');
 
-    if (!activityId) {
-      document.getElementById('activitytitle').texttitle = "Kegiatan tidak ditemukan";
-      document.getElementById('activitycontent').textcontent = "ID kegiatan tidak valid.";
-    } else {
-      db.ref('activities/' + activityId).once('value')
-        .then(snapshot => {
-          const data = snapshot.val();
-          if (data) {
-            document.getElementById('activitytitle').texttitle = data.title || 'Tanpa Judul';
-            document.getElementById('activitydate').textcontent = data.date 
-              ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
-              : '-';
-            document.getElementById('activityViews').textContent = data.views || 0;
-            document.getElementById('activityContent').innerHTML = data.content || '';
+if (!activityId) {
+  document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
+  document.getElementById('activityContent').textContent = "ID kegiatan tidak valid.";
+} else {
+  db.ref(activityId).once('value') // ambil langsung di root
+    .then(snapshot => {
+      const data = snapshot.val();
+      if (data) {
+        document.getElementById('activityTitle').textContent = data.title || 'Tanpa Judul';
+        document.getElementById('activityDate').textContent = data.date 
+          ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
+          : '-';
+        document.getElementById('activityViews').textContent = data.views || 0;
+        document.getElementById('activityContent').innerHTML = data.content || '';
 
-            const coverImg = document.querySelector('#coverImage img');
-            if (data.imageBase64 || data.imageUrl) {
-              coverImg.src = data.imageBase64 || data.imageUrl;
-            } else {
-              coverImg.src = "https://via.placeholder.com/1200x600?text=Tidak+Ada+Gambar";
-            }
-          } else {
-            document.getElementById('activitytitle').texttitle = "Kegiatan tidak ditemukan";
-            document.getElementById('activitycontent').textcontent = "Data kegiatan tidak ada di database.";
-          }
-          lucide.createIcons();
-        })
-        .catch(err => {
-          console.error(err);
-          document.getElementById('activitytitle').texttitle = "Error memuat data";
-          document.getElementById('activitycontent').textcontent = "Terjadi kesalahan saat mengambil data.";
-        });
-    }
+        const coverImg = document.querySelector('#coverImage img');
+        if (data.imageBase64 || data.imageUrl) {
+          coverImg.src = data.imageBase64 || data.imageUrl;
+        } else {
+          coverImg.src = "https://via.placeholder.com/1200x600?text=Tidak+Ada+Gambar";
+        }
+      } else {
+        document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
+        document.getElementById('activityContent').textContent = "Data kegiatan tidak ada di database.";
+      }
+      lucide.createIcons();
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('activityTitle').textContent = "Error memuat data";
+      document.getElementById('activityContent').textContent = "Terjadi kesalahan saat mengambil data.";
+    });
+}
   </script>
 
 </body>
