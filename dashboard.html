@@ -441,145 +441,185 @@
   <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
   
   <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-      authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
-      projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
-      messagingSenderId: "428460519406",
-      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-    };
+  // Firebase Config (sama dengan di login.html)
+  const firebaseConfig = {
+    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+    authDomain: "desakarangharja-31525.firebaseapp.com",
+    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "desakarangharja-31525",
+    storageBucket: "desakarangharja-31525.firebasestorage.app",
+    messagingSenderId: "428460519406",
+    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+  };
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
+  // Initialize Firebase (hanya jika belum ada)
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const auth = firebase.auth();
+  const db = firebase.database();
 
-    // Initialize Lucide Icons
-    lucide.createIcons();
+  // Initialize Lucide Icons
+  lucide.createIcons();
 
-    // Check authentication status
-    auth.onAuthStateChanged(user => {
-      if (!user || user.email !== "karangharja2025@gmail.com") {
+  // Enhanced Auth Check
+  auth.onAuthStateChanged(user => {
+    console.log("Auth state changed:", user);
+    if (!user || user.email !== "karangharja2025@gmail.com") {
+      console.log("Redirecting to login...");
+      window.location.href = "login.html";
+    } else {
+      console.log("User authenticated:", user.email);
+      // Load data hanya jika user terautentikasi
+      loadActivities();
+    }
+  });
+
+  // Logout functionality
+  document.getElementById('logoutBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    auth.signOut()
+      .then(() => {
+        console.log("User signed out");
         window.location.href = "login.html";
-      }
-    });
-
-    // Logout functionality
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      auth.signOut().then(() => {
-        window.location.href = "login.html";
+      })
+      .catch(error => {
+        console.error("Logout error:", error);
+        alert('Gagal logout: ' + error.message);
       });
-    });
+  });
 
-    // Navbar toggle for mobile
-    document.getElementById('navbarToggle').addEventListener('click', () => {
-      document.getElementById('navbarMenu').classList.toggle('active');
-    });
+  // Navbar toggle for mobile
+  document.getElementById('navbarToggle')?.addEventListener('click', () => {
+    document.getElementById('navbarMenu').classList.toggle('active');
+  });
 
-    // Load activities data
-    function loadActivities() {
-      const activitiesRef = db.ref('activities');
-      const tableContainer = document.getElementById('activitiesTable');
-      
-      activitiesRef.orderByChild('createdAt').on('value', (snapshot) => {
+  // Load activities data with error handling
+  function loadActivities() {
+    const activitiesRef = db.ref('activities');
+    const tableContainer = document.getElementById('activitiesTable');
+    
+    activitiesRef.orderByChild('createdAt').on('value', (snapshot) => {
+      try {
         const activities = snapshot.val();
         
         if (!activities) {
-          tableContainer.innerHTML = `
-            <div style="padding: 2rem; text-align: center;">
-              <i data-lucide="calendar" style="width: 3rem; height: 3rem; color: #d1d5db;"></i>
-              <h3 style="margin: 1rem 0 0.5rem; color: var(--dark);">Belum ada kegiatan</h3>
-              <p style="color: var(--gray);">Mulai dengan membuat kegiatan pertama Anda</p>
-            </div>
-          `;
-          lucide.createIcons();
+          showEmptyState(tableContainer);
           return;
         }
 
-        // Update stats
-        const activitiesArray = Object.values(activities);
-        document.getElementById('totalActivities').textContent = activitiesArray.length;
-        document.getElementById('publishedCount').textContent = 
-          activitiesArray.filter(a => a.published).length;
-        document.getElementById('draftCount').textContent = 
-          activitiesArray.filter(a => !a.published).length;
-        document.getElementById('totalViews').textContent = 
-          activitiesArray.reduce((sum, a) => sum + (a.views || 0), 0);
-
-        // Create table
-        let tableHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Judul Kegiatan</th>
-                <th>Tanggal</th>
-                <th>Status</th>
-                <th>Dilihat</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
+        updateStats(activities);
+        renderActivitiesTable(activities, tableContainer);
+        
+      } catch (error) {
+        console.error("Error loading activities:", error);
+        tableContainer.innerHTML = `
+          <div style="padding: 2rem; text-align: center; color: var(--danger);">
+            <i data-lucide="alert-triangle" style="width: 3rem; height: 3rem;"></i>
+            <h3 style="margin: 1rem 0 0.5rem;">Gagal memuat data</h3>
+            <p>${error.message || 'Terjadi kesalahan saat memuat kegiatan'}</p>
+          </div>
         `;
-
-        Object.entries(activities).reverse().slice(0, 5).forEach(([key, activity]) => {
-          tableHTML += `
-            <tr>
-              <td>${activity.title}</td>
-              <td>${new Date(activity.date).toLocaleDateString('id-ID')}</td>
-              <td>
-                <span class="badge ${activity.published ? 'badge-published' : 'badge-draft'}">
-                  ${activity.published ? 'Published' : 'Draft'}
-                </span>
-              </td>
-              <td>${activity.views || 0}</td>
-              <td>
-                <div style="display: flex; gap: 0.5rem;">
-                  <button class="action-btn" onclick="editActivity('${key}')">
-                    <i data-lucide="edit"></i>
-                  </button>
-                  <button class="action-btn" onclick="deleteActivity('${key}')">
-                    <i data-lucide="trash-2"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          `;
-        });
-
-        tableHTML += `
-            </tbody>
-          </table>
-        `;
-
-        tableContainer.innerHTML = tableHTML;
         lucide.createIcons();
-      });
-    }
-
-    // Edit activity function
-    window.editActivity = function(id) {
-      window.location.href = `kegiatan.html?edit=${id}`;
-    };
-
-    // Delete activity function
-    window.deleteActivity = function(id) {
-      if (confirm('Apakah Anda yakin ingin menghapus kegiatan ini?')) {
-        db.ref(`activities/${id}`).remove()
-          .then(() => {
-            alert('Kegiatan berhasil dihapus');
-          })
-          .catch(error => {
-            alert('Gagal menghapus kegiatan: ' + error.message);
-          });
       }
-    };
-
-    // Initialize when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-      loadActivities();
+    }, (error) => {
+      console.error("Firebase error:", error);
     });
+  }
+
+  function showEmptyState(container) {
+    container.innerHTML = `
+      <div style="padding: 2rem; text-align: center;">
+        <i data-lucide="calendar" style="width: 3rem; height: 3rem; color: #d1d5db;"></i>
+        <h3 style="margin: 1rem 0 0.5rem; color: var(--dark);">Belum ada kegiatan</h3>
+        <p style="color: var(--gray);">Mulai dengan membuat kegiatan pertama Anda</p>
+      </div>
+    `;
+    lucide.createIcons();
+  }
+
+  function updateStats(activities) {
+    const activitiesArray = Object.values(activities);
+    document.getElementById('totalActivities').textContent = activitiesArray.length;
+    document.getElementById('publishedCount').textContent = 
+      activitiesArray.filter(a => a.published).length;
+    document.getElementById('draftCount').textContent = 
+      activitiesArray.filter(a => !a.published).length;
+    document.getElementById('totalViews').textContent = 
+      activitiesArray.reduce((sum, a) => sum + (a.views || 0), 0);
+  }
+
+  function renderActivitiesTable(activities, container) {
+    let tableHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Judul Kegiatan</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Dilihat</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    Object.entries(activities).reverse().slice(0, 5).forEach(([key, activity]) => {
+      tableHTML += `
+        <tr>
+          <td>${activity.title || 'Tanpa Judul'}</td>
+          <td>${activity.date ? new Date(activity.date).toLocaleDateString('id-ID') : '-'}</td>
+          <td>
+            <span class="badge ${activity.published ? 'badge-published' : 'badge-draft'}">
+              ${activity.published ? 'Published' : 'Draft'}
+            </span>
+          </td>
+          <td>${activity.views || 0}</td>
+          <td>
+            <div style="display: flex; gap: 0.5rem;">
+              <button class="action-btn" onclick="editActivity('${key}')">
+                <i data-lucide="edit"></i>
+              </button>
+              <button class="action-btn" onclick="deleteActivity('${key}')">
+                <i data-lucide="trash-2"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    tableHTML += `
+        </tbody>
+      </table>
+    `;
+
+    container.innerHTML = tableHTML;
+    lucide.createIcons();
+  }
+
+  // Edit activity function
+  window.editActivity = function(id) {
+    window.location.href = `kegiatan.html?edit=${id}`;
+  };
+
+  // Delete activity function
+  window.deleteActivity = function(id) {
+    if (confirm('Apakah Anda yakin ingin menghapus kegiatan ini?')) {
+      db.ref(`activities/${id}`).remove()
+        .then(() => {
+          alert('Kegiatan berhasil dihapus');
+        })
+        .catch(error => {
+          alert('Gagal menghapus kegiatan: ' + error.message);
+        });
+    }
+  };
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("Dashboard initialized");
+  });
   </script>
 </body>
   </html>
