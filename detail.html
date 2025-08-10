@@ -67,17 +67,21 @@
       document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
       document.getElementById('activityContent').textContent = "ID kegiatan tidak valid.";
     } else {
-      db.ref(activityId).once('value') // langsung root
+      db.ref('activities/' + activityId).once('value')
         .then(snapshot => {
           const data = snapshot.val();
           if (data) {
+            // Judul
             document.getElementById('activityTitle').textContent = data.title || 'Tanpa Judul';
+            // Tanggal
             document.getElementById('activityDate').textContent = data.date 
               ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
               : '-';
+            // Views
             document.getElementById('activityViews').textContent = data.views || 0;
+            // Konten
             document.getElementById('activityContent').innerHTML = data.content || '';
-
+            // Gambar
             const coverImg = document.querySelector('#coverImage img');
             if (data.imageBase64 || data.imageUrl) {
               coverImg.src = data.imageBase64 || data.imageUrl;
