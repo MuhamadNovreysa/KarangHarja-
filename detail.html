@@ -153,7 +153,8 @@
       document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
       document.getElementById('activityContent').textContent = "ID kegiatan tidak valid.";
     } else {
-      db.ref('activities/' + activityId).once('value')
+      // Ambil data langsung di root sesuai JSON
+      db.ref(activityId).once('value')
         .then(snapshot => {
           const data = snapshot.val();
           if (data) {
