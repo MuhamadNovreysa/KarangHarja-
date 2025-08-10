@@ -455,120 +455,121 @@
     }
   </script>
   
-  <!-- Firebase and Activities Script -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
-  <script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+  
+    <!-- Firebase and Activities Script -->
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
 
-  <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-      authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
-      projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
-      messagingSenderId: "428460519406",
-      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-    };
+<script>
+  // Initialize Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+    authDomain: "desakarangharja-31525.firebaseapp.com",
+    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    projectId: "desakarangharja-31525",
+    storageBucket: "desakarangharja-31525.firebasestorage.app",
+    messagingSenderId: "428460519406",
+    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+  };
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
-    lucide.createIcons();
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.database();
+  lucide.createIcons();
 
-    // Function to render activities
-    function renderActivities(activities) {
-      const container = document.getElementById('activities-container');
-      
-      if (!activities || activities.length === 0) {
-        container.innerHTML = `
-          <div class="empty-activities">
-            <div class="empty-icon">
-              <i data-lucide="calendar"></i>
-            </div>
-            <h3 class="empty-title">Belum Ada Kegiatan</h3>
-            <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini</p>
+  // Function to render activities
+  function renderActivities(activities) {
+    const container = document.getElementById('activities-container');
+    
+    if (!activities || activities.length === 0) {
+      container.innerHTML = `
+        <div class="empty-activities">
+          <div class="empty-icon">
+            <i data-lucide="calendar"></i>
           </div>
-        `;
-        lucide.createIcons();
-        return;
-      }
-
-      let html = '';
-      activities.slice(0, 6).forEach(activity => {
-        const date = activity.date ? new Date(activity.date).toLocaleDateString('id-ID', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-        }) : 'Tanggal tidak tersedia';
-        
-        // Create excerpt by removing HTML tags and limiting to 150 characters
-        const textContent = activity.content.replace(/<[^>]*>/g, '');
-        const excerpt = textContent.length > 150 ? textContent.substring(0, 150) + '...' : textContent;
-
-        html += `
-          <div class="activity-card">
-            ${activity.imageBase64 ? `
-              <div class="activity-image-container">
-                <img src="${activity.imageBase64}" alt="${activity.title}" class="activity-image">
-              </div>
-            ` : ''}
-            <div class="activity-content">
-              <h3 class="activity-title">${activity.title || 'Tanpa Judul'}</h3>
-              <div class="activity-meta">
-                <span class="activity-date">
-                  <i data-lucide="calendar"></i> ${date}
-                </span>
-              </div>
-              <div class="activity-excerpt">${excerpt}</div>
-              <a href="#" class="activity-read-more">Baca selengkapnya</a>
-            </div>
-          </div>
-        `;
-      });
-
-      container.innerHTML = html;
-      lucide.createIcons();
-    }
-
-    // Listen for real-time updates from Firebase
-    db.ref('activities').orderByChild('createdAt').on('value', (snapshot) => {
-      const data = snapshot.val();
-      const activities = data ? Object.entries(data).map(([key, value]) => ({ 
-        id: key, 
-        ...value 
-      })).sort((a, b) => b.createdAt - a.createdAt) : [];
-      
-      renderActivities(activities);
-    }, (error) => {
-      console.error('Error loading activities:', error);
-      document.getElementById('activities-container').innerHTML = `
-        <div class="error-message">
-          <i data-lucide="alert-circle"></i>
-          <p>Gagal memuat kegiatan. Silakan coba lagi nanti.</p>
+          <h3 class="empty-title">Belum Ada Kegiatan yang Dipublikasi</h3>
+          <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini setelah dipublikasi</p>
         </div>
       `;
       lucide.createIcons();
+      return;
+    }
+
+    let html = '';
+    activities.slice(0, 6).forEach(activity => {
+      const date = activity.date ? new Date(activity.date).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }) : 'Tanggal tidak tersedia';
+      
+      // Create excerpt by removing HTML tags and limiting to 150 characters
+      const textContent = activity.content.replace(/<[^>]*>/g, '');
+      const excerpt = textContent.length > 150 ? textContent.substring(0, 150) + '...' : textContent;
+
+      html += `
+        <div class="activity-card">
+          ${activity.imageBase64 ? `
+            <div class="activity-image-container">
+              <img src="${activity.imageBase64}" alt="${activity.title}" class="activity-image">
+            </div>
+          ` : ''}
+          <div class="activity-content">
+            <h3 class="activity-title">${activity.title || 'Tanpa Judul'}</h3>
+            <div class="activity-meta">
+              <span class="activity-date">
+                <i data-lucide="calendar"></i> ${date}
+              </span>
+            </div>
+            <div class="activity-excerpt">${excerpt}</div>
+            <a href="#" class="activity-read-more">Baca selengkapnya</a>
+          </div>
+        </div>
+      `;
     });
 
-    // Typewriter effect for hero section
-    const typewriterText = document.getElementById('typewriter-text');
-    if (typewriterText) {
-      const text = "SISTEM INFORMASI DESA KARANGHARJA";
-      let i = 0;
-      
-      function typeWriter() {
-        if (i < text.length) {
-          typewriterText.innerHTML += text.charAt(i);
-          i++;
-          setTimeout(typeWriter, 100);
-        }
+    container.innerHTML = html;
+    lucide.createIcons();
+  }
+
+  // Listen for real-time updates from Firebase
+  db.ref('activities').orderByChild('createdAt').on('value', (snapshot) => {
+    const data = snapshot.val();
+    const activities = data ? Object.entries(data)
+      .map(([key, value]) => ({ id: key, ...value }))
+      .filter(act => act.published)  // Tambah filter ini untuk only published
+      .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)) : [];
+    
+    renderActivities(activities);
+  }, (error) => {
+    console.error('Error loading activities:', error);
+    document.getElementById('activities-container').innerHTML = `
+      <div class="error-message">
+        <i data-lucide="alert-circle"></i>
+        <p>Gagal memuat kegiatan. Silakan coba lagi nanti.</p>
+      </div>
+    `;
+    lucide.createIcons();
+  });
+
+  // Typewriter effect for hero section
+  const typewriterText = document.getElementById('typewriter-text');
+  if (typewriterText) {
+    const text = "SISTEM INFORMASI DESA KARANGHARJA";
+    let i = 0;
+    
+    function typeWriter() {
+      if (i < text.length) {
+        typewriterText.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, 100);
       }
-      
-      typeWriter();
     }
-  </script>
+    
+    typeWriter();
+  }
+</script>
 </body>
 </html>
