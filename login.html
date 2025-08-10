@@ -108,7 +108,7 @@
     }
 
     .login-btn:hover {
-      background-color: var(--primary-dark);
+      background-color: #1e3a8a;
     }
 
     .error-message {
@@ -218,39 +218,8 @@
     const app = firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    
-
-// Login function
-function login() {
-  const email = "karangharja2025@gmail.com";
-  const password = "Desakarangharja2025@"; // Ganti dengan password sebenarnya
-  
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      window.location.href = "dashboard.html";
-    })
-    .catch(error => {
-      console.error("Login error:", error);
-      alert("Login gagal: " + error.message);
-    });
-}
-
-// Cek auth state
-auth.onAuthStateChanged(user => {
-  if (!user || user.email !== "karangharja2025@gmail.com") {
-    window.location.href = "login.html";
-  }
-});
-
     // Initialize Lucide Icons
     lucide.createIcons();
-
-    // Check if already logged in
-    auth.onAuthStateChanged(user => {
-      if (user && user.email === "karangharja2025@gmail.com") {
-        window.location.href = "dashboard.html";
-      }
-    });
 
     // Handle form submission
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -273,17 +242,15 @@ auth.onAuthStateChanged(user => {
         // Sign in with Firebase Auth
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
         
-        // Check if email is verified (optional)
-        if (!userCredential.user.emailVerified) {
-          await userCredential.user.sendEmailVerification();
-          console.log("Email verifikasi terkirim ulang");
+        // Check if user is admin
+        if (userCredential.user.email === "karangharja2025@gmail.com") {
+          // Redirect to dashboard
+          window.location.href = "dashboard.html";
+        } else {
+          throw new Error("Anda bukan admin yang berwenang");
         }
         
-        // Redirect to dashboard
-        window.location.href = "dashboard.html";
-        
       } catch (error) {
-        // Handle errors
         console.error("Login error:", error);
         
         let errorMsg = "Terjadi kesalahan saat login";
@@ -297,6 +264,8 @@ auth.onAuthStateChanged(user => {
           case "auth/user-not-found":
             errorMsg = "Akun admin tidak ditemukan";
             break;
+          default:
+            errorMsg = error.message;
         }
         
         errorText.textContent = errorMsg;
@@ -314,6 +283,13 @@ auth.onAuthStateChanged(user => {
         loginBtn.innerHTML = '<i data-lucide="log-in"></i><span>Masuk</span>';
         loading.style.display = 'none';
         lucide.createIcons();
+      }
+    });
+
+    // Check if already logged in
+    auth.onAuthStateChanged(user => {
+      if (user && user.email === "karangharja2025@gmail.com") {
+        window.location.href = "dashboard.html";
       }
     });
 
