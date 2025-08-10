@@ -75,25 +75,38 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
       processedActivities = processedActivities.filter(act => act.published === true);
     }
 
-    // Build HTML
-    container.innerHTML = processedActivities.map(activity => `
-      <div class="activity-card" data-id="${activity.id}">
-        <div class="activity-image">
-          ${activity.imageBase64 || activity.imageUrl ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" loading="lazy">` : ''}
-          <div class="date-badge">
-            <i data-lucide="calendar"></i>
-            ${activity.date ? new Date(activity.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
+    // Build HTML cards
+    container.innerHTML = processedActivities.map(activity => {
+      const shortDesc = activity.content
+        ? activity.content.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 120) + "..."
+        : "";
+
+      return `
+        <div class="activity-card" data-id="${activity.id}">
+          <div class="activity-image">
+            ${activity.imageBase64 || activity.imageUrl
+              ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" loading="lazy">`
+              : ''
+            }
+            <div class="date-badge">
+              <i data-lucide="calendar"></i>
+              ${activity.date
+                ? new Date(activity.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })
+                : ''
+              }
+            </div>
+          </div>
+          <div class="activity-content">
+            <h3>${activity.title || 'Tanpa Judul'}</h3>
+            <div class="activity-description">${shortDesc}</div>
+            <div class="activity-footer">
+              <span><i data-lucide="eye"></i> ${activity.views || 0} dilihat</span>
+              <a href="detail-kegiatan.html?id=${activity.id}" class="read-more">Baca Selengkapnya</a>
+            </div>
           </div>
         </div>
-        <div class="activity-content">
-          <h3>${activity.title || 'Tanpa Judul'}</h3>
-          <div class="activity-description">${activity.content || ''}</div>
-          <div class="activity-footer">
-            <span><i data-lucide="eye"></i> ${activity.views || 0} dilihat</span>
-          </div>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
 
     lucide.createIcons();
     setupActivityClickHandlers();
@@ -102,11 +115,11 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
 
 function setupActivityClickHandlers() {
   document.querySelectorAll('.activity-card').forEach(card => {
-    card.addEventListener('click', function () {
-      const activityId = this.dataset.id;
-      incrementViews(activityId);
-      // Redirect ke halaman detail kalau ada
-      // window.location.href = `detail.html?id=${activityId}`;
+    card.addEventListener('click', function (e) {
+      if (!e.target.classList.contains('read-more')) {
+        const activityId = this.dataset.id;
+        incrementViews(activityId);
+      }
     });
   });
 }
@@ -163,7 +176,7 @@ function setupNavbarToggle() {
 
 function setupSmoothScrolling() {
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', e => {
+    anchor.addEventListener('click', function(e) {
       e.preventDefault();
       const target = document.querySelector(this.getAttribute('href'));
       if (target) target.scrollIntoView({ behavior: 'smooth' });
