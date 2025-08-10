@@ -150,15 +150,15 @@
     const activityId = urlParams.get('id');
 
     if (!activityId) {
-      document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
-      document.getElementById('activityContent').textContent = "ID kegiatan tidak valid.";
+      document.getElementById('activitytitle').texttitle = "Kegiatan tidak ditemukan";
+      document.getElementById('activitycontent').textcontent = "ID kegiatan tidak valid.";
     } else {
       db.ref('activities/' + activityId).once('value')
         .then(snapshot => {
           const data = snapshot.val();
           if (data) {
-            document.getElementById('activityTitle').textContent = data.title || 'Tanpa Judul';
-            document.getElementById('activityDate').textContent = data.date 
+            document.getElementById('activitytitle').texttitle = data.title || 'Tanpa Judul';
+            document.getElementById('activitydate').textcontent = data.date 
               ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
               : '-';
             document.getElementById('activityViews').textContent = data.views || 0;
@@ -171,15 +171,15 @@
               coverImg.src = "https://via.placeholder.com/1200x600?text=Tidak+Ada+Gambar";
             }
           } else {
-            document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
-            document.getElementById('activityContent').textContent = "Data kegiatan tidak ada di database.";
+            document.getElementById('activitytitle').texttitle = "Kegiatan tidak ditemukan";
+            document.getElementById('activitycontent').textcontent = "Data kegiatan tidak ada di database.";
           }
           lucide.createIcons();
         })
         .catch(err => {
           console.error(err);
-          document.getElementById('activityTitle').textContent = "Error memuat data";
-          document.getElementById('activityContent').textContent = "Terjadi kesalahan saat mengambil data.";
+          document.getElementById('activitytitle').texttitle = "Error memuat data";
+          document.getElementById('activitycontent').textcontent = "Terjadi kesalahan saat mengambil data.";
         });
     }
   </script>
