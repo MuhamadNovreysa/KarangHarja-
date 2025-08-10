@@ -1,183 +1,11 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login Admin - Desa KarangHarja</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://unpkg.com/lucide@latest/dist/lucide.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #1e40af;
-      --primary-light: #3b82f6;
-      --danger: #dc2626;
-      --light: #f9fafb;
-      --dark: #111827;
-      --gray: #6b7280;
-      --white: #ffffff;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--light);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 1rem;
-    }
-
-    .login-container {
-      background-color: var(--white);
-      border-radius: 0.75rem;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-      padding: 2rem;
-      text-align: center;
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    @keyframes fade	In {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .logo {
-      width: 80px;
-      height: auto;
-      margin-bottom: 1.5rem;
-    }
-
-    h1 {
-      color: var(--primary);
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-      text-align: left;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: var(--dark);
-      font-weight: 500;
-      font-size: 0.875rem;
-    }
-
-    input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary-light);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-
-    .login-btn {
-      background-color: var(--primary);
-      color: var(--white);
-      border: none;
-      padding: 0.75rem;
-      width: 100%;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-
-    .login-btn:hover {
-      background-color: #1e3a8a;
-    }
-
-    .back-btn {
-      background-color: transparent;
-      border: 1px solid #e5e7eb;
-      color: var(--dark);
-      padding: 0.75rem;
-      width: 100%;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: 1rem;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: background-color 0.3s;
-    }
-
-    .back-btn:hover {
-      background-color: #f9fafb;
-    }
-
-    .error-message {
-      color: var(--danger);
-      margin-top: 1rem;
-      font-size: 0.875rem;
-      display: none;
-      background-color: rgba(220, 38, 38, 0.1);
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      text-align: left;
-    }
-
-    .error-message i {
-      margin-right: 0.5rem;
-    }
-
-    .loading {
-      display: none;
-      margin-top: 1rem;
-    }
-
-    .loading-spinner {
-      width: 1.5rem;
-      height: 1.5rem;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: var(--white);
-      animation: spin 1s ease-in-out infinite;
-      margin: 0 auto;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 480px) {
-      .login-container {
-        padding: 1.5rem;
-      }
-      
-      h1 {
-        font-size: 1.25rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css"/>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   <div class="login-container">
@@ -186,139 +14,51 @@
          class="logo">
     <h1>Login Admin Desa KarangHarja</h1>
     
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="email">Email Admin</label>
-        <input type="email" 
-               id="email" 
-               placeholder="Masukkan email admin" 
-               required>
-      </div>
-      
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" 
-               id="password" 
-               placeholder="Masukkan password" 
-               required
-               minlength="8">
-      </div>
-      
-      <button type="submit" class="login-btn" id="loginBtn">
-        <i data-lucide="log-in"></i>
-        <span>Masuk</span>
-      </button>
-
-      <a href="index.html" class="back-btn">
-        <i data-lucide="arrow-left"></i>
-        Kembali ke Beranda
-      </a>
-      
-      <div class="loading" id="loading">
-        <div class="loading-spinner"></div>
-      </div>
-      
-      <div class="error-message" id="errorMessage">
-        <i data-lucide="alert-circle"></i>
-        <span id="errorText"></span>
-      </div>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email" required/>
+      <input type="password" id="password" placeholder="Password" required/>
+      <button type="submit">Masuk</button>
     </form>
+
+    <a href="index.html" class="back-btn">
+      <i data-lucide="arrow-left"></i>
+      Kembali ke Beranda
+    </a>
   </div>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  <!-- replace existing Firebase + login script with this -->
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+      authDomain: "desakarangharja-31525.firebaseapp.com",
+      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "desakarangharja-31525",
+      storageBucket: "desakarangharja-31525.appspot.com",
+      messagingSenderId: "428460519406",
+      appId: "1:428460519406:web:fca8b9854de78cac5628ff",
+      measurementId: "G-T9G2VRJ5S2"
+    };
 
-<script>
-  // --- Firebase config & init (compat) ---
-  const firebaseConfig = {
-    apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-    authDomain: "desakarangharja-31525.firebaseapp.com",
-    databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "desakarangharja-31525",
-    storageBucket: "desakarangharja-31525.firebasestorage.app",
-    messagingSenderId: "428460519406",
-    appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-  };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const auth = firebase.auth();
+    document.getElementById("login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-  // icons
-  lucide.createIcons();
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("Login gagal: " + error.message);
+        });
+    });
 
-  // Elements
-  const loginForm = document.getElementById('loginForm');
-  const loginBtn = document.getElementById('loginBtn');
-  const loadingEl = document.getElementById('loading');
-  const errorMessage = document.getElementById('errorMessage');
-  const errorText = document.getElementById('errorText');
-
-  // Prevent page reload and sign in
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    errorMessage.style.display = 'none';
-
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
-
-    if (!email || !password) {
-      errorText.textContent = 'Harap isi email dan password';
-      errorMessage.style.display = 'flex';
-      return;
-    }
-
-    try {
-      loginBtn.disabled = true;
-      loginBtn.innerHTML = '<span>Memproses...</span>';
-      loadingEl.style.display = 'block';
-
-      // sign in (compat)
-      const userCredential = await auth.signInWithEmailAndPassword(email, password);
-
-      // extra check: only allow specific admin email
-      const userEmail = userCredential.user && userCredential.user.email;
-      if (userEmail && userEmail.toLowerCase() === 'karangharja2025@gmail.com') {
-        // redirect
-        window.location.href = 'dashboard.html';
-      } else {
-        // sign out then show error
-        await auth.signOut();
-        throw new Error('Akun tidak memiliki izin admin.');
-      }
-    } catch (err) {
-      console.error('Login error:', err);
-      let msg = err.message || 'Gagal login';
-      // map common firebase codes if present
-      if (err.code) {
-        switch (err.code) {
-          case 'auth/wrong-password': msg = 'Password salah'; break;
-          case 'auth/invalid-email': msg = 'Email tidak valid'; break;
-          case 'auth/user-not-found': msg = 'Akun tidak ditemukan'; break;
-        }
-      }
-      alert('Login gagal: ' + msg);
-      errorText.textContent = msg;
-      errorMessage.style.display = 'flex';
-    } finally {
-      loginBtn.disabled = false;
-      loginBtn.innerHTML = '<i data-lucide="log-in"></i><span>Masuk</span>';
-      loadingEl.style.display = 'none';
-      lucide.createIcons();
-    }
-  });
-
-  // If already authenticated -> go to dashboard
-  auth.onAuthStateChanged(user => {
-    if (user && user.email && user.email.toLowerCase() === 'karangharja2025@gmail.com') {
-      // already logged in
-      window.location.href = 'dashboard.html';
-    }
-  });
-    </script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>
