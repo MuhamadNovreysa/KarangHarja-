@@ -754,7 +754,7 @@ body {
 .activities-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .activity-card {
@@ -762,11 +762,9 @@ body {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-}
-
-.activity-card:hover {
-  transform: translateY(-5px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .activity-image img {
@@ -777,22 +775,50 @@ body {
 
 .activity-content {
   padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .activity-content h3 {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   margin-bottom: 0.5rem;
+  color: #111;
 }
 
 .activity-description {
-  font-size: 0.9rem;
+  flex: 1;
+  font-size: 0.95rem;
   color: #555;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Potong jadi 3 baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.read-more {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  background: #2563eb;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.read-more:hover {
+  background: #1d4ed8;
 }
 
 .activity-footer {
   font-size: 0.8rem;
   color: #888;
-  margin-top: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 @media (min-width: 640px) {
