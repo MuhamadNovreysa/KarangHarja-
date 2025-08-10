@@ -1,13 +1,13 @@
 // Initialize Firebase
 const firebaseConfig = {
-      apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
-      authDomain: "desakarangharja-31525.firebaseapp.com",
-      databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
-      projectId: "desakarangharja-31525",
-      storageBucket: "desakarangharja-31525.firebasestorage.app",
-      messagingSenderId: "428460519406",
-      appId: "1:428460519406:web:fca8b9854de78cac5628ff"
-    };
+  apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
+  authDomain: "desakarangharja-31525.firebaseapp.com",
+  databaseURL: "https://desakarangharja-31525-default-rtdb.asia-southeast1.firebasedatabase.app/",
+  projectId: "desakarangharja-31525",
+  storageBucket: "desakarangharja-31525.firebasestorage.app",
+  messagingSenderId: "428460519406",
+  appId: "1:428460519406:web:fca8b9854de78cac5628ff"
+};
 
 const app = firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
@@ -36,13 +36,13 @@ function setupLogout() {
     btn.addEventListener('click', () => {
       auth.signOut().then(() => {
         window.location.href = "login.html";
-      });
+      }).catch(err => console.error('Logout error:', err)); // Tambah log
     });
   });
 }
 
 // ==================== ACTIVITIES FUNCTIONS ====================
-function loadActivities(containerId, limit = null) {
+function loadActivities(containerId, limit = null, onlyPublished = false) { // Tambah param onlyPublished
   const container = document.getElementById(containerId);
   if (!container) return;
 
@@ -70,13 +70,21 @@ function loadActivities(containerId, limit = null) {
       return;
     }
 
+    let processedActivities = Object.keys(activities).reverse().map(key => ({
+      id: key,
+      ...activities[key]
+    }));
+
+    if (onlyPublished) {
+      processedActivities = processedActivities.filter(act => act.published);
+    }
+
     let html = '';
-    Object.keys(activities).reverse().forEach(key => {
-      const activity = activities[key];
+    processedActivities.forEach(activity => {
       html += `
-        <div class="activity-card" data-id="${key}">
+        <div class="activity-card" data-id="${activity.id}">
           <div class="activity-image">
-            ${activity.imageUrl ? `<img src="${activity.imageUrl}" alt="${activity.title}" loading="lazy">` : ''}
+            ${activity.imageBase64 ? `<img src="${activity.imageBase64}" alt="${activity.title}" loading="lazy">` : ''}
             <div class="date-badge">
               <i data-lucide="calendar"></i>
               ${new Date(activity.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
@@ -115,7 +123,7 @@ function incrementViews(activityId) {
       activity.views = (activity.views || 0) + 1;
     }
     return activity;
-  });
+  }).catch(err => console.error('Error incrementing views:', err)); // Tambah error handling
 }
 
 // ==================== DASHBOARD FUNCTIONS ====================
@@ -155,7 +163,7 @@ function setupNavbarToggle() {
   
   if (navbarToggle && navbarMenu) {
     navbarToggle.addEventListener('click', (e) => {
-      e.stopPropagation(); // Mencegah event bubbling
+      e.stopPropagation();
       navbarMenu.classList.toggle('active');
       navbarToggle.classList.toggle('active');
     });
@@ -206,25 +214,20 @@ function initTypewriter() {
 
 // ==================== INITIALIZATION ====================
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize Firebase services
   checkAuthState();
-  
-  // Initialize UI components
   setupNavbarToggle();
   setupSmoothScrolling();
   initTypewriter();
   setupLogout();
 
-  // Page-specific initializations
   if (document.getElementById('activitiesContainer')) {
-    loadActivities('activitiesContainer');
+    loadActivities('activitiesContainer', null, true); // Tambah onlyPublished true untuk index
   }
 
   if (document.getElementById('dashboardStats')) {
     setupDashboardStats();
   }
 
-  // Initialize Lucide icons
   lucide.createIcons();
 });
 
@@ -246,4 +249,4 @@ function showError(message) {
       errorElement.style.display = 'none';
     }, 5000);
   }
-          }
+}
