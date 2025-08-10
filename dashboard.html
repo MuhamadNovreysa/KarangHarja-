@@ -233,6 +233,86 @@
       color: white;
     }
 
+    /* Activity Cards */
+    .activity-card {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      transition: background-color 0.2s;
+    }
+
+    .activity-card:last-child {
+      border-bottom: none;
+    }
+
+    .activity-card:hover {
+      background-color: #f9fafb;
+    }
+
+    .activity-image {
+      width: 120px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .activity-content {
+      flex-grow: 1;
+    }
+
+    .activity-title {
+      margin: 0 0 8px 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .activity-meta {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+      color: var(--muted);
+    }
+
+    .activity-status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-published {
+      background-color: #dcfce7;
+      color: #047857;
+    }
+
+    .status-draft {
+      background-color: #fff7ed;
+      color: #92400e;
+    }
+
+    .activity-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .action-btn:hover {
+      color: var(--primary);
+      background-color: rgba(46, 204, 113, 0.1);
+    }
+
     /* Loading spinner */
     .loading {
       display: flex;
@@ -252,6 +332,28 @@
 
     @keyframes spin {
       to { transform: rotate(360deg); }
+    }
+
+    /* Empty state */
+    .empty-state {
+      padding: 2rem;
+      text-align: center;
+      color: #374151;
+    }
+
+    .empty-icon {
+      margin-bottom: 1rem;
+      color: #d1d5db;
+    }
+
+    .empty-title {
+      margin: 0.75rem 0 0.25rem;
+      font-size: 1.125rem;
+    }
+
+    .empty-subtitle {
+      color: var(--muted);
+      font-size: 0.875rem;
     }
   </style>
 </head>
@@ -442,16 +544,31 @@
         renderActivities(entries.slice(0, 5));
       }, (err) => {
         console.error("Firebase read error:", err);
-        activitiesTableContainer.innerHTML = `<div style="padding:2rem; text-align:center; color:red;">Gagal memuat kegiatan: ${err.message || err}</div>`;
+        showErrorState(err);
       });
     }
 
     function showEmptyState() {
       activitiesTableContainer.innerHTML = `
-        <div style="padding:2rem; text-align:center; color:#374151;">
-          <i data-lucide="calendar" style="width:36px;height:36px;color:#d1d5db"></i>
-          <h3 style="margin:.75rem 0 0.25rem">Belum ada kegiatan</h3>
-          <p style="color:var(--muted)">Mulai dengan membuat kegiatan pertama Anda</p>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i data-lucide="calendar" width="36" height="36"></i>
+          </div>
+          <h3 class="empty-title">Belum ada kegiatan</h3>
+          <p class="empty-subtitle">Mulai dengan membuat kegiatan pertama Anda</p>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function showErrorState(error) {
+      activitiesTableContainer.innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon">
+            <i data-lucide="alert-circle" width="36" height="36"></i>
+          </div>
+          <h3 class="empty-title">Gagal memuat kegiatan</h3>
+          <p class="empty-subtitle">${error.message || "Terjadi kesalahan saat memuat data"}</p>
         </div>
       `;
       lucide.createIcons();
@@ -465,15 +582,46 @@
     }
 
     function renderActivities(entries) {
-      if (!entries || entries.length === 0) { showEmptyState(); return; }
-      let html = `<table style="width:100%;border-collapse:collapse"><thead><tr style="background:#f3f4f6"><th style="padding:12px;text-align:left">Judul Kegiatan</th><th style="padding:12px;text-align:left">Tanggal</th><th style="padding:12px;text-align:left">Status</th><th style="padding:12px;text-align:left">Dilihat</th><th style="padding:12px;text-align:left">Aksi</th></tr></thead><tbody>`;
+      if (!entries || entries.length === 0) {
+        showEmptyState();
+        return;
+      }
+
+      let html = '';
       entries.forEach(entry => {
-        const statusClass = entry.published ? "badge-published" : "badge-draft";
-        const statusText = entry.published ? "Published" : "Draft";
         const dateText = entry.date ? new Date(entry.date).toLocaleDateString("id-ID") : "-";
-        html += `<tr><td style="padding:12px;vertical-align:top">${escapeHtml(entry.title || "Tanpa Judul")}</td><td style="padding:12px;vertical-align:top">${dateText}</td><td style="padding:12px;vertical-align:top"><span style="display:inline-block;padding:.25rem .6rem;border-radius:9999px;background:${entry.published ? "#dcfce7" : "#fff7ed"};color:${entry.published ? "#047857" : "#92400e"};font-weight:600;font-size:.85rem">${statusText}</span></td><td style="padding:12px;vertical-align:top">${entry.views || 0}</td><td style="padding:12px;vertical-align:top"><div style="display:flex;gap:8px"><button class="action-btn" onclick="editActivity('${entry.id}')"><i data-lucide="edit"></i></button><button class="action-btn" onclick="deleteActivity('${entry.id}')"><i data-lucide="trash-2"></i></button></div></td></tr>`;
+        const statusClass = entry.published ? "status-published" : "status-draft";
+        const statusText = entry.published ? "Published" : "Draft";
+        
+        // Create excerpt from HTML content
+        const textContent = entry.content ? entry.content.replace(/<[^>]*>/g, '').substring(0, 100) + (entry.content.length > 100 ? '...' : '') : '';
+
+        html += `
+          <div class="activity-card">
+            ${entry.imageBase64 ? `
+              <img src="${entry.imageBase64}" alt="${entry.title}" class="activity-image">
+            ` : '<div style="width:120px; height:80px; background:#f3f4f6; border-radius:8px; display:flex; align-items:center; justify-content:center;"><i data-lucide="image" width="24" height="24" color="#9ca3af"></i></div>'}
+            <div class="activity-content">
+              <h3 class="activity-title">${escapeHtml(entry.title || "Tanpa Judul")}</h3>
+              <div class="activity-meta">
+                <span><i data-lucide="calendar" width="16" height="16"></i> ${dateText}</span>
+                <span class="activity-status ${statusClass}">${statusText}</span>
+                <span><i data-lucide="eye" width="16" height="16"></i> ${entry.views || 0} dilihat</span>
+              </div>
+              <p>${escapeHtml(textContent)}</p>
+              <div class="activity-actions">
+                <button class="action-btn" onclick="editActivity('${entry.id}')" title="Edit">
+                  <i data-lucide="edit" width="16" height="16"></i>
+                </button>
+                <button class="action-btn" onclick="deleteActivity('${entry.id}')" title="Hapus">
+                  <i data-lucide="trash-2" width="16" height="16"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
       });
-      html += `</tbody></table>`;
+
       activitiesTableContainer.innerHTML = html;
       lucide.createIcons();
     }
@@ -488,7 +636,14 @@
 
     window.deleteActivity = function(id) {
       if (!confirm("Yakin ingin menghapus kegiatan ini?")) return;
-      db.ref(`activities/${id}`).remove().then(() => alert("Kegiatan dihapus")).catch(err => alert("Gagal menghapus: " + (err.message || err)));
+      db.ref(`activities/${id}`).remove()
+        .then(() => {
+          alert("Kegiatan berhasil dihapus");
+          // No need to reload, Firebase listener will update automatically
+        })
+        .catch(err => {
+          alert("Gagal menghapus: " + (err.message || err));
+        });
     };
 
     // Ensure icons on first load
