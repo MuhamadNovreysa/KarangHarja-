@@ -436,28 +436,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-storage-compat.js"></script>
 <script src="script.js"></script>
-  <script>
-    lucide.createIcons();
-
-    // Navbar Toggle Functionality for Mobile
-    const navbarToggle = document.getElementById('navbar-toggle');
-    const navbarMenu = document.getElementById('navbar-menu');
-
-    if (navbarToggle && navbarMenu) {
-      navbarToggle.addEventListener('click', () => {
-        navbarToggle.classList.toggle('active');
-        navbarMenu.classList.toggle('active');
-      });
-
-      // Close menu when clicking outside
-      document.addEventListener('click', (e) => {
-        if (!navbarToggle.contains(e.target) && !navbarMenu.contains(e.target)) {
-          navbarToggle.classList.remove('active');
-          navbarMenu.classList.remove('active');
-        }
-      });
-    }
-  </script>
+  
   
   
   
