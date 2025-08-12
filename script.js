@@ -217,16 +217,46 @@ function setupSmoothScrolling() {
 function initTypewriter() {
   const element = document.getElementById("typewriter-text");
   if (!element) return;
-  const text = "SISTEM INFORMASI DESA KARANGHARJA";
-  let i = 0;
-  element.innerHTML = '';
-  (function typeWriter() {
-    if (i < text.length) {
-      element.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typeWriter, 100);
+
+  const texts = [
+    "SISTEM INFORMASI DESA KARANGHARJA",
+    "MEMBANGUN DESA BERSAMA",
+    "PELAYANAN UNTUK WARGA"
+  ];
+
+  let textIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  const typingSpeed = 100;
+  const deletingSpeed = 50;
+  const delayBetween = 1500;
+
+  function type() {
+    const currentText = texts[textIndex];
+
+    if (isDeleting) {
+      element.textContent = currentText.substring(0, charIndex - 1);
+      charIndex--;
+    } else {
+      element.textContent = currentText.substring(0, charIndex + 1);
+      charIndex++;
     }
-  })();
+
+    let timeout = isDeleting ? deletingSpeed : typingSpeed;
+
+    if (!isDeleting && charIndex === currentText.length) {
+      timeout = delayBetween;
+      isDeleting = true;
+    } else if (isDeleting && charIndex === 0) {
+      isDeleting = false;
+      textIndex = (textIndex + 1) % texts.length;
+      timeout = typingSpeed;
+    }
+
+    setTimeout(type, timeout);
+  }
+
+  type();
 }
 
 // ==================== INIT ====================
