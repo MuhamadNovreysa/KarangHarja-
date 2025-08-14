@@ -80,7 +80,7 @@
             document.getElementById('activityDate').textContent = data.date 
               ? new Date(data.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) 
               : '-';
-            // Views (tampilkan dulu angka saat ini)
+            // Views (tampilkan langsung dari database)
             document.getElementById('activityViews').textContent = data.views || 0;
             // Konten
             document.getElementById('activityContent').innerHTML = data.content || '';
@@ -91,21 +91,6 @@
             } else {
               coverImg.src = "https://via.placeholder.com/1200x600?text=Tidak+Ada+Gambar";
             }
-
-            // === Tambahan: Increment views setiap buka detail ===
-            db.ref('activities/' + activityId + '/views').transaction(currentViews => {
-              return (currentViews || 0) + 1;
-            }, (error, committed, snapAfter) => {
-              if (error) {
-                console.error("Gagal increment views:", error);
-              } else if (committed) {
-                // Update angka views di layar sesuai nilai terbaru
-                const newViews = snapAfter && typeof snapAfter.val() === 'number'
-                  ? snapAfter.val()
-                  : ((data.views || 0) + 1);
-                document.getElementById('activityViews').textContent = newViews;
-              }
-            });
           } else {
             document.getElementById('activityTitle').textContent = "Kegiatan tidak ditemukan";
             document.getElementById('activityContent').textContent = "Data kegiatan tidak ada di database.";
