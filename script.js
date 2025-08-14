@@ -1,6 +1,9 @@
 // ==================== FIREBASE INIT ====================
 // Declare the firebase variable before using it
 const firebase = window.firebase
+// Tambahan: pastikan lucide tersedia secara global (tidak menghapus deklarasi lucide lain di bawah)
+const lucide = window.lucide || undefined
+
 const firebaseConfig = {
   apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
   authDomain: "desakarangharja-31525.firebaseapp.com",
