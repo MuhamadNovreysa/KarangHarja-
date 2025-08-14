@@ -770,6 +770,64 @@ body {
 }
 
 /* Mobile Styles */
+@media (max-width: 767px) {
+  /* Mobile responsive styles for sambutan and sejarah */
+  .sambutan-section,
+  .sejarah-section {
+    padding: 3rem 1rem; /* Reduced vertical padding but kept horizontal padding reasonable */
+  }
+
+  .section-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .sambutan-card {
+    flex-direction: column;
+    margin: 0 0.5rem; /* Reduced side margins from 2rem to 0.5rem for more content space */
+  }
+
+  .kepala-desa-profile {
+    flex: none; /* Removed fixed width constraint for better mobile flexibility */
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5); /* Added border back for mobile separation */
+    border-right: none; /* Removed right border for mobile layout */
+    padding: 2rem 1.5rem; /* Adjusted padding for better mobile spacing */
+  }
+
+  .kepala-desa-photo {
+    width: 8rem; /* Reduced photo size for mobile to save space */
+    height: 10rem;
+  }
+
+  .sambutan-text {
+    flex: 1;
+    padding: 2rem 1.5rem; /* Increased padding for better readability on mobile */
+  }
+
+  .unified-greeting {
+    font-size: 0.95rem; /* Slightly reduced font size for mobile readability */
+    line-height: 1.6;
+  }
+
+  .timeline-content {
+    padding: 1.5rem; /* Adjusted timeline padding for mobile */
+  }
+
+  .timeline-line {
+    left: 1.5rem;
+  }
+
+  .timeline-item {
+    padding-left: 4rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .timeline-dot {
+    left: -4rem;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
 @media (max-width: 768px) {
   .navbar-toggle {
     display: block;
@@ -1034,6 +1092,10 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  .org-staff-grid.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .map-iframe {
     height: 20rem;
   }
@@ -1105,3 +1167,4 @@ body {
     height: 36rem;
   }
 }
+
