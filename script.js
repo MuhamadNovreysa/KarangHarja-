@@ -1,7 +1,7 @@
 // ==================== FIREBASE INIT ====================
 // Declare the firebase variable before using it
 const firebase = window.firebase
-// Tambahan: pastikan lucide tersedia secara global (tidak menghapus deklarasi lucide lain di bawah)
+// Tambahan: pastikan lucide tersedia secara global
 const lucide = window.lucide || undefined
 
 const firebaseConfig = {
@@ -36,8 +36,7 @@ function checkAuthState() {
 function setupLogout() {
   document.querySelectorAll(".logout, #logoutBtn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      auth
-        .signOut()
+      auth.signOut()
         .then(() => (window.location.href = "login.html"))
         .catch((err) => console.error("Logout error:", err))
     })
@@ -64,7 +63,6 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
           <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini</p>
         </div>
       `
-      const lucide = window.lucide
       if (typeof lucide !== "undefined") {
         lucide.createIcons()
       }
@@ -84,45 +82,54 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
 
     container.innerHTML = processedActivities
       .map((activity) => {
-        const shortDesc = activity.content ? activity.content.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 120) + "..." : ""
+        const shortDesc = activity.content
+          ? activity.content.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 120) + "..."
+          : ""
+
         return `
-        <div class="activity-card" data-id="${activity.id}">
-          <div class="activity-image">
-            ${
-              activity.imageBase64 || activity.imageUrl
+          <div class="activity-card" data-id="${activity.id}">
+            <div class="activity-image">
+              ${activity.imageBase64 || activity.imageUrl
                 ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" loading="lazy">`
-                : ""
-            }
-            <div class="date-badge">
-              <i data-lucide="calendar"></i>
-              ${
-                activity.date
+                : ""}
+              <div class="date-badge">
+                <i data-lucide="calendar"></i>
+                ${activity.date
                   ? new Date(activity.date).toLocaleDateString("id-ID", {
                       day: "numeric",
                       month: "short",
                       year: "numeric",
                     })
-                  : ""
-              }
+                  : ""}
+              </div>
+            </div>
+            <div class="activity-content">
+              <h3>${activity.title || "Tanpa Judul"}</h3>
+              <div class="activity-description">${shortDesc}</div>
+              <div class="activity-footer">
+                <span><i data-lucide="eye"></i> ${activity.views || 0} dilihat</span>
+                <a href="#" class="read-more" data-id="${activity.id}">Baca Selengkapnya</a>
+              </div>
             </div>
           </div>
-          <div class="activity-content">
-            <h3>${activity.title || "Tanpa Judul"}</h3>
-            <div class="activity-description">${shortDesc}</div>
-            <div class="activity-footer">
-              <span><i data-lucide="eye"></i> ${activity.views || 0} dilihat</span>
-              <a href="detail.html?id=${activity.id}" class="read-more">Baca Selengkapnya</a>
-            </div>
-          </div>
-        </div>
-      `
+        `
       })
       .join("")
 
-    const lucide = window.lucide
     if (typeof lucide !== "undefined") {
       lucide.createIcons()
     }
+
+    // Tambahan: Event listener untuk klik "Baca Selengkapnya"
+    container.querySelectorAll(".read-more").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault()
+        const activityId = link.getAttribute("data-id")
+        incrementViews(activityId, () => {
+          window.location.href = `detail.html?id=${activityId}`
+        })
+      })
+    })
   })
 }
 
@@ -139,16 +146,14 @@ function loadActivityDetail() {
     return
   }
 
-  // Increment view count first, then fetch updated data
-  incrementViews(activityId).then(() => {
-    db.ref(`activities/${activityId}`).on("value", (snapshot) => {
-      const activity = snapshot.val()
-      if (!activity) {
-        detailContainer.innerHTML = "<p>Kegiatan tidak ditemukan.</p>"
-        return
-      }
+  db.ref(`activities/${activityId}`).once("value").then((snapshot) => {
+    const activity = snapshot.val()
+    if (!activity) {
+      detailContainer.innerHTML = "<p>Kegiatan tidak ditemukan.</p>"
+      return
+    }
 
-      detailContainer.innerHTML = `
+    detailContainer.innerHTML = `
       <div class="detail-card">
         <h1 class="detail-title">${activity.title || "Tanpa Judul"}</h1>
         <p class="detail-date"><i data-lucide="calendar"></i> ${
@@ -156,31 +161,30 @@ function loadActivityDetail() {
             ? new Date(activity.date).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })
             : ""
         }</p>
-        ${
-          activity.imageBase64 || activity.imageUrl
-            ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" class="detail-image">`
-            : ""
-        }
+        ${activity.imageBase64 || activity.imageUrl
+          ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" class="detail-image">`
+          : ""}
         <div class="detail-content">
           ${activity.content || ""}
         </div>
         <p class="detail-views"><i data-lucide="eye"></i> ${activity.views || 0} kali dilihat</p>
       </div>
     `
-      const lucide = window.lucide
-      if (typeof lucide !== "undefined") {
-        lucide.createIcons()
-      }
-    })
+    if (typeof lucide !== "undefined") {
+      lucide.createIcons()
+    }
   })
 }
 
-function incrementViews(activityId) {
-  return db
-    .ref(`activities/${activityId}`)
+// Perubahan: incrementViews bisa pakai callback
+function incrementViews(activityId, callback = null) {
+  db.ref(`activities/${activityId}`)
     .transaction((activity) => {
       if (activity) activity.views = (activity.views || 0) + 1
       return activity
+    })
+    .then(() => {
+      if (callback) callback()
     })
     .catch((err) => console.error("Error incrementing views:", err))
 }
@@ -240,9 +244,14 @@ function setupSmoothScrolling() {
       e.preventDefault()
       const targetId = this.getAttribute("href")
       const targetSection = document.querySelector(targetId)
+
       if (targetSection) {
         const offsetTop = targetSection.offsetTop - 80
-        window.scrollTo({ top: offsetTop, behavior: "smooth" })
+        window.scrollTo({
+          top: offsetTop,
+          behavior: "smooth",
+        })
+
         const navbarMenu = document.getElementById("navbar-menu")
         const navbarToggle = document.getElementById("navbar-toggle")
         if (navbarMenu && navbarMenu.classList.contains("active")) {
@@ -258,9 +267,19 @@ function setupSmoothScrolling() {
 function initTypewriter() {
   const element = document.getElementById("typewriter-text")
   if (!element) return
-  const texts = ["SISTEM INFORMASI DESA KARANGHARJA", "MEMBANGUN DESA BERSAMA", "PELAYANAN UNTUK WARGA"]
-  let textIndex = 0, charIndex = 0, isDeleting = false
-  const typingSpeed = 100, deletingSpeed = 50, delayBetween = 1500
+
+  const texts = [
+    "SISTEM INFORMASI DESA KARANGHARJA",
+    "MEMBANGUN DESA BERSAMA",
+    "PELAYANAN UNTUK WARGA",
+  ]
+
+  let textIndex = 0
+  let charIndex = 0
+  let isDeleting = false
+  const typingSpeed = 100
+  const deletingSpeed = 50
+  const delayBetween = 1500
 
   function type() {
     const currentText = texts[textIndex]
@@ -271,14 +290,21 @@ function initTypewriter() {
       element.textContent = currentText.substring(0, charIndex + 1)
       charIndex++
     }
+
     let timeout = isDeleting ? deletingSpeed : typingSpeed
+
     if (!isDeleting && charIndex === currentText.length) {
-      timeout = delayBetween; isDeleting = true
+      timeout = delayBetween
+      isDeleting = true
     } else if (isDeleting && charIndex === 0) {
-      isDeleting = false; textIndex = (textIndex + 1) % texts.length; timeout = typingSpeed
+      isDeleting = false
+      textIndex = (textIndex + 1) % texts.length
+      timeout = typingSpeed
     }
+
     setTimeout(type, timeout)
   }
+
   type()
 }
 
@@ -337,6 +363,7 @@ function setupSambutanSejarahAnimations() {
       const suffix = stat.textContent.replace(/\d/g, "")
       let current = 0
       const increment = target / 50
+
       const updateNumber = () => {
         if (current < target) {
           current += increment
@@ -346,6 +373,7 @@ function setupSambutanSejarahAnimations() {
           stat.textContent = target + suffix
         }
       }
+
       const statObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -354,9 +382,11 @@ function setupSambutanSejarahAnimations() {
           }
         })
       })
+
       statObserver.observe(stat.parentElement)
     })
   }
+
   animateNumbers()
 }
 
@@ -368,6 +398,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupSmoothScrolling()
   initTypewriter()
   setupSambutanSejarahAnimations()
+
   if (document.getElementById("activitiesContainer")) {
     loadActivities("activitiesContainer", null, true)
   }
@@ -377,7 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("activityDetail")) {
     loadActivityDetail()
   }
-  const lucide = window.lucide
+
   if (typeof lucide !== "undefined") {
     lucide.createIcons()
   }
