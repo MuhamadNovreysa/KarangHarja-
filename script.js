@@ -125,9 +125,18 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
       link.addEventListener("click", (e) => {
         e.preventDefault()
         const activityId = link.getAttribute("data-id")
-        incrementViews(activityId, () => {
-          window.location.href = `detail.html?id=${activityId}`
-        })
+
+        // Panggil incrementViews (Promise). Jika commit sukses atau gagal, tetap redirect.
+        // incrementViews akan gunakan sessionStorage untuk mencegah double-count.
+        incrementViews(activityId)
+          .then(() => {
+            // redirect setelah selesai (atau skip)
+            window.location.href = `detail.html?id=${activityId}`
+          })
+          .catch(() => {
+            // meskipun error, redirect tetap dilakukan agar UX lancar
+            window.location.href = `detail.html?id=${activityId}`
+          })
       })
     })
   })
@@ -146,14 +155,21 @@ function loadActivityDetail() {
     return
   }
 
-  db.ref(`activities/${activityId}`).once("value").then((snapshot) => {
-    const activity = snapshot.val()
-    if (!activity) {
-      detailContainer.innerHTML = "<p>Kegiatan tidak ditemukan.</p>"
-      return
-    }
+  // Pastikan kita hanya increment jika belum di-mark di sessionStorage
+  // incrementViews akan skip jika sessionStorage menunjukkan activity tadi sudah di-increment
+  incrementViews(activityId)
+    .then(() => {
+      // Setelah increment (atau skip) selesai, ambil data terbaru dan render
+      return db.ref(`activities/${activityId}`).once("value")
+    })
+    .then((snapshot) => {
+      const activity = snapshot.val()
+      if (!activity) {
+        detailContainer.innerHTML = "<p>Kegiatan tidak ditemukan.</p>"
+        return
+      }
 
-    detailContainer.innerHTML = `
+      detailContainer.innerHTML = `
       <div class="detail-card">
         <h1 class="detail-title">${activity.title || "Tanpa Judul"}</h1>
         <p class="detail-date"><i data-lucide="calendar"></i> ${
@@ -161,41 +177,109 @@ function loadActivityDetail() {
             ? new Date(activity.date).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })
             : ""
         }</p>
-        ${activity.imageBase64 || activity.imageUrl
-          ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" class="detail-image">`
-          : ""}
+        ${
+          activity.imageBase64 || activity.imageUrl
+            ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" class="detail-image">`
+            : ""
+        }
         <div class="detail-content">
           ${activity.content || ""}
         </div>
         <p class="detail-views"><i data-lucide="eye"></i> ${activity.views || 0} kali dilihat</p>
       </div>
     `
-    if (typeof lucide !== "undefined") {
-      lucide.createIcons()
-    }
-  })
-}
-
-// Perubahan: incrementViews pakai child('views') + callback
-function incrementViews(activityId, callback = null) {
-  const viewsRef = db.ref(`activities/${activityId}/views`)
-  viewsRef
-    .transaction((current) => {
-      if (typeof current !== "number") {
-        // Kalau bukan number (misal null), biarin aja supaya rules non-auth tidak menolak.
-        // Pastikan saat create activity diset views: 0.
-        return current
+      if (typeof lucide !== "undefined") {
+        lucide.createIcons()
       }
-      return current + 1
-    })
-    .then(() => {
-      if (callback) callback()
     })
     .catch((err) => {
-      console.error("Error incrementing views:", err)
-      // Tetep redirect supaya UX lancar meskipun increment gagal (mis. views belum diinisialisasi)
-      if (callback) callback()
+      console.error("Error loading activity detail:", err)
+      // fallback: coba ambil data tanpa menunggu increment
+      db.ref(`activities/${activityId}`).once("value").then((snapshot) => {
+        const activity = snapshot.val()
+        if (!activity) {
+          detailContainer.innerHTML = "<p>Kegiatan tidak ditemukan.</p>"
+          return
+        }
+        detailContainer.innerHTML = `
+        <div class="detail-card">
+          <h1 class="detail-title">${activity.title || "Tanpa Judul"}</h1>
+          <p class="detail-date"><i data-lucide="calendar"></i> ${
+            activity.date
+              ? new Date(activity.date).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })
+              : ""
+          }</p>
+          ${
+            activity.imageBase64 || activity.imageUrl
+              ? `<img src="${activity.imageBase64 || activity.imageUrl}" alt="${activity.title}" class="detail-image">`
+              : ""
+          }
+          <div class="detail-content">
+            ${activity.content || ""}
+          </div>
+          <p class="detail-views"><i data-lucide="eye"></i> ${activity.views || 0} kali dilihat</p>
+        </div>
+      `
+        if (typeof lucide !== "undefined") {
+          lucide.createIcons()
+        }
+      })
     })
+}
+
+// ==================== incrementViews (safe, prevents double-count) ====================
+/**
+ * incrementViews: increments activities/{id}/views using a transaction,
+ * but prevents duplicate increments within the same browser session using sessionStorage.
+ * Returns a Promise that resolves with an object { committed: boolean, value: ... } or resolves if skipped.
+ */
+function incrementViews(activityId) {
+  const key = `viewed_${activityId}`
+
+  // If already viewed in this session, skip increment to avoid double-count
+  try {
+    if (sessionStorage.getItem(key)) {
+      return Promise.resolve({ skipped: true })
+    }
+  } catch (e) {
+    // sessionStorage mungkin tidak tersedia di mode privacy; tetap coba increment
+    console.warn("sessionStorage unavailable:", e)
+  }
+
+  const viewsRef = db.ref(`activities/${activityId}/views`)
+
+  return new Promise((resolve, reject) => {
+    // transaction: only increment if current value is a number (your rules require views to be numeric)
+    viewsRef.transaction(
+      (current) => {
+        if (typeof current !== "number") {
+          // Jika current bukan number (mis. null), kita return current tanpa mengubah.
+          // Pastikan saat create activity, field views diinisialisasi ke 0 supaya increment bisa berjalan.
+          return current
+        }
+        return current + 1
+      },
+      (error, committed, snapshot) => {
+        if (error) {
+          console.error("Error incrementing views:", error)
+          // resolve anyway so UX tidak terganggu
+          resolve({ error: true, errorObj: error })
+        } else if (!committed) {
+          // Transaction did not commit (kemungkinan karena current bukan number / rules)
+          console.warn("Increment views not committed (maybe views null or rules). Snapshot:", snapshot && snapshot.val())
+          resolve({ committed: false, snapshot: snapshot && snapshot.val() })
+        } else {
+          // Sukses
+          try {
+            sessionStorage.setItem(key, Date.now().toString())
+          } catch (e) {
+            // ignore sessionStorage errors
+          }
+          resolve({ committed: true, value: snapshot && snapshot.val() })
+        }
+      }
+    )
+  })
 }
 
 // ==================== DASHBOARD STATS ====================
@@ -279,8 +363,7 @@ function initTypewriter() {
 
   const texts = [
     "SISTEM INFORMASI DESA KARANGHARJA",
-    "MEMBANGUN DESA BERSAMA",
-    "PELAYANAN UNTUK WARGA",
+
   ]
 
   let textIndex = 0
