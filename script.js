@@ -64,12 +64,9 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
           <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini</p>
         </div>
       `
-      // Declare the lucide variable before using it
       const lucide = window.lucide
       if (typeof lucide !== "undefined") {
         lucide.createIcons()
-      } else {
-        console.warn("Lucide icons not loaded")
       }
       return
     }
@@ -88,7 +85,6 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
     container.innerHTML = processedActivities
       .map((activity) => {
         const shortDesc = activity.content ? activity.content.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 120) + "..." : ""
-
         return `
         <div class="activity-card" data-id="${activity.id}">
           <div class="activity-image">
@@ -123,12 +119,9 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
       })
       .join("")
 
-    // Declare the lucide variable before using it
     const lucide = window.lucide
     if (typeof lucide !== "undefined") {
       lucide.createIcons()
-    } else {
-      console.warn("Lucide icons not loaded")
     }
   })
 }
@@ -146,17 +139,14 @@ function loadActivityDetail() {
     return
   }
 
-  db.ref(`activities/${activityId}`)
-    .once("value")
-    .then((snapshot) => {
+  // Increment view count first, then fetch updated data
+  incrementViews(activityId).then(() => {
+    db.ref(`activities/${activityId}`).on("value", (snapshot) => {
       const activity = snapshot.val()
       if (!activity) {
         detailContainer.innerHTML = "<p>Kegiatan tidak ditemukan.</p>"
         return
       }
-
-      // Increment view count
-      incrementViews(activityId)
 
       detailContainer.innerHTML = `
       <div class="detail-card">
@@ -177,18 +167,17 @@ function loadActivityDetail() {
         <p class="detail-views"><i data-lucide="eye"></i> ${activity.views || 0} kali dilihat</p>
       </div>
     `
-      // Declare the lucide variable before using it
       const lucide = window.lucide
       if (typeof lucide !== "undefined") {
         lucide.createIcons()
-      } else {
-        console.warn("Lucide icons not loaded")
       }
     })
+  })
 }
 
 function incrementViews(activityId) {
-  db.ref(`activities/${activityId}`)
+  return db
+    .ref(`activities/${activityId}`)
     .transaction((activity) => {
       if (activity) activity.views = (activity.views || 0) + 1
       return activity
@@ -245,25 +234,15 @@ function setupNavbarToggle() {
 }
 
 function setupSmoothScrolling() {
-  // Smooth scrolling for navigation links
   const navLinks = document.querySelectorAll('.navbar-links a[href^="#"]')
-
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault()
-
       const targetId = this.getAttribute("href")
       const targetSection = document.querySelector(targetId)
-
       if (targetSection) {
-        const offsetTop = targetSection.offsetTop - 80 // Account for fixed navbar
-
-        window.scrollTo({
-          top: offsetTop,
-          behavior: "smooth",
-        })
-
-        // Close mobile menu if open
+        const offsetTop = targetSection.offsetTop - 80
+        window.scrollTo({ top: offsetTop, behavior: "smooth" })
         const navbarMenu = document.getElementById("navbar-menu")
         const navbarToggle = document.getElementById("navbar-toggle")
         if (navbarMenu && navbarMenu.classList.contains("active")) {
@@ -279,19 +258,12 @@ function setupSmoothScrolling() {
 function initTypewriter() {
   const element = document.getElementById("typewriter-text")
   if (!element) return
-
   const texts = ["SISTEM INFORMASI DESA KARANGHARJA", "MEMBANGUN DESA BERSAMA", "PELAYANAN UNTUK WARGA"]
-
-  let textIndex = 0
-  let charIndex = 0
-  let isDeleting = false
-  const typingSpeed = 100
-  const deletingSpeed = 50
-  const delayBetween = 1500
+  let textIndex = 0, charIndex = 0, isDeleting = false
+  const typingSpeed = 100, deletingSpeed = 50, delayBetween = 1500
 
   function type() {
     const currentText = texts[textIndex]
-
     if (isDeleting) {
       element.textContent = currentText.substring(0, charIndex - 1)
       charIndex--
@@ -299,42 +271,30 @@ function initTypewriter() {
       element.textContent = currentText.substring(0, charIndex + 1)
       charIndex++
     }
-
     let timeout = isDeleting ? deletingSpeed : typingSpeed
-
     if (!isDeleting && charIndex === currentText.length) {
-      timeout = delayBetween
-      isDeleting = true
+      timeout = delayBetween; isDeleting = true
     } else if (isDeleting && charIndex === 0) {
-      isDeleting = false
-      textIndex = (textIndex + 1) % texts.length
-      timeout = typingSpeed
+      isDeleting = false; textIndex = (textIndex + 1) % texts.length; timeout = typingSpeed
     }
-
     setTimeout(type, timeout)
   }
-
   type()
 }
 
 // ==================== SAMBUTAN & SEJARAH ANIMATIONS ====================
 function setupSambutanSejarahAnimations() {
-  // Active navigation highlighting
   window.addEventListener("scroll", () => {
     const sections = document.querySelectorAll("section[id]")
     const navLinks = document.querySelectorAll('.navbar-links a[href^="#"]')
-
     let current = ""
-
     sections.forEach((section) => {
       const sectionTop = section.offsetTop - 120
       const sectionHeight = section.offsetHeight
-
       if (window.pageYOffset >= sectionTop && window.pageYOffset < sectionTop + sectionHeight) {
         current = section.getAttribute("id")
       }
     })
-
     navLinks.forEach((link) => {
       link.classList.remove("active")
       if (link.getAttribute("href") === "#" + current) {
@@ -343,12 +303,7 @@ function setupSambutanSejarahAnimations() {
     })
   })
 
-  // Enhanced intersection observer for animations
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px",
-  }
-
+  const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -359,7 +314,6 @@ function setupSambutanSejarahAnimations() {
     })
   }, observerOptions)
 
-  // Observe timeline items with staggered animation
   const timelineItems = document.querySelectorAll(".timeline-item")
   timelineItems.forEach((item, index) => {
     item.style.opacity = "0"
@@ -368,7 +322,6 @@ function setupSambutanSejarahAnimations() {
     observer.observe(item)
   })
 
-  // Observe stats items with staggered animation
   const statItems = document.querySelectorAll(".stat-item")
   statItems.forEach((item, index) => {
     item.style.opacity = "0"
@@ -377,16 +330,13 @@ function setupSambutanSejarahAnimations() {
     observer.observe(item)
   })
 
-  // Animate numbers in stats
   const animateNumbers = () => {
     const statNumbers = document.querySelectorAll(".stat-number")
-
     statNumbers.forEach((stat) => {
       const target = Number.parseInt(stat.textContent.replace(/\D/g, ""))
       const suffix = stat.textContent.replace(/\d/g, "")
       let current = 0
       const increment = target / 50
-
       const updateNumber = () => {
         if (current < target) {
           current += increment
@@ -396,8 +346,6 @@ function setupSambutanSejarahAnimations() {
           stat.textContent = target + suffix
         }
       }
-
-      // Start animation when stat becomes visible
       const statObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -406,47 +354,31 @@ function setupSambutanSejarahAnimations() {
           }
         })
       })
-
       statObserver.observe(stat.parentElement)
     })
   }
-
-  // Initialize number animations
   animateNumbers()
 }
 
 // ==================== INIT ====================
 document.addEventListener("DOMContentLoaded", () => {
-  // Firebase and Auth
   checkAuthState()
   setupLogout()
-
-  // Navigation and UI
   setupNavbarToggle()
   setupSmoothScrolling()
-
-  // Animations and Effects
   initTypewriter()
   setupSambutanSejarahAnimations()
-
-  // Firebase Data Loading
   if (document.getElementById("activitiesContainer")) {
     loadActivities("activitiesContainer", null, true)
   }
-
   if (document.getElementById("dashboardStats")) {
     setupDashboardStats()
   }
-
   if (document.getElementById("activityDetail")) {
     loadActivityDetail()
   }
-
-  // Initialize Lucide icons
   const lucide = window.lucide
   if (typeof lucide !== "undefined") {
     lucide.createIcons()
-  } else {
-    console.warn("Lucide icons not loaded")
   }
 })
