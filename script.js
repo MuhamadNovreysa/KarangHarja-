@@ -120,7 +120,7 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
       lucide.createIcons()
     }
 
-    // Tambahan: Event listener untuk klik "Baca Selengkapnya"
+    // Tambahan: Event listener untuk klik "Baca Selengkapnya" -> increment views lalu redirect
     container.querySelectorAll(".read-more").forEach((link) => {
       link.addEventListener("click", (e) => {
         e.preventDefault()
@@ -176,17 +176,26 @@ function loadActivityDetail() {
   })
 }
 
-// Perubahan: incrementViews bisa pakai callback
+// Perubahan: incrementViews pakai child('views') + callback
 function incrementViews(activityId, callback = null) {
-  db.ref(`activities/${activityId}`)
-    .transaction((activity) => {
-      if (activity) activity.views = (activity.views || 0) + 1
-      return activity
+  const viewsRef = db.ref(`activities/${activityId}/views`)
+  viewsRef
+    .transaction((current) => {
+      if (typeof current !== "number") {
+        // Kalau bukan number (misal null), biarin aja supaya rules non-auth tidak menolak.
+        // Pastikan saat create activity diset views: 0.
+        return current
+      }
+      return current + 1
     })
     .then(() => {
       if (callback) callback()
     })
-    .catch((err) => console.error("Error incrementing views:", err))
+    .catch((err) => {
+      console.error("Error incrementing views:", err)
+      // Tetep redirect supaya UX lancar meskipun increment gagal (mis. views belum diinisialisasi)
+      if (callback) callback()
+    })
 }
 
 // ==================== DASHBOARD STATS ====================
