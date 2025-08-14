@@ -1,10 +1,6 @@
 // ==================== FIREBASE INIT ====================
-import firebase from "firebase/app"
-import "firebase/auth"
-import "firebase/database"
-import "firebase/storage"
-import lucide from "lucide"
-
+// Declare the firebase variable before using it
+const firebase = window.firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC0AcdsPrAQxttVk1SBfBcZnF6tYg4y6GM",
   authDomain: "desakarangharja-31525.firebaseapp.com",
@@ -65,7 +61,13 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
           <p class="empty-subtitle">Kegiatan desa akan ditampilkan di sini</p>
         </div>
       `
-      lucide.createIcons()
+      // Declare the lucide variable before using it
+      const lucide = window.lucide
+      if (typeof lucide !== "undefined") {
+        lucide.createIcons()
+      } else {
+        console.warn("Lucide icons not loaded")
+      }
       return
     }
 
@@ -118,7 +120,13 @@ function loadActivities(containerId, limit = null, onlyPublished = false) {
       })
       .join("")
 
-    lucide.createIcons()
+    // Declare the lucide variable before using it
+    const lucide = window.lucide
+    if (typeof lucide !== "undefined") {
+      lucide.createIcons()
+    } else {
+      console.warn("Lucide icons not loaded")
+    }
   })
 }
 
@@ -166,7 +174,13 @@ function loadActivityDetail() {
         <p class="detail-views"><i data-lucide="eye"></i> ${activity.views || 0} kali dilihat</p>
       </div>
     `
-      lucide.createIcons()
+      // Declare the lucide variable before using it
+      const lucide = window.lucide
+      if (typeof lucide !== "undefined") {
+        lucide.createIcons()
+      } else {
+        console.warn("Lucide icons not loaded")
+      }
     })
 }
 
@@ -194,10 +208,15 @@ function setupDashboardStats() {
       })
     }
 
-    document.getElementById("totalActivities").textContent = stats.total
-    document.getElementById("publishedCount").textContent = stats.published
-    document.getElementById("draftCount").textContent = stats.draft
-    document.getElementById("totalViews").textContent = stats.views
+    const totalElement = document.getElementById("totalActivities")
+    const publishedElement = document.getElementById("publishedCount")
+    const draftElement = document.getElementById("draftCount")
+    const viewsElement = document.getElementById("totalViews")
+
+    if (totalElement) totalElement.textContent = stats.total
+    if (publishedElement) publishedElement.textContent = stats.published
+    if (draftElement) draftElement.textContent = stats.draft
+    if (viewsElement) viewsElement.textContent = stats.views
   })
 }
 
@@ -223,7 +242,7 @@ function setupNavbarToggle() {
 }
 
 function setupSmoothScrolling() {
-  // Smooth scrolling for navigation links (sambutan and sejarah)
+  // Smooth scrolling for navigation links
   const navLinks = document.querySelectorAll('.navbar-links a[href^="#"]')
 
   navLinks.forEach((link) => {
@@ -297,12 +316,12 @@ function initTypewriter() {
 
 // ==================== SAMBUTAN & SEJARAH ANIMATIONS ====================
 function setupSambutanSejarahAnimations() {
-  // Active navigation highlighting for 2 sections only
+  // Active navigation highlighting
   window.addEventListener("scroll", () => {
-    const sections = document.querySelectorAll("#sambutan, #sejarah")
+    const sections = document.querySelectorAll("section[id]")
     const navLinks = document.querySelectorAll('.navbar-links a[href^="#"]')
 
-    let current = "sambutan" // Default to sambutan
+    let current = ""
 
     sections.forEach((section) => {
       const sectionTop = section.offsetTop - 120
@@ -421,5 +440,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Initialize Lucide icons
-  lucide.createIcons()
+  const lucide = window.lucide
+  if (typeof lucide !== "undefined") {
+    lucide.createIcons()
+  } else {
+    console.warn("Lucide icons not loaded")
+  }
 })
